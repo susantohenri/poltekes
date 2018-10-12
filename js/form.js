@@ -5,13 +5,13 @@ window.onload = function () {
     var fchild = $(this)
     var controller = fchild.attr('data-controller')
     var uuids = JSON.parse(fchild.attr('data-uuids').split("'").join('"'))
-    for (var u in uuids) $.get('<?= site_url() ?>' + controller + '/subformread/' + uuids[u], function (form) {
+    for (var u in uuids) $.get(current_controller + '/subformread/' + uuids[u], function (form) {
       fchild.prepend(form)
       formInit()
     })
     fchild.find('.btn-add').click(function () {
         var beforeButton = $(this).parents('.form-group');
-      $.get('<?= site_url() ?>' + controller + '/subformcreate/', function (form) {
+      $.get(current_controller + '/subformcreate/', function (form) {
         $(form).insertBefore(beforeButton)
         formInit()
       })
@@ -36,7 +36,7 @@ function formInit () {
       var field = $(this).attr('data-field')
       $(this).select2({
         ajax: {
-          url: '<?= site_url($current['controller']) ?>/select2/' + model + '/' + field,
+          url: current_controller + '/select2/' + model + '/' + field,
           type: 'POST', dataType: 'json'
         }
       }).on('select2:select', function (evt) {
@@ -46,7 +46,7 @@ function formInit () {
           if(selectID == 'Provinces'){
               $('#Regencies').select2({
                  ajax: {
-                   url: '<?= site_url($current['controller']) ?>/select2region/'+ model + '/Regencies/' + uid + '/' + field,
+                   url: current_controller + '/select2region/'+ model + '/Regencies/' + uid + '/' + field,
                    type: 'POST', dataType: 'json'
                  }
               })     
@@ -57,7 +57,7 @@ function formInit () {
           else if(selectID == 'Regencies'){    
               $('#Districts').select2({
                 ajax: {
-                  url: '<?= site_url($current['controller']) ?>/select2region/'+ model + '/Districts/' + uid + '/' + field,
+                  url: current_controller + '/select2region/'+ model + '/Districts/' + uid + '/' + field,
                   type: 'POST', dataType: 'json'
                 }
               })    
@@ -67,7 +67,7 @@ function formInit () {
           else if(selectID == 'Districts'){
               $('#Villages').select2({
                 ajax: {
-                  url: '<?= site_url($current['controller']) ?>/select2region/' + model + '/Villages/' + uid + '/' + field,
+                  url: current_controller + '/select2region/' + model + '/Villages/' + uid + '/' + field,
                   type: 'POST', dataType: 'json'
                 }
               })    
@@ -96,12 +96,12 @@ function formInit () {
     } else $(this).select2()
   })
   $('[data-date="datepicker"]').datepicker({format: 'yyyy-mm-dd', autoclose: true})
-  $('[data-date="timepicker"]').timepicker({defaultTime: false, showMeridian: false})
-  $('[data-date="datetimepicker"]').daterangepicker({
-    singleDatePicker: true,
-    timePicker: true,
-    timePicker24Hour: true,
-    locale: {format: 'YYYY-MM-DD HH:mm:ss'},
-    startDate: moment().format('YYYY-MM-DD HH:mm:ss')
-  })
+  // $('[data-date="timepicker"]').timepicker({defaultTime: false, showMeridian: false})
+  // $('[data-date="datetimepicker"]').daterangepicker({
+  //   singleDatePicker: true,
+  //   timePicker: true,
+  //   timePicker24Hour: true,
+  //   locale: {format: 'YYYY-MM-DD HH:mm:ss'},
+  //   startDate: moment().format('YYYY-MM-DD HH:mm:ss')
+  // })
 }

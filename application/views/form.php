@@ -19,8 +19,8 @@
                 <?php break; ?>
                 <?php case 'select': ?>
                     <div class="form-group row">
-                      <label class="col-sm-3 control-label"><?= $field['label']  ?></label>
-                      <div class="col-sm-7">
+                      <label class="col-sm-2 control-label"><?= $field['label']  ?></label>
+                      <div class="col-sm-6">
                         <?php if(preg_match('/(multiple)/', $field['attr']) > 0): ?>
                         <input type="hidden" name="'.str_replace('[]','',$field['name']).'">
                         <?php endif ?>
@@ -32,18 +32,10 @@
                       </div>
                     </div>
                 <?php break; ?>
-                <?php case 'password': ?>
-                    <div class="form-group row">
-                      <label class="col-sm-3 control-label"><?= $field['label']  ?></label>
-                      <div class="col-sm-7">
-                        <input class="form-control" type="<?= $field['type'] ?>" value="<?= $field['value'] ?>" name="<?= $field['name'] ?>" <?= $field['attr'] ?>>
-                      </div>
-                    </div>
-                <?php break; ?>
                 <?php default: ?>
                     <div class="form-group row">
-                      <label class="col-sm-3 control-label"><?= $field['label']  ?></label>
-                      <div class="col-sm-7">
+                      <label class="col-sm-2 control-label"><?= $field['label']  ?></label>
+                      <div class="col-sm-6">
                         <input class="form-control" type="<?= $field['type'] ?>" value="<?= $field['value'] ?>" name="<?= $field['name'] ?>" <?= $field['attr'] ?>>
                       </div>
                     </div>
@@ -67,8 +59,8 @@
             <?= !empty($subform) ? '<hr>':'' ?>
 
             <div class="form-group row">
-              <div class="col-sm-3"></div>
-              <div class="col-sm-7">
+              <div class="col-sm-2"></div>
+              <div class="col-sm-6">
                 <button class="btn btn-primary"><i class="fa fa-save"></i> &nbsp; Save</button>
                 <?php if (!empty ($uuid)): ?>
                 <a href="<?= site_url($current['controller'] . "/delete/$uuid") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Delete</a>

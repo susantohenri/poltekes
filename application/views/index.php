@@ -12,6 +12,12 @@
         <link rel="stylesheet" id="theme-style" href="<?= base_url('css/app-orange.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/jquery.dataTables.min.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/dataTables.orange.css') ?>">
+        <link rel="stylesheet" type="text/css" href="<?= base_url('css/select2.min.css') ?>">
+        <style type="text/css">
+            form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option {
+                font-size: 14px
+            }
+        </style>
     </head>
     <body>
         <div class="main-wrapper">
@@ -259,17 +265,19 @@
                 if (href.length > 0 && window.location.href.indexOf(href) > -1) $(this).parent('li').addClass('active')
                 else $(this).parent('li').removeClass('active')
             })
+            var current_controller = '<?= site_url ($current['controller']) ?>'
         </script>
         <?php if ('table' === $page_name): ?>
             <script type="text/javascript" src="<?= base_url('js/jquery.dataTables.min.js') ?>"></script>
             <script type="text/javascript">
                 var
                 thead = <?= json_encode ($thead) ?>,
-                records = <?= json_encode ($records) ?>,
-                current_controller = '<?= site_url ($current['controller']) ?>'
+                records = <?= json_encode ($records) ?>
             </script>
             <script type="text/javascript" src="<?= base_url('js/table.js') ?>"></script>
         <?php elseif ('form' === $page_name): ?>
+            <script type="text/javascript" src="<?= base_url('js/select2.full.min.js') ?>"></script>
+            <script type="text/javascript" src="<?= base_url('js/bootstrap-datepicker.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/form.js') ?>"></script>
         <?php endif ?>
     </body>

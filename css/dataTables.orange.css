@@ -1,10 +1,6 @@
 /*
  * Table styles
  */
-.dataTables_wrapper {
-  font-size: 14px;
-}
-
 table.dataTable {
   width: 100%;
   margin: 0 auto;
