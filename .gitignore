@@ -1,3 +1,5 @@
+application/config/config.php
+application/config/database.php
 .editorconfig
 system 
 .DS_Store
