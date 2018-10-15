@@ -258,13 +258,14 @@
             </div>
         </div>
         <!-- <script src="<?= base_url('js/vendor.js') ?>"></script> -->
-        <script type="text/javascript" src="<?= base_url('js/jquery-3.3.1.slim.min.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('js/jquery-3.3.1.min.js') ?>"></script>
         <script type="text/javascript">
             $('nav.menu li a').each(function () {
                 var href = $(this).attr('href')
                 if (href.length > 0 && window.location.href.indexOf(href) > -1) $(this).parent('li').addClass('active')
                 else $(this).parent('li').removeClass('active')
             })
+            if ($('nav.menu li.active').length < 1) $('nav.menu li:first').addClass('active')
             var current_controller = '<?= site_url ($current['controller']) ?>'
         </script>
         <?php if ('table' === $page_name): ?>

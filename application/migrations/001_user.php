@@ -15,6 +15,16 @@ class Migration_user extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
+    $generate = $this->db->select('UUID() uuid', false)->get()->row_array();
+    $record['uuid'] = $generate['uuid'];
+
+    $this->db->insert('user', array(
+      'uuid' => $record['uuid'],
+      'email' => 'admin',
+      'password' => md5('admin'),
+      'role' => 'admin'
+    ));
+
   }
 
   function down () {
