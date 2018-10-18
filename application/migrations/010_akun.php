@@ -15,15 +15,6 @@ class Migration_akun extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $this->db->query("
-      CREATE TABLE `klasifikasi_akun` (
-        `uuid` varchar(255) NOT NULL,
-        `kode` varchar(255) NOT NULL,
-        `nama` varchar(255) NOT NULL,
-        PRIMARY KEY (`uuid`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
-    ");
-
     // http://www.convertcsv.com/csv-to-json.htm
     $lines = json_decode('      [
        {
@@ -19576,7 +19567,6 @@ class Migration_akun extends CI_Migration {
 
   function down () {
     $this->db->query("DROP TABLE `akun`");
-    $this->db->query("DROP TABLE `klasifikasi_akun`");
   }
 
 }

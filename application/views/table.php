@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <h1 class="title"> <?= $page_title ?> </h1>
-                <p class="title-description"> <?= $page_title ?> Management </p>
+                <p class="title-description"> Manajemen <?= $page_title ?> </p>
             </div>
             <div class="col-sm-6 text-right">
                 <a href="<?= site_url($current['controller'] . '/create') ?>" class="btn btn-primary">

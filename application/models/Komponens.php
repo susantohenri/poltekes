@@ -1,24 +1,24 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class KlasifikasiAkuns extends MY_Model {
+class Komponens extends MY_Model {
 
   function __construct () {
     parent::__construct();
-    $this->table = 'klasifikasi_akun';
+    $this->table = 'komponen';
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
-      (object) array('mData' => 'nama', 'sTitle' => 'Nama'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
     );
 
     $this->form[]= array(
     	'name' => 'kode',
-    	'label'=> 'kode'
+    	'label'=> 'Kode'
     );
 
     $this->form[]= array(
     	'name' => 'nama',
-    	'label'=> 'nama'
+    	'label'=> 'Uraian'
     );
   }
 
