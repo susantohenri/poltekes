@@ -1,25 +1,25 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_account extends CI_Migration {
+class Migration_akun extends CI_Migration {
 
   function up () {
 
     $this->db->query("
-      CREATE TABLE `code_of_account` (
+      CREATE TABLE `akun` (
         `uuid` varchar(255) NOT NULL,
-        `account_classification` varchar(255) NOT NULL,
-        `code` varchar(255) NOT NULL,
-        `name` varchar(255) NOT NULL,
+        `klasifikasi_akun` varchar(255) NOT NULL,
+        `kode` varchar(255) NOT NULL,
+        `nama` varchar(255) NOT NULL,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
     $this->db->query("
-      CREATE TABLE `account_classification` (
+      CREATE TABLE `klasifikasi_akun` (
         `uuid` varchar(255) NOT NULL,
-        `code` varchar(255) NOT NULL,
-        `name` varchar(255) NOT NULL,
+        `kode` varchar(255) NOT NULL,
+        `nama` varchar(255) NOT NULL,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
@@ -19551,21 +19551,21 @@ class Migration_account extends CI_Migration {
        }
       ]');
 
-    $this->load->model(array('CodeOfAccounts', 'AccountClassifications'));
+    $this->load->model(array('Akuns', 'KlasifikasiAkuns'));
     $ac = '';
     foreach ($lines as $line) {
       switch (strlen ($line->FIELD1)) {
         case 2:
-          $ac = $this->AccountClassifications->save(array(
-            'code' => $line->FIELD1,
-            'name' => $line->FIELD2
+          $ac = $this->KlasifikasiAkuns->save(array(
+            'kode' => $line->FIELD1,
+            'nama' => $line->FIELD2
           ));
           break;
         case 6:
-          $this->CodeOfAccounts->save(array(
-            'account_classification' => $ac,
-            'code' => $line->FIELD1,
-            'name' => $line->FIELD2
+          $this->Akuns->save(array(
+            'klasifikasi_akun' => $ac,
+            'kode' => $line->FIELD1,
+            'nama' => $line->FIELD2
           ));
           break;
         default:break;
@@ -19575,8 +19575,8 @@ class Migration_account extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `code_of_account`");
-    $this->db->query("DROP TABLE `account_classification`");
+    $this->db->query("DROP TABLE `akun`");
+    $this->db->query("DROP TABLE `klasifikasi_akun`");
   }
 
 }
