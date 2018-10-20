@@ -51,6 +51,11 @@ class MY_Model extends CI_Model {
     return $this->db->get_where($this->table, $param)->result();
   }
 
+  function findOrCreate ($data) {
+    if ($found = $this->findOne (array('kode' => $data['kode']))) return $found['uuid'];
+    else return $this->create($data);
+  }
+
   function findIn ($field, $value) {
     return $this->db->where_in($field, $value)->get($this->table)->result();
   }

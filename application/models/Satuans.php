@@ -16,4 +16,9 @@ class Satuans extends MY_Model {
     );
   }
 
+  function findOrCreate ($nama) {
+    if ($found = $this->findOne(array('nama' => $nama))) return $found['uuid'];
+    else return $this->create(array('nama' => $nama));
+  }
+
 }

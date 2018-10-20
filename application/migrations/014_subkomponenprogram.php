@@ -1,16 +1,15 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_output extends CI_Migration {
+class Migration_subkomponenprogram extends CI_Migration {
 
   function up () {
 
     $this->db->query("
-      CREATE TABLE `output` (
+      CREATE TABLE `sub_komponen_program` (
         `uuid` varchar(255) NOT NULL,
-        `kode` varchar(255) NOT NULL,
-        `uraian` varchar(255) NOT NULL,
-        `sat` varchar(255) NOT NULL,
+        `komponen_program` varchar(255) NOT NULL,
+        `sub_komponen` varchar(255) NOT NULL,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
@@ -18,7 +17,7 @@ class Migration_output extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `output`");
+    $this->db->query("DROP TABLE `sub_komponen_program`");
   }
 
 }

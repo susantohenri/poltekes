@@ -7,7 +7,6 @@ class Spjs extends MY_Model {
     $this->table = 'spj';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
       (object) array('mData' => 'vol', 'sTitle' => 'Volume'),
       (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),

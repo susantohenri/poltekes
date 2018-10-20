@@ -17,7 +17,7 @@ class Komponens extends MY_Model {
     );
 
     $this->form[]= array(
-    	'name' => 'nama',
+    	'name' => 'uraian',
     	'label'=> 'Uraian'
     );
   }

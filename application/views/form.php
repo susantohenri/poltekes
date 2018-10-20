@@ -32,6 +32,14 @@
                       </div>
                     </div>
                 <?php break; ?>
+                <?php case 'textarea': ?>
+                    <div class="form-group row">
+                      <label class="col-sm-2 control-label"><?= $field['label']  ?></label>
+                      <div class="col-sm-6">
+                        <textarea class="form-control" name="<?= $field['name'] ?>" <?= $field['attr'] ?> ></textarea>
+                      </div>
+                    </div>
+                <?php break; ?>
                 <?php default: ?>
                     <div class="form-group row">
                       <label class="col-sm-2 control-label"><?= $field['label']  ?></label>
