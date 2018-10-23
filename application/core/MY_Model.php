@@ -107,6 +107,7 @@ class MY_Model extends CI_Model {
         $f['attributes'][] = array('multiple' => 'true');
       }
       if (!isset ($f['type'])) $f['type']   = 'text';
+      if (!isset ($f['width'])) $f['width'] = 2;
       if (!isset ($f['value'])) $f['value']       = '';
       if (!isset ($f['required'])) $f['required'] = '';
       else $f['required'] = 'required="required"';

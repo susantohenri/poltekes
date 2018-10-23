@@ -17,6 +17,7 @@
             form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option {
                 font-size: 14px
             }
+            [data-number] {text-align: right;}
         </style>
     </head>
     <body>
@@ -266,6 +267,7 @@
                 else $(this).parent('li').removeClass('active')
             })
             if ($('nav.menu li.active').length < 1) $('nav.menu li:first').addClass('active')
+            var site_url = '<?= site_url('/') ?>'
             var current_controller = '<?= site_url ($current['controller']) ?>'
         </script>
         <?php if ('table' === $page_name): ?>

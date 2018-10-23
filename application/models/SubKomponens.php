@@ -6,10 +6,6 @@ class SubKomponens extends MY_Model {
     parent::__construct();
     $this->table = 'sub_komponen';
     $this->form = array();
-    $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-    );
 
     $this->form[]= array(
     	'name' => 'kode',

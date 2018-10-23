@@ -9,23 +9,24 @@ class Spjs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
       (object) array('mData' => 'vol', 'sTitle' => 'Volume'),
-      (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
-      (object) array('mData' => 'hargasat', 'sTitle' => 'Harga Satuan'),
+      (object) array('mData' => 'nama_satuan', 'sTitle' => 'Satuan'),
+      (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
     );
 
     $this->form[]= array(
-    	'name' => 'kode',
-    	'label'=> 'Kode'
-    );
-
-    $this->form[]= array(
-      'name' => 'nama',
-      'label'=> 'Uraian'
+      'name' => 'uraian',
+      'label'=> 'Uraian',
+      'width'=> 4
     );
 
     $this->form[]= array(
       'name' => 'vol',
-      'label'=> 'Volume'
+      'label'=> 'Volume',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
+      'width'=> 1
     );
 
     $this->form[]= array(
@@ -41,8 +42,39 @@ class Spjs extends MY_Model {
 
     $this->form[]= array(
       'name' => 'hargasat',
-      'label'=> 'Harga Satuan'
+      'label'=> 'Harga Satuan',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
     );
+
+    $this->form[]= array(
+      'name' => 'jumlah',
+      'label'=> 'Jumlah',
+      'value'=> 0,
+      'attributes' => array(
+        array('disabled' => 'disabled'),
+        array('data-number' => 'true')
+      ),
+    );
+
+  }
+
+  function findOne ($param) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah", false);
+    return parent::findOne($param);
+  }
+
+  function find ($param = array()) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("satuan.nama nama_satuan",false)
+      ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) hargasat_format", false)
+      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false)
+      ->join('satuan', "{$this->table}.sat = satuan.uuid", false);
+    return parent::find($param);
   }
 
 }

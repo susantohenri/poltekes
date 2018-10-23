@@ -3,15 +3,15 @@ window.onload = function () {
   formInit()
   $('.form-child').each (function () {
     var fchild = $(this)
-    var controller = fchild.attr('data-controller')
+    var controller = site_url + fchild.attr('data-controller')
     var uuids = JSON.parse(fchild.attr('data-uuids').split("'").join('"'))
-    for (var u in uuids) $.get(current_controller + '/subformread/' + uuids[u], function (form) {
+    for (var u in uuids) $.get(controller + '/subformread/' + uuids[u], function (form) {
       fchild.prepend(form)
       formInit()
     })
     fchild.find('.btn-add').click(function () {
         var beforeButton = $(this).parents('.form-group');
-      $.get(current_controller + '/subformcreate/', function (form) {
+      $.get(controller + '/subformcreate/', function (form) {
         $(form).insertBefore(beforeButton)
         formInit()
       })
