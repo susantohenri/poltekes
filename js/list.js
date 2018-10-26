@@ -20,6 +20,36 @@ function activateExpandButton () {
 	})
 }
 
+function activateBtnDelete () {
+	$('.btn-delete').unbind('click').bind('click', function () {
+		var li = $(this).parent().parent().parent().parent().parent()
+		li.remove()
+		calculateBottomUp (li)
+	})
+}
+
+function activateAddBtn (li) {
+	var last = $('[data-parent="' + li.uuid + '"]').last()
+	var indent = last.css('padding-left')
+	var addBtn = '<li class="item" data-uuid="" data-parent="' + li.uuid + '" style="padding-left: ' + indent + '">\
+	    <div class="item-row">\
+        <div class="item-col">\
+					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i></a>\
+				</div>\
+			</div>\
+	</li>'
+	$(addBtn).insertAfter(last).find('.btn').click(function () {
+		var blankForm = last.clone().insertAfter(last)
+		blankForm.attr('data-uuid', '')
+		blankForm.attr('data-urutan', parseInt(last.attr('data-urutan')) + 1)
+		blankForm.find('input').val('').attr('value', '')
+		blankForm.find('[name*="uuid"]').remove()
+		activateBtnDelete()
+		activateRealtimeCalculation()
+	})
+
+}
+
 function expandItem (btn, cb) {
 	var li = btn.parent().parent().parent().parent()
 	var parent = {
@@ -39,12 +69,9 @@ function expandItem (btn, cb) {
 	$.when.apply(undefined, requests).then(function () {
 		sortItem(li)
 		$('[data-parent="' + li.attr('data-uuid') + '"]').css('padding-left', parent.indent + 10 + 'px')
-		$('.btn-delete').unbind('click').bind('click', function () {
-			var li = $(this).parent().parent().parent().parent().parent()
-			li.remove()
-			calculateBottomUp (li)
-		})
+		activateBtnDelete()
 		activateRealtimeCalculation()
+		if ('Spj' === parent.childController) activateAddBtn(parent)
 		cb()
 	})
 }
@@ -98,7 +125,7 @@ function calculateBottomUp (li) {
 		var parentLi = $('[data-uuid="' + li.attr('data-parent') + '"]')
 		var jumlah = 0
 		$('[data-parent="' + parentUuid + '"]').each(function () {
-			jumlah += getNumber($(this).find('.jumlah'))
+			jumlah += $(this).find('.jumlah').length > 0 ? getNumber($(this).find('.jumlah')) : 0
 		})
 		parentLi.find('.jumlah').html(currency (jumlah))
 		calculateBottomUp (parentLi)
