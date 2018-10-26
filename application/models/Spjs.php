@@ -63,6 +63,7 @@ class Spjs extends MY_Model {
   function findOne ($param) {
     $this->db
       ->select("{$this->table}.*")
+      ->select("{$this->table}.akun_program parent", false)
       ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah", false);
     return parent::findOne($param);
   }
@@ -75,6 +76,20 @@ class Spjs extends MY_Model {
       ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false)
       ->join('satuan', "{$this->table}.sat = satuan.uuid", false);
     return parent::find($param);
+  }
+
+  function getListItem ($uuid) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("{$this->table}.akun_program parent", false)
+      ->select("FORMAT(vol, 0) vol_format", false)
+      ->select("FORMAT(hargasat, 0) hargasat_format", false)
+      ->select("FORMAT(vol*hargasat, 0) jumlah", false)
+      ->select("'' childUuid", false)
+      ->select("'' childController", false)
+      ->select("''  kode", false)
+      ->group_by("{$this->table}.uuid");
+    return parent::getListItem ($uuid);
   }
 
 }

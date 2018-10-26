@@ -9,15 +9,16 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
         <link rel="stylesheet" href="<?= base_url('css/vendor.css') ?>">
-        <link rel="stylesheet" id="theme-style" href="<?= base_url('css/app-orange.css') ?>">
+        <link rel="stylesheet" id="theme-style" href="<?= base_url('css/app-green.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/jquery.dataTables.min.css') ?>">
-        <link rel="stylesheet" type="text/css" href="<?= base_url('css/dataTables.orange.css') ?>">
+        <link rel="stylesheet" type="text/css" href="<?= base_url('css/dataTables.green.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/select2.min.css') ?>">
         <style type="text/css">
             form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option {
                 font-size: 14px
             }
             [data-number] {text-align: right;}
+            .btn {color: #fff !important}
         </style>
     </head>
     <body>
@@ -50,14 +51,10 @@
                 <aside class="sidebar">
                     <div class="sidebar-container">
                         <div class="sidebar-header">
-                            <div class="brand">
-                                <div class="logo">
-                                    <span class="l l1"></span>
-                                    <span class="l l2"></span>
-                                    <span class="l l3"></span>
-                                    <span class="l l4"></span>
-                                    <span class="l l5"></span>
-                                </div> Modular Admin </div>
+                            <div class="brand" style="font-size: 28px">
+                                <i class="fa fa-laptop"></i>
+                                Si<i style="color:#197b30">Montok</i>
+                            </div>
                         </div>
 
                         <?php include APPPATH . 'views/menu.php' ?>
@@ -282,6 +279,8 @@
             <script type="text/javascript" src="<?= base_url('js/select2.full.min.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/bootstrap-datepicker.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/form.js') ?>"></script>
+        <?php elseif ('list' === $page_name): ?>
+            <script type="text/javascript" src="<?= base_url('js/list.js') ?>"></script>
         <?php endif ?>
     </body>
 </html>

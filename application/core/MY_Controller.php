@@ -42,7 +42,15 @@ class MY_Controller extends CI_Controller {
       else {
           $db_debug = $this->db->db_debug;
           $this->db->db_debug = FALSE;
-          $result = $this->$model->save($post);
+
+          if (strpos($this->router->class, 'Program')) {
+            $this->load->model('AkunPrograms');
+            foreach ($post as $uuid => $data) {
+              $data['uuid'] = $uuid;
+              $result = $this->AkunPrograms->save($data);
+            }
+          } else $result = $this->$model->save($post);
+
           $error = $this->db->error();
           $this->db->db_debug = $db_debug;
           if (isset ($result['error'])) $error = $result['error'];
@@ -96,7 +104,23 @@ class MY_Controller extends CI_Controller {
     $data['subformlabel'] = $this->subformlabel;
     $data['controller'] = $this->controller;
     $data['uuid'] = $uuid;
+    $data['item'] = $this->{$this->model}->findOne($uuid);
     $this->loadview('subform', $data);
+  }
+
+  function readlist ($id) {
+    $data = array();
+    $data['page_name'] = 'list';
+    $model = $this->model;
+    $data['item'] = $this->$model->getListItem($id);
+    $this->loadview('index', $data);
+  }
+
+  function subformlist ($uuid) {
+    $data = array();
+    $model = $this->model;
+    $data['item'] = $this->$model->getListItem($uuid);
+    $this->loadview('subformlist', $data);
   }
 
   function delete ($uuid) {

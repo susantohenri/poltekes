@@ -13,6 +13,7 @@ class Migration_spj extends CI_Migration {
         `vol` float NOT NULL,
         `sat` varchar(255) NOT NULL,
         `hargasat` float NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");

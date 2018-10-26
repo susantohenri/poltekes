@@ -9,7 +9,7 @@
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
         <!-- Place favicon.ico in the root directory -->
         <link rel="stylesheet" href="<?= base_url('css/vendor.css') ?>">
-        <link rel="stylesheet" id="theme-style" href="<?= base_url('css/app-orange.css') ?>">
+        <link rel="stylesheet" id="theme-style" href="<?= base_url('css/app-green.css') ?>">
     </head>
     <body>
         <div class="auth">
@@ -18,12 +18,11 @@
                     <header class="auth-header">
                         <h1 class="auth-title">
                             <div class="logo">
-                                <span class="l l1"></span>
-                                <span class="l l2"></span>
-                                <span class="l l3"></span>
-                                <span class="l l4"></span>
-                                <span class="l l5"></span>
-                            </div> ModularAdmin </h1>
+                                <i class="fa fa-laptop"></i>
+                            </div>
+                            Si<i style="color:#197b30">Montok</i>
+                            <br><small style="font-size: 14px">Sistem Monitoring Keuangan</small>
+                        </h1>
                     </header>
                     <div class="auth-content">
                         <form id="login-form" action="" method="POST" novalidate="">

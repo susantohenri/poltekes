@@ -10,6 +10,7 @@ class Migration_suboutputprogram extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `output_program` varchar(255) NOT NULL,
         `sub_output` varchar(255) NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
