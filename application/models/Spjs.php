@@ -9,7 +9,7 @@ class Spjs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
       (object) array('mData' => 'vol', 'sTitle' => 'Volume'),
-      (object) array('mData' => 'nama_satuan', 'sTitle' => 'Satuan'),
+      (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
       (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga'),
       (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
     );
@@ -32,12 +32,6 @@ class Spjs extends MY_Model {
     $this->form[]= array(
       'name'    => 'sat',
       'label'   => 'Satuan',
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Satuans'), 
-        array('data-field' => 'nama')
-      ),
     );
 
     $this->form[]= array(
@@ -71,10 +65,8 @@ class Spjs extends MY_Model {
   function find ($param = array()) {
     $this->db
       ->select("{$this->table}.*")
-      ->select("satuan.nama nama_satuan",false)
       ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) hargasat_format", false)
-      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false)
-      ->join('satuan', "{$this->table}.sat = satuan.uuid", false);
+      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false);
     return parent::find($param);
   }
 

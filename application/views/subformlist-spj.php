@@ -6,12 +6,11 @@
                 <div class="col-sm-4">
                     <input class="form-control" type="text" value="<?= $item['uraian'] ?>" name="<?= "{$item['parent']}[Spj_uraian][]" ?>" placeholder="Uraian">
                 </div>
-                <div class="col-sm-1">
+                <div class="col-sm-2">
                     <input class="form-control input-vol" type="text" value="<?= $item['vol_format'] ?>" name="<?= "{$item['parent']}[Spj_vol][]" ?>" data-number="true" placeholder="Volume">
                 </div>
-                <div class="col-sm-2">
-                    <select name="<?= "{$item['parent']}[Spj_sat][]" ?>" class="form-control">
-                    </select>
+                <div class="col-sm-1">
+                    <input class="form-control" type="text" value="<?= $item['sat'] ?>" name="<?= "{$item['parent']}[Spj_sat][]" ?>" placeholder="Satuan">
                 </div>
                 <div class="col-sm-2">
                     <input name="<?= "{$item['parent']}[Spj_hargasat][]" ?>"

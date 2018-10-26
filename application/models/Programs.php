@@ -35,7 +35,6 @@ class Programs extends MY_Model {
       'SubKomponenPrograms',
       'AkunPrograms',
       'Spjs',
-      'Satuans'
     ));
     $program = false;
     $kegiatanProgram = false;
@@ -94,12 +93,11 @@ class Programs extends MY_Model {
           'akun' => $akun,
         ));
       } else if (0 === $codeLength) {
-        $sat = $this->Satuans->findOrCreate($cell[3]);
         $spj = $this->Spjs->save(array(
           'akun_program' => $akunProgram,
           'uraian' => $cell[1],
           'vol' => $cell[2],
-          'sat' => $sat,
+          'sat' => $cell[3],
           'hargasat' => $cell[4],
         ));
       }
