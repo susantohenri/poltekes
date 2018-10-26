@@ -75,46 +75,12 @@ class AkunPrograms extends MY_Model {
   	return parent::find($param);
   }
 
-  function savechild ($record) {
-    $childrecords = array();
-    $savedchilds  = array();
-
-    foreach ($this->childs as $child) {
-      $child_controller = $child['controller'];
-      $child_model = $child['model'];
-      $childrecords[$child_model]= array();
-      $savedchilds[$child_model]  = array('');
-      foreach ($record as $key => $value) if (strpos($key, $child_controller) > -1) {
-        unset ($record[$key]);
-        $childrecords[$child_model][str_replace("{$child_controller}_", '', $key)] = $value;
-      }
+  function updateByList ($data) {
+    foreach ($data as $uuid => $child) {
+      $child = array('uuid' => $uuid) + $child;
+      foreach ($child as &$c) if (is_array ($c)) $c = implode(',', $c);
+      $this->update($child);
     }
-
-    foreach ($childrecords as $childmodel => $values) {
-      if (empty ($values)) continue;
-      $this->load->model($childmodel);
-      $fields = array_keys($values);
-      for ($index =0; $index < count(explode(',', $childrecords[$childmodel][$fields[0]])); $index++) {
-        $child_record = array();
-        foreach ($fields as $field) {
-          $childinput = explode(',', $childrecords[$childmodel][$field]);
-          if (isset ($childinput[$index])) $child_record[$field] = $childinput[$index];
-        }
-        $child_record[$this->table] = $record['uuid'];
-        $savedchilds[$childmodel][] = $this->$childmodel->save($child_record);
-      }
-    }
-
-    foreach ($this->childs as $child) {
-      $childxmodel = $child['model'];
-      $this->load->model($childxmodel);
-      $this->db
-        ->where(array($this->table => $record['uuid']))
-        ->where_not_in('uuid', $savedchilds[$childxmodel])
-        ->delete($this->$childxmodel->table);
-    }
-
-    return $record;
   }
 
 }

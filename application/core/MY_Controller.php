@@ -43,12 +43,9 @@ class MY_Controller extends CI_Controller {
           $db_debug = $this->db->db_debug;
           $this->db->db_debug = FALSE;
 
-          if (strpos($this->router->class, 'Program')) {
+          if (strpos($_SERVER['HTTP_REFERER'], '/readList/') > -1) {
             $this->load->model('AkunPrograms');
-            foreach ($post as $uuid => $data) {
-              $data['uuid'] = $uuid;
-              $result = $this->AkunPrograms->save($data);
-            }
+            $result = $this->AkunPrograms->updateByList($post);
           } else $result = $this->$model->save($post);
 
           $error = $this->db->error();

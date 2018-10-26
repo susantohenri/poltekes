@@ -40,9 +40,9 @@ function expandItem (btn, cb) {
 		sortItem(li)
 		$('[data-parent="' + li.attr('data-uuid') + '"]').css('padding-left', parent.indent + 10 + 'px')
 		$('.btn-delete').unbind('click').bind('click', function () {
-			alert('belum berfungsi!')
-			// $(this).parent().parent().parent().parent().parent().remove()
-			// calculate()
+			var li = $(this).parent().parent().parent().parent().parent()
+			li.remove()
+			calculateBottomUp (li)
 		})
 		activateRealtimeCalculation()
 		cb()
