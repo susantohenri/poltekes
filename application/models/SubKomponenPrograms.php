@@ -41,6 +41,7 @@ class SubKomponenPrograms extends MY_Model {
   function getListItem ($uuid) {
     $this->db
       ->select("{$this->table}.*")
+      ->select("{$this->table}.komponen_program parent", false)
       ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
       ->select("GROUP_CONCAT(DISTINCT akun_program.uuid) childUuid", false)
       ->select("'AkunProgram' childController", false)
@@ -64,7 +65,7 @@ class SubKomponenPrograms extends MY_Model {
     return parent::findOne($param);
   }
 
-  function find ($param = array ()) {
+  function dt () {
     $this->db
       ->select("{$this->table}.*")
       ->select('sub_komponen.kode kode_sub_komponen', false)
@@ -74,7 +75,7 @@ class SubKomponenPrograms extends MY_Model {
       ->join('akun_program', "{$this->table}.uuid = akun_program.{$this->table}", 'left')
       ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
       ->group_by("{$this->table}.uuid");
-    return parent::find($param);
+    return parent::dt();
   }
 
 }

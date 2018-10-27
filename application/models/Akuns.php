@@ -34,12 +34,12 @@ class Akuns extends MY_Model {
     );
   }
 
-  function find ($where = array()) {
+  function dt () {
   	$this->db
   	->select("{$this->table}.*")
   	->select('klasifikasi_akun.nama nama_klasifikasi_akun', false)
   	->join('klasifikasi_akun', "klasifikasi_akun.uuid = {$this->table}.klasifikasi_akun", 'left');
-  	return parent::find($where);
+  	return parent::dt();
   }
 
 }

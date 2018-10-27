@@ -62,12 +62,12 @@ class Spjs extends MY_Model {
     return parent::findOne($param);
   }
 
-  function find ($param = array()) {
+  function dt () {
     $this->db
       ->select("{$this->table}.*")
       ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) hargasat_format", false)
       ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false);
-    return parent::find($param);
+    return parent::dt();
   }
 
   function getListItem ($uuid) {

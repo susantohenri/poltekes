@@ -9,6 +9,7 @@ class Programs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
     );
 
     $this->form[]= array(
@@ -103,6 +104,39 @@ class Programs extends MY_Model {
       }
 
     }
+  }
+
+  function getListItem ($uuid) { // sing iki durung
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("'' parent", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("GROUP_CONCAT(DISTINCT kegiatan_program.uuid) childUuid", false)
+      ->select("'KegiatanProgram' childController", false)
+      ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.program", 'left')
+      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
+      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
+      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
+      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
+      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
+      ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
+      ->group_by("{$this->table}.uuid");
+    return parent::getListItem ($uuid);
+  }
+
+  function dt () {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+      ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.{$this->table}", 'left')
+      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
+      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
+      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
+      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
+      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
+      ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
+      ->group_by("{$this->table}.uuid");
+    return parent::dt();
   }
 
 }

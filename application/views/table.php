@@ -5,16 +5,22 @@
                 <h1 class="title"> <?= $page_title ?> </h1>
                 <p class="title-description"> Manajemen <?= $page_title ?> </p>
             </div>
+
+            <?php if (strpos($current['controller'], 'Program') > 0): ?>
+            <?php else: ?>
             <div class="col-sm-6 text-right">
                 <a href="<?= site_url($current['controller'] . '/create') ?>" class="btn btn-primary">
                     <i class="fa fa-plus"></i>&nbsp;Add New <?= $page_title ?>
                 </a>
             </div>
+            <?php endif ?>
+
         </div>
     </div>
     <section class="section">
         <div class="card card-block">
-            <table class="table table-bordered table-striped datatable table-model"></table>
+            <table class="table table-bordered table-striped datatable table-model">
+            </table>
         </div>
     </section>
 </article>

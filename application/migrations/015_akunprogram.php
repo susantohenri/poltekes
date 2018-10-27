@@ -11,7 +11,8 @@ class Migration_akunprogram extends CI_Migration {
         `sub_komponen_program` varchar(255) NOT NULL,
         `akun` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `program` (`sub_komponen_program`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

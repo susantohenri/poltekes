@@ -255,7 +255,6 @@
                 <div class="color-secondary"></div>
             </div>
         </div>
-        <!-- <script src="<?= base_url('js/vendor.js') ?>"></script> -->
         <script type="text/javascript" src="<?= base_url('js/jquery-3.3.1.min.js') ?>"></script>
         <script type="text/javascript">
             $('nav.menu li a').each(function () {
@@ -270,9 +269,7 @@
         <?php if ('table' === $page_name): ?>
             <script type="text/javascript" src="<?= base_url('js/jquery.dataTables.min.js') ?>"></script>
             <script type="text/javascript">
-                var
-                thead = <?= json_encode ($thead) ?>,
-                records = <?= json_encode ($records) ?>
+                var thead = <?= json_encode ($thead) ?>
             </script>
             <script type="text/javascript" src="<?= base_url('js/table.js') ?>"></script>
         <?php elseif ('form' === $page_name): ?>

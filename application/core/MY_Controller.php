@@ -59,7 +59,7 @@ class MY_Controller extends CI_Controller {
     }
     $vars = array();
     $vars['page_name'] = 'table';
-    $vars['records'] = $this->$model->find();
+    // $vars['records'] = $this->$model->find();
     $vars['thead'] = $this->$model->thead;
     $this->loadview('index', $vars);
   }
@@ -132,6 +132,9 @@ class MY_Controller extends CI_Controller {
     echo '{"results":'. json_encode($this->$model->select2($field, $this->input->post('term'))) . '}';
   }
 
+  function dt () {
+    echo $this->{$this->model}->dt();
+  }
 
   function select2region ($previousmodel, $model, $data, $field) {
     $this->load->model($model);

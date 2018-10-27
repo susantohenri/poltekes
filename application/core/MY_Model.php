@@ -51,6 +51,11 @@ class MY_Model extends CI_Model {
     return $this->db->get_where($this->table, array("{$this->table}.uuid" => $uuid))->row_array();
   }
 
+  function dt () {
+    $this->load->library('datatables');
+    return $this->datatables->from($this->table)->generate();
+  }
+
   function find ($param = array()) {
     return $this->db->get_where($this->table, $param)->result();
   }

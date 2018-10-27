@@ -63,7 +63,7 @@ class AkunPrograms extends MY_Model {
   	return parent::findOne($param);
   }
 
-  function find ($param = array ()) {
+  function dt () {
   	$this->db
   		->select("{$this->table}.*")
   		->select('akun.kode kode_akun', false)
@@ -72,7 +72,7 @@ class AkunPrograms extends MY_Model {
   		->join('akun', "{$this->table}.akun = akun.uuid", 'left')
   		->join('spj', "{$this->table}.uuid = spj.akun_program", 'left')
   		->group_by("{$this->table}.uuid");
-  	return parent::find($param);
+  	return parent::dt();
   }
 
   function updateByList ($data) {
