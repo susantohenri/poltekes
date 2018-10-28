@@ -6,10 +6,13 @@ class KegiatanPrograms extends MY_Model {
     parent::__construct();
     $this->table = 'kegiatan_program';
     $this->thead = array(
-      (object) array('mData' => 'urutan', 'sTitle' => 'No'),
-      (object) array('mData' => 'kode_kegiatan', 'sTitle' => 'Kode'),
-      (object) array('mData' => 'uraian_kegiatan', 'sTitle' => 'Kegiatan'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
+      (object) array('mData' => 'urutan', 'sTitle' => 'No', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_kegiatan', 'sTitle' => 'Kode', 'className' => 'text-right'),
+      (object) array('mData' => 'uraian_kegiatan', 'sTitle' => 'Kegiatan', 'width' => '30%'),
+      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'OutputProgram', 'model' => 'OutputPrograms');
@@ -42,7 +45,10 @@ class KegiatanPrograms extends MY_Model {
       ->select("{$this->table}.urutan")
       ->select('kegiatan.kode as kode_kegiatan', false)
       ->select('kegiatan.uraian as uraian_kegiatan', false)
+      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
+      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
       ->join('kegiatan', "{$this->table}.kegiatan = kegiatan.uuid", 'left')
       ->join('output_program', "{$this->table}.uuid = output_program.{$this->table}", 'left')
       ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')

@@ -7,7 +7,7 @@ class Komponens extends MY_Model {
     $this->table = 'komponen';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
+      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
     );
 

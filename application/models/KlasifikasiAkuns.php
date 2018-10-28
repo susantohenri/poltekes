@@ -7,7 +7,7 @@ class KlasifikasiAkuns extends MY_Model {
     $this->table = 'klasifikasi_akun';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
+      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'nama', 'sTitle' => 'Nama'),
     );
 

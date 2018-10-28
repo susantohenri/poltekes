@@ -6,10 +6,13 @@ class SubKomponenPrograms extends MY_Model {
     parent::__construct();
     $this->table = 'sub_komponen_program';
     $this->thead = array(
-      (object) array('mData' => 'urutan', 'sTitle' => 'No'),
-      (object) array('mData' => 'kode_sub_komponen', 'sTitle' => 'Kode'),
+      (object) array('mData' => 'urutan', 'sTitle' => 'No', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_sub_komponen', 'sTitle' => 'Kode', 'className' => 'text-center'),
       (object) array('mData' => 'uraian_sub_komponen', 'sTitle' => 'Sub Komponen'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
+      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right')
     );
 
     $this->form = array();
@@ -71,7 +74,10 @@ class SubKomponenPrograms extends MY_Model {
       ->select("{$this->table}.urutan")
       ->select('sub_komponen.kode as kode_sub_komponen', false)
       ->select('sub_komponen.uraian as uraian_sub_komponen', false)
+      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
+      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
       ->join('sub_komponen', "{$this->table}.sub_komponen = sub_komponen.uuid", 'left')
       ->join('akun_program', "{$this->table}.uuid = akun_program.{$this->table}", 'left')
       ->join('spj', "akun_program.uuid = spj.akun_program", 'left')

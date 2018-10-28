@@ -7,9 +7,12 @@ class Programs extends MY_Model {
     $this->table = 'program';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
+      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '30%'),
+      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right'),
     );
 
     $this->form[]= array(
@@ -92,6 +95,7 @@ class Programs extends MY_Model {
         $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
           'akun' => $akun,
+          // 'pagu' => 10000000 TESTING PURPOSE
         ));
       } else if (0 === $codeLength) {
         $spj = $this->Spjs->save(array(
@@ -129,7 +133,10 @@ class Programs extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
+      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
+      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.{$this->table}", 'left')
       ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
       ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')

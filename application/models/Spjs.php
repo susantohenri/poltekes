@@ -8,10 +8,10 @@ class Spjs extends MY_Model {
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'vol', 'sTitle' => 'Volume'),
+      (object) array('mData' => 'vol', 'sTitle' => 'Volume', 'className' => 'text-right'),
       (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
-      (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
+      (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga', 'className' => 'text-right'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right'),
     );
 
     $this->form[]= array(

@@ -7,10 +7,13 @@ class KomponenPrograms extends MY_Model {
     $this->table = 'komponen_program';
 
     $this->thead = array(
-      (object) array('mData' => 'urutan', 'sTitle' => 'No'),
-      (object) array('mData' => 'kode_komponen', 'sTitle' => 'Kode'),
+      (object) array('mData' => 'urutan', 'sTitle' => 'No', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_komponen', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian_komponen', 'sTitle' => 'Komponen'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
+      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right')
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'SubKomponenProgram', 'model' => 'SubKomponenPrograms');
@@ -40,7 +43,10 @@ class KomponenPrograms extends MY_Model {
       ->select("{$this->table}.urutan")
       ->select('komponen.kode as kode_komponen', false)
       ->select('komponen.uraian as uraian_komponen', false)
+      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
+      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
       ->join('komponen', "{$this->table}.komponen = komponen.uuid", 'left')
       ->join('sub_komponen_program', "{$this->table}.uuid = sub_komponen_program.{$this->table}", 'left')
       ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')

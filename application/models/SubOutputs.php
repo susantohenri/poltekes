@@ -7,7 +7,7 @@ class SubOutputs extends MY_Model {
     $this->table = 'sub_output';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
+      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
     );
 
