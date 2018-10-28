@@ -8,6 +8,7 @@ class MY_Model extends CI_Model {
   function __construct () {
     // parent::__construct();
     $this->load->database();
+    $this->load->library('datatables');
     $this->table = strtolower($this->router->class);
     $this->thead = array(
       (object) array('mData' => 'name', 'sTitle' => 'Name'),
@@ -52,7 +53,6 @@ class MY_Model extends CI_Model {
   }
 
   function dt () {
-    $this->load->library('datatables');
     return $this->datatables->from($this->table)->generate();
   }
 

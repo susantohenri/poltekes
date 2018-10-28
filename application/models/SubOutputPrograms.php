@@ -9,7 +9,7 @@ class SubOutputPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No'),
       (object) array('mData' => 'kode_sub_output', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian_sub_output', 'sTitle' => 'Sub Output'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'KomponenProgram', 'model' => 'KomponenPrograms');
@@ -35,10 +35,11 @@ class SubOutputPrograms extends MY_Model {
   }
 
   function dt () {
-    $this->db
-      ->select("{$this->table}.*")
-      ->select('sub_output.kode kode_sub_output', false)
-      ->select('sub_output.uraian uraian_sub_output', false)
+    $this->datatables
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
+      ->select('sub_output.kode as kode_sub_output', false)
+      ->select('sub_output.uraian as uraian_sub_output', false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
       ->join('sub_output', "{$this->table}.sub_output = sub_output.uuid", 'left')
       ->join('komponen_program', "{$this->table}.uuid = komponen_program.{$this->table}", 'left')

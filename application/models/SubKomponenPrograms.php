@@ -9,7 +9,7 @@ class SubKomponenPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No'),
       (object) array('mData' => 'kode_sub_komponen', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian_sub_komponen', 'sTitle' => 'Sub Komponen'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
     );
 
     $this->form = array();
@@ -66,10 +66,11 @@ class SubKomponenPrograms extends MY_Model {
   }
 
   function dt () {
-    $this->db
-      ->select("{$this->table}.*")
-      ->select('sub_komponen.kode kode_sub_komponen', false)
-      ->select('sub_komponen.uraian uraian_sub_komponen', false)
+    $this->datatables
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
+      ->select('sub_komponen.kode as kode_sub_komponen', false)
+      ->select('sub_komponen.uraian as uraian_sub_komponen', false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
       ->join('sub_komponen', "{$this->table}.sub_komponen = sub_komponen.uuid", 'left')
       ->join('akun_program', "{$this->table}.uuid = akun_program.{$this->table}", 'left')

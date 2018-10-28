@@ -35,7 +35,7 @@ class Akuns extends MY_Model {
   }
 
   function dt () {
-  	$this->db
+  	$this->datatables
   	->select("{$this->table}.*")
   	->select('klasifikasi_akun.nama nama_klasifikasi_akun', false)
   	->join('klasifikasi_akun', "klasifikasi_akun.uuid = {$this->table}.klasifikasi_akun", 'left');

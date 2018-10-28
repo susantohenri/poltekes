@@ -11,7 +11,7 @@ class Spjs extends MY_Model {
       (object) array('mData' => 'vol', 'sTitle' => 'Volume'),
       (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
       (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
     );
 
     $this->form[]= array(
@@ -63,10 +63,14 @@ class Spjs extends MY_Model {
   }
 
   function dt () {
-    $this->db
-      ->select("{$this->table}.*")
-      ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) hargasat_format", false)
-      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah_format", false);
+    $this->datatables
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.uraian")
+      ->select("{$this->table}.vol")
+      ->select("{$this->table}.sat")
+      ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) as hargasat_format", false)
+      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) as jumlah_format", false)
+      ;
     return parent::dt();
   }
 

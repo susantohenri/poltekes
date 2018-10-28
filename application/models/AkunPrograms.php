@@ -9,7 +9,7 @@ class AkunPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No'),
       (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode'),
       (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'searchable' => 'false'),
     );
 
     $this->form = array();
@@ -64,11 +64,12 @@ class AkunPrograms extends MY_Model {
   }
 
   function dt () {
-  	$this->db
-  		->select("{$this->table}.*")
-  		->select('akun.kode kode_akun', false)
-  		->select('akun.nama nama_akun', false)
-  		->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
+  	$this->datatables
+  		->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
+  		->select('akun.kode as kode_akun', false)
+  		->select('akun.nama as nama_akun', false)
+  		->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) as jumlah_format", false)
   		->join('akun', "{$this->table}.akun = akun.uuid", 'left')
   		->join('spj', "{$this->table}.uuid = spj.akun_program", 'left')
   		->group_by("{$this->table}.uuid");

@@ -9,7 +9,7 @@ class Programs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
     );
 
     $this->form[]= array(
@@ -125,8 +125,10 @@ class Programs extends MY_Model {
   }
 
   function dt () {
-    $this->db
-      ->select("{$this->table}.*")
+    $this->datatables
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.kode")
+      ->select("{$this->table}.uraian")
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.{$this->table}", 'left')
       ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')

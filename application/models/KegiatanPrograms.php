@@ -9,7 +9,7 @@ class KegiatanPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No'),
       (object) array('mData' => 'kode_kegiatan', 'sTitle' => 'Kode'),
       (object) array('mData' => 'uraian_kegiatan', 'sTitle' => 'Kegiatan'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah'),
+      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'OutputProgram', 'model' => 'OutputPrograms');
@@ -37,10 +37,11 @@ class KegiatanPrograms extends MY_Model {
   }
 
   function dt () {
-    $this->db
-      ->select("{$this->table}.*")
-      ->select('kegiatan.kode kode_kegiatan', false)
-      ->select('kegiatan.uraian uraian_kegiatan', false)
+    $this->datatables
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
+      ->select('kegiatan.kode as kode_kegiatan', false)
+      ->select('kegiatan.uraian as uraian_kegiatan', false)
       ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
       ->join('kegiatan', "{$this->table}.kegiatan = kegiatan.uuid", 'left')
       ->join('output_program', "{$this->table}.uuid = output_program.{$this->table}", 'left')
