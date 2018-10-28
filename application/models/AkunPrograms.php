@@ -9,8 +9,8 @@ class AkunPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'className' => 'text-right'),
       (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun'),
-      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right')
     );
@@ -72,10 +72,10 @@ class AkunPrograms extends MY_Model {
       ->select("{$this->table}.urutan")
   		->select('akun.kode as kode_akun', false)
   		->select('akun.nama as nama_akun', false)
-      ->select("CONCAT('Rp ', FORMAT(pagu, 0)) as pagu_format", false)
-  		->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) as jumlah_format", false)
-  		->select("CONCAT('Rp ', FORMAT(IF(pagu - SUM(hargasat * vol) > 0, pagu - SUM(hargasat * vol), 0), 0)) as sisa")
-      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / pagu * 100, 0), ' %') as prosentase")
+      ->select("{$this->table}.pagu")
+  		->select("SUM(hargasat * vol) as realisasi", false)
+  		->select("IF(pagu - SUM(hargasat * vol) > 0, pagu - SUM(hargasat * vol), 0) as sisa")
+      ->select("SUM(hargasat * vol) / pagu * 100 as prosentase")
       ->join('akun', "{$this->table}.akun = akun.uuid", 'left')
   		->join('spj', "{$this->table}.uuid = spj.akun_program", 'left')
   		->group_by("{$this->table}.uuid");

@@ -1,4 +1,11 @@
 window.onload = function () {
+
+  for (var th in thead) {
+    if (['realisasi', 'hargasat', 'pagu', 'sisa'].indexOf(thead[th].mData) > -1)
+      thead[th].render = $.fn.dataTable.render.number( ',', '.', 0, 'Rp ' )
+    if ('prosentase' === thead[th].mData) thead[th].render = $.fn.dataTable.render.number( ',', '.', 0, '', ' %' )
+  }
+
   $('.table-model').DataTable( {
     processing: true,
     serverSide: true,

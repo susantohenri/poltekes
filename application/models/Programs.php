@@ -9,8 +9,8 @@ class Programs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '30%'),
-      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right'),
     );
@@ -133,10 +133,10 @@ class Programs extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
-      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
-      ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
-      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
-      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
+      ->select('akun_program.pagu')
+      ->select("SUM(hargasat * vol) as realisasi", false)
+      ->select("IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0) as sisa")
+      ->select("SUM(hargasat * vol) / SUM(pagu) * 100 as prosentase")
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.{$this->table}", 'left')
       ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
       ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')

@@ -7,11 +7,12 @@ class Spjs extends MY_Model {
     $this->table = 'spj';
     $this->form = array();
     $this->thead = array(
+      (object) array('mData' => 'urutan', 'sTitle' => 'No'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
       (object) array('mData' => 'vol', 'sTitle' => 'Volume', 'className' => 'text-right'),
       (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
-      (object) array('mData' => 'hargasat_format', 'sTitle' => 'Harga', 'className' => 'text-right'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
+      (object) array('mData' => 'realisasi', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
     );
 
     $this->form[]= array(
@@ -65,11 +66,12 @@ class Spjs extends MY_Model {
   function dt () {
     $this->datatables
       ->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
-      ->select("CONCAT('Rp ', FORMAT(hargasat, 0)) as hargasat_format", false)
-      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) as jumlah_format", false)
+      ->select("{$this->table}.hargasat")
+      ->select("hargasat * vol as realisasi", false)
       ;
     return parent::dt();
   }

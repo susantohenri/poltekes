@@ -9,8 +9,8 @@ class OutputPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'className' => 'text-right'),
       (object) array('mData' => 'kode_output', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '30%'),
-      (object) array('mData' => 'pagu_format', 'sTitle' => 'Pagu', 'className' => 'text-right'),
-      (object) array('mData' => 'jumlah_format', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right'),
     );
@@ -44,10 +44,10 @@ class OutputPrograms extends MY_Model {
       ->select("{$this->table}.urutan")
       ->select('output.kode as kode_output', false)
       ->select('output.uraian as uraian_output', false)
-      ->select("CONCAT('Rp ', FORMAT(SUM(pagu), 0)) pagu_format", false)
-      ->select("CONCAT('Rp ', FORMAT(SUM(hargasat * vol), 0)) jumlah_format", false)
-      ->select("CONCAT('Rp ', FORMAT(IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0), 0)) as sisa")
-      ->select("CONCAT(FORMAT(SUM(hargasat * vol) / SUM(pagu) * 100, 0), ' %') as prosentase")
+      ->select('akun_program.pagu')
+      ->select("SUM(hargasat * vol) as realisasi", false)
+      ->select("IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0) as sisa")
+      ->select("SUM(hargasat * vol) / SUM(pagu) * 100 as prosentase")
       ->join('output', "{$this->table}.output = output.uuid", 'left')
       ->join('sub_output_program', "{$this->table}.uuid = sub_output_program.{$this->table}", 'left')
       ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
