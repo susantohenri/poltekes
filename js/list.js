@@ -99,7 +99,7 @@ function sortItem (li) {
 	var sorted = elems.sort(function (a, b) {
 		var aValue = parseInt(a.getAttribute('data-urutan'), 10)
 		var bValue = parseInt(b.getAttribute('data-urutan'), 10)
-		return aValue > bValue
+		return aValue - bValue
 	})
 
   var html = ''

@@ -88,7 +88,7 @@ class Programs extends MY_Model {
           'sub_komponen' => $subKomponen
         ));
       } else if (6 === $codeLength) {
-        $akun = $this->Akuns->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        $akun = $this->Akuns->findOrCreate(array('kode' => $cell[0], 'nama' => $cell[1]));
         $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
           'akun' => $akun,
@@ -102,8 +102,8 @@ class Programs extends MY_Model {
           'hargasat' => $cell[4],
         ));
       }
-
     }
+    return $program;
   }
 
   function getListItem ($uuid) { // sing iki durung
