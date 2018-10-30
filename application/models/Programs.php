@@ -21,6 +21,8 @@ class Programs extends MY_Model {
       'value'=> '',
       'type' => 'textarea'
     );
+
+    $this->childs[] = array('label' => '', 'controller' => 'KegiatanProgram', 'model' => 'KegiatanPrograms');
   }
 
   function create ($data) {
