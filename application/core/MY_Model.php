@@ -61,7 +61,7 @@ class MY_Model extends CI_Model {
   }
 
   function findOrCreate ($data) {
-    if ($found = $this->findOne (array('kode' => $data['kode']))) return $found['uuid'];
+    if ($found = $this->findOne (array('kode' => $data['kode'], 'uraian' => $data['uraian']))) return $found['uuid'];
     else return $this->create($data);
   }
 

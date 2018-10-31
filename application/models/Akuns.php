@@ -42,4 +42,9 @@ class Akuns extends MY_Model {
   	return parent::dt();
   }
 
+  function findOrCreate ($data) {
+    if ($found = $this->findOne (array('kode' => $data['kode'], 'nama' => $data['nama']))) return $found['uuid'];
+    else return $this->create($data);
+  }
+
 }

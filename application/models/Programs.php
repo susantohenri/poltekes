@@ -50,7 +50,7 @@ class Programs extends MY_Model {
     $subKomponenProgram = false;
     $akunProgram = false;
     $spj = false;
-    foreach (explode ("\n", $xlsString) as $rowIndex => $rowContent) {
+    foreach (explode ("\n", str_replace("\n[Base Line]", '', $xlsString)) as $rowIndex => $rowContent) {
       if (0 === $rowIndex) continue;
       $cell = explode ("\t", $rowContent);
       $cell[0] = trim($cell[0]);
@@ -63,43 +63,81 @@ class Programs extends MY_Model {
           'uraian' => $cell[1]
         ));
       } else if ($codeLength === 4) {
-        $kegiatan = $this->Kegiatans->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        if (!$program) {
+          $program = parent::create(array(
+            'kode' => '',
+            'uraian' => 'Tanpa Program'
+          ));
+        }
         $kegiatanProgram = $this->KegiatanPrograms->save(array(
           'program' => $program,
-          'kegiatan' => $kegiatan
+          'kegiatan' => $this->Kegiatans->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]))
         ));
+        $outputProgram = false;
       } else if (1 === $codeDotCount) {
-        $output = $this->Outputs->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        if (!$kegiatanProgram) {
+          $kegiatanProgram = $this->KegiatanPrograms->save(array(
+            'program' => $program,
+            'kegiatan' => $this->Kegiatans->findOrCreate(array('kode' => '', 'uraian' => 'Tanpa Kegiatan'))
+          ));
+        }
         $outputProgram = $this->OutputPrograms->save(array(
           'kegiatan_program' => $kegiatanProgram,
-          'output' => $output
+          'output' => $this->Outputs->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]))
         ));
+        $subOutputProgram = false;
       } else if (2 === $codeDotCount) {
-        $subOutput = $this->SubOutputs->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        if (!$outputProgram) {
+          $outputProgram = $this->OutputPrograms->save(array(
+            'kegiatan_program' => $kegiatanProgram,
+            'output' => $this->Outputs->findOrCreate(array('kode' => '', 'uraian' => 'Tanpa Output'))
+          ));
+        }
         $subOutputProgram = $this->SubOutputPrograms->save(array(
           'output_program' => $outputProgram,
-          'sub_output' => $subOutput,
+          'sub_output' => $this->SubOutputs->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1])),
         ));
+        $komponenProgram = false;
       } else if (3 === $codeLength) {
-        $komponen = $this->Komponens->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        if (!$subOutputProgram) {
+          $subOutputProgram = $this->SubOutputPrograms->save(array(
+            'output_program' => $outputProgram,
+            'sub_output' => $this->SubOutputs->findOrCreate(array('kode' => '', 'uraian' => 'Tanpa Sub Output')),
+          ));
+        }
         $komponenProgram = $this->KomponenPrograms->save(array(
           'sub_output_program' => $subOutputProgram,
-          'komponen' => $komponen
+          'komponen' => $this->Komponens->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]))
         ));
+        $subKomponenProgram = false;
       } else if (ctype_alpha ($cell[0])) {
-        $subKomponen = $this->SubKomponens->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]));
+        if (!$komponenProgram) {
+          $komponenProgram = $this->KomponenPrograms->save(array(
+            'sub_output_program' => $subOutputProgram,
+            'komponen' => $this->Komponens->findOrCreate(array('kode' => '', 'uraian' => 'Tanpa Komponen'))
+          ));
+        }
         $subKomponenProgram = $this->SubKomponenPrograms->save(array(
           'komponen_program' => $komponenProgram,
-          'sub_komponen' => $subKomponen
+          'sub_komponen' => $this->SubKomponens->findOrCreate(array('kode' => $cell[0], 'uraian' => $cell[1]))
         ));
+        $akunProgram = false;
       } else if (6 === $codeLength) {
-        $akun = $this->Akuns->findOrCreate(array('kode' => $cell[0], 'nama' => $cell[1]));
+        if (!$subKomponenProgram) $subKomponenProgram = $this->SubKomponenPrograms->save(array(
+          'komponen_program' => $komponenProgram,
+          'sub_komponen' => $this->SubKomponens->findOrCreate(array('kode' => '', 'uraian' => 'Tanpa Sub Komponen'))
+        ));
         $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
-          'akun' => $akun,
+          'akun' => $this->Akuns->findOrCreate(array('kode' => $cell[0], 'nama' => $cell[1])),
           // 'pagu' => 10000000 TESTING PURPOSE
         ));
+        $spj = false;
       } else if (0 === $codeLength) {
+        if (!$akunProgram) $akunProgram = $this->AkunPrograms->save(array(
+          'sub_komponen_program' => $subKomponenProgram,
+          'akun' => $this->Akuns->findOrCreate(array('kode' => '', 'nama' => 'Tanpa Akun')),
+        ));
         $spj = $this->Spjs->save(array(
           'akun_program' => $akunProgram,
           'uraian' => $cell[1],
@@ -148,6 +186,11 @@ class Programs extends MY_Model {
       ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();
+  }
+
+  function getForm ($uuid = false) {
+    $this->childs = array();
+    return parent::getForm ($uuid = false);
   }
 
 }
