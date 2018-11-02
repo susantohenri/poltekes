@@ -45,7 +45,8 @@ class SubKomponenPrograms extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.komponen_program parent", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("FORMAT(SUM(pagu), 0) pagu", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT akun_program.uuid) childUuid", false)
       ->select("'AkunProgram' childController", false)
       ->select('sub_komponen.kode kode', false)

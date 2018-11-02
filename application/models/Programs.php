@@ -130,7 +130,7 @@ class Programs extends MY_Model {
         $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
           'akun' => $this->Akuns->findOrCreate(array('kode' => $cell[0], 'nama' => $cell[1])),
-          // 'pagu' => 10000000 TESTING PURPOSE
+          'pagu' => 10000000// TESTING PURPOSE
         ));
         $spj = false;
       } else if (0 === $codeLength) {
@@ -154,7 +154,8 @@ class Programs extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("'' parent", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("FORMAT(SUM(pagu), 0) pagu", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT kegiatan_program.uuid) childUuid", false)
       ->select("'KegiatanProgram' childController", false)
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.program", 'left')

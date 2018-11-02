@@ -45,7 +45,8 @@ class AkunPrograms extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.sub_komponen_program parent", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("FORMAT(pagu, 0) pagu", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
       ->select('akun.kode kode', false)

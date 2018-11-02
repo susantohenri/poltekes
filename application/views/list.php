@@ -22,6 +22,31 @@
     <section class="section">
         <div class="card items">
           <ul class="item-list striped">
+            <li class="item item-list-header">
+                <div class="item-row">
+                    <div class="item-col fixed item-col-check">
+                        <label class="item-check" id="select-all-items">
+                          &nbsp;
+                          <span></span>
+                        </label>
+                    </div>
+                    <div class="item-col item-col-header fixed col-sm-9">
+                        <div>
+                            <span>URAIAN</span>
+                        </div>
+                    </div>
+                    <div class="item-col item-col-header text-right">
+                        <div>
+                            <span class="">PAGU</span>
+                        </div>
+                    </div>
+                    <div class="item-col item-col-header text-right">
+                        <div>
+                            <span class="">REALISASI</span>
+                        </div>
+                    </div>
+                </div>
+            </li>
             <form method="POST" action="<?= site_url($current['controller']) ?>" enctype="multipart/form-data" id="form_list">
                 <input type="hidden" name="last_submit" value="<?= time() ?>">        
                 <li class="item item-list-header" data-uuid="<?= $item['uuid'] ?>" data-child-controller="<?= $item['childController'] ?>" data-child-uuid="<?= $item['childUuid'] ?>">
@@ -32,14 +57,19 @@
                               <span></span>
                             </label>
                         </div>
-                        <div class="item-col item-col-header fixed">
+                        <div class="item-col item-col-header fixed col-sm-9">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
                             </div>
                         </div>
                         <div class="item-col item-col-header text-right">
                             <div>
-                                <span class="jumlah"><?= $item['jumlah'] ?></span>
+                                <span class="pagu"><?= $item['pagu'] ?></span>
+                            </div>
+                        </div>
+                        <div class="item-col item-col-header text-right">
+                            <div>
+                                <span class="realisasi"><?= $item['realisasi'] ?></span>
                             </div>
                         </div>
                     </div>

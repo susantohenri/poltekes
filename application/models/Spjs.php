@@ -59,7 +59,7 @@ class Spjs extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.akun_program parent", false)
-      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) jumlah", false);
+      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) realisasi", false);
     return parent::findOne($param);
   }
 
@@ -82,7 +82,7 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.akun_program parent", false)
       ->select("FORMAT(vol, 0) vol_format", false)
       ->select("FORMAT(hargasat, 0) hargasat_format", false)
-      ->select("FORMAT(vol*hargasat, 0) jumlah", false)
+      ->select("FORMAT(vol*hargasat, 0) realisasi", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)

@@ -17,7 +17,7 @@
                     class="form-control input-hargasat" type="text" value="<?= $item['hargasat_format'] ?>" data-number="true" placeholder="Harga Satuan">
                 </div>
                 <div class="col-sm-2">
-                    <input class="form-control jumlah" type="text" value="<?= $item['jumlah'] ?>" disabled="disabled" data-number="true">
+                    <input class="form-control realisasi" type="text" value="<?= $item['realisasi'] ?>" disabled="disabled" data-number="true">
                 </div>
 
                 <input class="form-control" type="hidden" value="<?= $item['uuid'] ?>" name="<?= "{$item['parent']}[Spj_uuid][]" ?>" placeholder="UUID">

@@ -23,7 +23,8 @@ class SubOutputPrograms extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.output_program parent", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("FORMAT(SUM(pagu), 0) pagu", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT komponen_program.uuid) childUuid", false)
       ->select("'KomponenProgram' childController", false)
       ->select('sub_output.kode kode', false)

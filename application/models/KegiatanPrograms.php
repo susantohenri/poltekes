@@ -23,7 +23,8 @@ class KegiatanPrograms extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.program parent", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) jumlah", false)
+      ->select("FORMAT(SUM(pagu), 0) pagu", false)
+      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT output_program.uuid) childUuid", false)
       ->select("'OutputProgram' childController", false)
       ->select('kegiatan.kode kode', false)

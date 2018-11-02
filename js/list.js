@@ -1,10 +1,13 @@
 $(document).ready(activateExpandButton)
-$('.btn-save').click(function () {
-	$('[data-number]').each (function () {
-		$(this).val(getNumber($(this)))
+
+	markMinus($('li[data-uuid]'))
+
+	$('.btn-save').click(function () {
+		$('[data-number]').each (function () {
+			$(this).val(getNumber($(this)))
+		})
+		$('form#form_list').submit()
 	})
-	$('form#form_list').submit()
-})
 
 function activateExpandButton () {
 	$('.expand-btn').unbind('click').bind('click', function () {
@@ -69,6 +72,9 @@ function expandItem (btn, cb) {
 	$.when.apply(undefined, requests).then(function () {
 		sortItem(li)
 		$('[data-parent="' + li.attr('data-uuid') + '"]').css('padding-left', parent.indent + 10 + 'px')
+		.each(function () {
+			markMinus($(this))
+		})
 		activateBtnDelete()
 		activateRealtimeCalculation()
 		if ('Spj' === parent.childController) activateAddBtn(parent)
@@ -112,7 +118,7 @@ function sortItem (li) {
 function activateRealtimeCalculation () {
 	$('[data-number]').unbind('keyup').bind('keyup', function () {
 		var li = $(this).parent().parent().parent().parent().parent()
-		li.find('.jumlah').val(currency (getNumber (li.find('.input-vol')) * getNumber (li.find('.input-hargasat'))))
+		li.find('.realisasi').val(currency (getNumber (li.find('.input-vol')) * getNumber (li.find('.input-hargasat'))))
 		$(this).val(currency (getNumber ($(this))))
 		calculateBottomUp (li)
 	})
@@ -123,11 +129,12 @@ function calculateBottomUp (li) {
 	else {
 		var parentUuid = li.attr('data-parent')
 		var parentLi = $('[data-uuid="' + li.attr('data-parent') + '"]')
-		var jumlah = 0
+		var realisasi = 0
 		$('[data-parent="' + parentUuid + '"]').each(function () {
-			jumlah += $(this).find('.jumlah').length > 0 ? getNumber($(this).find('.jumlah')) : 0
+			realisasi += $(this).find('.realisasi').length > 0 ? getNumber($(this).find('.realisasi')) : 0
 		})
-		parentLi.find('.jumlah').html(currency (jumlah))
+		parentLi.find('.realisasi').html(currency (realisasi))
+		markMinus(parentLi)
 		calculateBottomUp (parentLi)
 	}
 }
@@ -142,4 +149,11 @@ function currency (number) {
 	var	reverse = number.toString().split('').reverse().join(''),
 	currency 	= reverse.match(/\d{1,3}/g)
 	return currency.join(',').split('').reverse().join('')
+}
+
+function markMinus (li) {
+	var inlineStyle = li.attr('style') || ''
+	if (li.find('.pagu').length < 1) return true
+	if (getNumber(li.find('.realisasi')) > getNumber(li.find('.pagu'))) li.css('background-color', '#ffcccc')
+	else li.attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
 }
