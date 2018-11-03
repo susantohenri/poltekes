@@ -7,10 +7,10 @@ class Spjs extends MY_Model {
     $this->table = 'spj';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'urutan', 'sTitle' => 'No'),
+      (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'vol', 'sTitle' => 'Volume', 'className' => 'text-right'),
-      (object) array('mData' => 'sat', 'sTitle' => 'Satuan'),
+      (object) array('mData' => 'vol', 'sTitle' => 'Vol', 'className' => 'text-right'),
+      (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
       (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
     );
@@ -23,7 +23,7 @@ class Spjs extends MY_Model {
 
     $this->form[]= array(
       'name' => 'vol',
-      'label'=> 'Volume',
+      'label'=> 'Vol',
       'attributes' => array(
         array('data-number' => 'true')
       ),
@@ -32,20 +32,20 @@ class Spjs extends MY_Model {
 
     $this->form[]= array(
       'name'    => 'sat',
-      'label'   => 'Satuan',
+      'label'   => 'Sat',
     );
 
     $this->form[]= array(
       'name' => 'hargasat',
-      'label'=> 'Harga Satuan',
+      'label'=> 'Harga Sat',
       'attributes' => array(
         array('data-number' => 'true')
       ),
     );
 
     $this->form[]= array(
-      'name' => 'jumlah',
-      'label'=> 'Jumlah',
+      'name' => 'realisasi',
+      'label'=> 'Realisasi',
       'value'=> 0,
       'attributes' => array(
         array('disabled' => 'disabled'),
@@ -58,8 +58,10 @@ class Spjs extends MY_Model {
   function findOne ($param) {
     $this->db
       ->select("{$this->table}.*")
-      ->select("{$this->table}.akun_program parent", false)
-      ->select("CONCAT('Rp ', FORMAT(hargasat * vol, 0)) realisasi", false);
+      ->select("FORMAT({$this->table}.vol, 0) vol")
+      ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
+      ->select("{$this->table}.detail parent", false)
+      ->select("FORMAT(hargasat * vol, 0) realisasi", false);
     return parent::findOne($param);
   }
 
@@ -79,7 +81,7 @@ class Spjs extends MY_Model {
   function getListItem ($uuid) {
     $this->db
       ->select("{$this->table}.*")
-      ->select("{$this->table}.akun_program parent", false)
+      ->select("{$this->table}.detail parent", false)
       ->select("FORMAT(vol, 0) vol_format", false)
       ->select("FORMAT(hargasat, 0) hargasat_format", false)
       ->select("FORMAT(vol*hargasat, 0) realisasi", false)

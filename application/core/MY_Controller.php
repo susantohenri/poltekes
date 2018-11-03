@@ -44,8 +44,8 @@ class MY_Controller extends CI_Controller {
           $this->db->db_debug = FALSE;
 
           if (strpos($_SERVER['HTTP_REFERER'], '/readList/') > -1) {
-            $this->load->model('AkunPrograms');
-            $result = $this->AkunPrograms->updateByList($post);
+            $this->load->model('Details');
+            $result = $this->Details->updateByList($post);
           } else $result = $this->$model->save($post);
 
           $error = $this->db->error();

@@ -10,7 +10,6 @@ class Migration_akunprogram extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `sub_komponen_program` varchar(255) NOT NULL,
         `akun` varchar(255) NOT NULL,
-        `pagu` float NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`sub_komponen_program`)

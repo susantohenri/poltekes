@@ -12,7 +12,7 @@ class Programs extends MY_Model {
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'prosentase', 'sTitle' => 'Penyerapan', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right'),
     );
 
     $this->form[]= array(
@@ -40,7 +40,7 @@ class Programs extends MY_Model {
       'KomponenPrograms',
       'SubKomponenPrograms',
       'AkunPrograms',
-      'Spjs',
+      'Details',
     ));
     $program = false;
     $kegiatanProgram = false;
@@ -49,7 +49,7 @@ class Programs extends MY_Model {
     $komponenProgram = false;
     $subKomponenProgram = false;
     $akunProgram = false;
-    $spj = false;
+    $Detail = false;
     foreach (explode ("\n", str_replace("\n[Base Line]", '', $xlsString)) as $rowIndex => $rowContent) {
       if (0 === $rowIndex) continue;
       $cell = explode ("\t", $rowContent);
@@ -130,15 +130,14 @@ class Programs extends MY_Model {
         $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
           'akun' => $this->Akuns->findOrCreate(array('kode' => $cell[0], 'nama' => $cell[1])),
-          'pagu' => 10000000// TESTING PURPOSE
         ));
-        $spj = false;
+        $Detail = false;
       } else if (0 === $codeLength) {
         if (!$akunProgram) $akunProgram = $this->AkunPrograms->save(array(
           'sub_komponen_program' => $subKomponenProgram,
           'akun' => $this->Akuns->findOrCreate(array('kode' => '', 'nama' => 'Tanpa Akun')),
         ));
-        $spj = $this->Spjs->save(array(
+        $Detail = $this->Details->save(array(
           'akun_program' => $akunProgram,
           'uraian' => $cell[1],
           'vol' => $cell[2],
@@ -154,8 +153,8 @@ class Programs extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("'' parent", false)
-      ->select("FORMAT(SUM(pagu), 0) pagu", false)
-      ->select("FORMAT(SUM(vol*hargasat), 0) realisasi", false)
+      ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) realisasi", false)
       ->select("GROUP_CONCAT(DISTINCT kegiatan_program.uuid) childUuid", false)
       ->select("'KegiatanProgram' childController", false)
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.program", 'left')
@@ -164,7 +163,8 @@ class Programs extends MY_Model {
       ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
       ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
       ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
+      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('spj', "detail.uuid = spj.detail", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::getListItem ($uuid);
   }
@@ -174,17 +174,18 @@ class Programs extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
-      ->select('akun_program.pagu')
-      ->select("SUM(hargasat * vol) as realisasi", false)
-      ->select("IF(SUM(pagu) - SUM(hargasat * vol) > 0, SUM(pagu) - SUM(hargasat * vol), 0) as sisa")
-      ->select("SUM(hargasat * vol) / SUM(pagu) * 100 as prosentase")
+      ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
+      ->select("SUM(spj.hargasat * spj.vol) as realisasi", false)
+      ->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
+      ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
       ->join('kegiatan_program', "{$this->table}.uuid = kegiatan_program.{$this->table}", 'left')
       ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
       ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
       ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
       ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
       ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('spj', "akun_program.uuid = spj.akun_program", 'left')
+      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('spj', "detail.uuid = spj.detail", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();
   }

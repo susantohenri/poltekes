@@ -33,6 +33,9 @@
             <a href="<?= site_url('AkunProgram/') ?>"><i class="fa fa-windows"></i>Akun</a>
         </li>
         <li>
+            <a href="<?= site_url('Detail/') ?>"><i class="fa fa-gift"></i>Detail</a>
+        </li>
+        <li>
             <a href="<?= site_url('Spj/') ?>"><i class="fa fa-dropbox"></i>SPJ</a>
         </li>
     </ul>

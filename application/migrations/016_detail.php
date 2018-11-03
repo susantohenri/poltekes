@@ -1,12 +1,12 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_spj extends CI_Migration {
+class Migration_detail extends CI_Migration {
 
   function up () {
 
     $this->db->query("
-      CREATE TABLE `spj` (
+      CREATE TABLE `detail` (
         `uuid` varchar(255) NOT NULL,
         `akun_program` varchar(255) NOT NULL,
         `uraian` varchar(255) NOT NULL,
@@ -22,7 +22,7 @@ class Migration_spj extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `spj`");
+    $this->db->query("DROP TABLE `detail`");
   }
 
 }
