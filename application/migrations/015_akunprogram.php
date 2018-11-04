@@ -19,7 +19,7 @@ class Migration_akunprogram extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `akun_program`");
+    $this->db->query("DROP TABLE IF EXISTS `akun_program`");
   }
 
 }

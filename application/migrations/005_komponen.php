@@ -17,7 +17,7 @@ class Migration_komponen extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `komponen`");
+    $this->db->query("DROP TABLE IF EXISTS `komponen`");
   }
 
 }

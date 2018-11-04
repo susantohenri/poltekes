@@ -19,7 +19,7 @@ class Migration_kegiatanprogram extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `kegiatan_program`");
+    $this->db->query("DROP TABLE IF EXISTS `kegiatan_program`");
   }
 
 }

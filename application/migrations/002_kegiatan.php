@@ -17,7 +17,7 @@ class Migration_kegiatan extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `kegiatan`");
+    $this->db->query("DROP TABLE IF EXISTS `kegiatan`");
   }
 
 }

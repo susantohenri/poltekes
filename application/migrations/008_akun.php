@@ -18,7 +18,7 @@ class Migration_akun extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `akun`");
+    $this->db->query("DROP TABLE IF EXISTS `akun`");
   }
 
 }

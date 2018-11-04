@@ -22,7 +22,7 @@ class Migration_spj extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `spj`");
+    $this->db->query("DROP TABLE IF EXISTS `spj`");
   }
 
 }

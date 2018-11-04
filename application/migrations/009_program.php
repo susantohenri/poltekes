@@ -17,7 +17,7 @@ class Migration_program extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `program`");
+    $this->db->query("DROP TABLE IF EXISTS `program`");
   }
 
 }

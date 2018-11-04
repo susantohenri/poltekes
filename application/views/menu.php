@@ -3,14 +3,14 @@
         <li>
             <a href="<?= site_url('User/') ?>"><i class="fa fa-group"></i>User</a>
         </li>
-<!-- 
+
         <li>
-            <a href="<?= site_url('KlasifikasiAkun/') ?>"><i class="fa fa-tags"></i>Klasifikasi Akun</a>
+            <a href="<?= site_url('Jurusan/') ?>"><i class="fa fa-tags"></i>Jurusan</a>
         </li>
         <li>
-            <a href="<?= site_url('Satuan/') ?>"><i class="fa fa-crosshairs"></i>Satuan</a>
+            <a href="<?= site_url('Prodi/') ?>"><i class="fa fa-tag"></i>Prodi</a>
         </li>
- -->
+
         <li>
             <a href="<?= site_url('Program/') ?>"><i class="fa fa-laptop"></i>Program</a>
         </li>

@@ -22,7 +22,7 @@ class Migration_detail extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `detail`");
+    $this->db->query("DROP TABLE IF EXISTS `detail`");
   }
 
 }

@@ -19,7 +19,7 @@ class Migration_subkomponenprogram extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `sub_komponen_program`");
+    $this->db->query("DROP TABLE IF EXISTS `sub_komponen_program`");
   }
 
 }

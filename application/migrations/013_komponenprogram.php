@@ -19,7 +19,7 @@ class Migration_komponenprogram extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `komponen_program`");
+    $this->db->query("DROP TABLE IF EXISTS `komponen_program`");
   }
 
 }

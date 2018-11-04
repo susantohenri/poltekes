@@ -28,7 +28,7 @@ class Migration_user extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `user`");
+    $this->db->query("DROP TABLE IF EXISTS `user`");
   }
 
 }

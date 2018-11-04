@@ -17,7 +17,7 @@ class Migration_output extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `output`");
+    $this->db->query("DROP TABLE IF EXISTS `output`");
   }
 
 }

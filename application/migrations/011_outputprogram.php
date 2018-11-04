@@ -19,7 +19,7 @@ class Migration_outputprogram extends CI_Migration {
   }
 
   function down () {
-    $this->db->query("DROP TABLE `output_program`");
+    $this->db->query("DROP TABLE IF EXISTS `output_program`");
   }
 
 }
