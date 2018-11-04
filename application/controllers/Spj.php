@@ -9,4 +9,8 @@ class Spj extends MY_Controller {
     $this->loadview('subformlist-spj', $data);
   }
 
+  function subformlistcreate ($parentUuid) {
+    $this->loadview('subformlistcreate-spj', array('item' => array ('parent' => $parentUuid)));
+  }
+
 }

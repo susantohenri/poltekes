@@ -35,6 +35,10 @@ function activateBtnDelete () {
 function activateAddBtn (li) {
 	var last = $('[data-parent="' + li.uuid + '"]').last()
 	var indent = last.css('padding-left')
+	if (last.length < 1) {
+		last = $('li[data-uuid="' + li.uuid + '"]')
+		indent = parseInt(last.css('padding-left').replace('px', 0))
+	}
 	var addBtn = '<li class="item" data-uuid="" data-parent="' + li.uuid + '" style="padding-left: ' + indent + '">\
 	    <div class="item-row">\
         <div class="item-col">\
@@ -42,16 +46,14 @@ function activateAddBtn (li) {
 				</div>\
 			</div>\
 	</li>'
-	$(addBtn).insertAfter(last).find('.btn').click(function () {
-		var blankForm = last.clone().insertAfter(last)
-		blankForm.attr('data-uuid', '')
-		blankForm.attr('data-urutan', parseInt(last.attr('data-urutan')) + 1)
-		blankForm.find('input').val('').attr('value', '')
-		blankForm.find('[name*="uuid"]').remove()
-		activateBtnDelete()
-		activateRealtimeCalculation()
+	$(addBtn).css('padding-left', li.indent + 10 + 'px').insertAfter(last).find('.btn').click(function () {
+		var btn = $(this)
+		$.get(site_url + li.childController + '/subformlistcreate/' + li.uuid, function (form) {
+			$(form).insertBefore(btn.parent().parent().parent()).css('padding-left', li.indent + 10 + 'px')
+			activateBtnDelete()
+			activateRealtimeCalculation()
+		})
 	})
-
 }
 
 function expandItem (btn, cb) {
@@ -64,12 +66,16 @@ function expandItem (btn, cb) {
 	}
 	if (parent.childUuids[0].length < 1) cb()
 	var requests = []
-	for (var uuid of parent.childUuids) requests.push($.ajax({
-		url: site_url + parent.childController + '/subformlist/' + uuid,
-		success: function (item) {
-			$(item).insertAfter(li)
-		}
-	}))
+	for (var uuid of parent.childUuids) {
+		var url = site_url + parent.childController + '/subformlist/' + uuid
+		if ('Spj' === parent.childController && uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
+		requests.push($.ajax({
+			url: url,
+			success: function (item) {
+				$(item).insertAfter(li)
+			}
+		}))
+	}
 	$.when.apply(undefined, requests).then(function () {
 		sortItem(li)
 		$('[data-parent="' + li.attr('data-uuid') + '"]').css('padding-left', parent.indent + 10 + 'px')
