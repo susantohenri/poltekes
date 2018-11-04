@@ -1610,7 +1610,7 @@ span a {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   border-radius: 0;
-  background: #fe7404; }
+  background: #197b30; }
 
 ::-webkit-scrollbar-thumb:window-inactive {
   background: #197b30; }

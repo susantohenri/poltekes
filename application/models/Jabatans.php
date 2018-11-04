@@ -1,24 +1,24 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Units extends MY_Model {
+class Jabatans extends MY_Model {
 
   function __construct () {
     parent::__construct();
-    $this->table = 'unit';
+    $this->table = 'jabatan';
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'urutan', 'visible' => false),
-      (object) array('mData' => 'nama', 'sTitle' => 'Unit'),
+      (object) array('mData' => 'nama', 'sTitle' => 'Jabatan'),
     );
 
     $this->form[]= array(
     	'name' => 'nama',
-    	'label'=> 'Nama Unit'
+    	'label'=> 'Jabatan'
     );
   }
 
   function dt () {
-    $this->datatables->select('uuid, urutan, nama');
+    $this->datatables->select('uuid,urutan, nama');
     return parent::dt();
   }
 

@@ -18,7 +18,7 @@ class Urusans extends MY_Model {
   }
 
   function dt () {
-    $this->datatables->select('urutan, nama');
+    $this->datatables->select('uuid, urutan, nama');
     return parent::dt();
   }
 

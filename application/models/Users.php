@@ -14,15 +14,6 @@ class Users extends MY_Model {
     	'name' => 'email',
     	'label'=> 'Email Address'
     );
-  
-    $this->form[]= array(
-        'name' => 'role',
-        'label'=> 'Role',
-        'options' => array(
-          array('text' => 'Administrator', 'value' => 'admin'),
-          array('text' => 'User', 'value' => 'user'),
-        )
-    );
 
     $this->form[]= array(
     	'type' => 'password',
@@ -34,6 +25,61 @@ class Users extends MY_Model {
         'type' => 'password',
         'name' => 'confirm_password',
         'label'=> 'Confirm Password'
+    );
+  
+    $this->form[]= array(
+      'name' => 'jabatan',
+      'label'=> 'Jabatan',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Jabatans'), 
+        array('data-field' => 'nama')
+      ),
+    );
+  
+    $this->form[]= array(
+      'name' => 'jurusan',
+      'label'=> 'Jurusan',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Jurusans'), 
+        array('data-field' => 'nama')
+      ),
+    );
+  
+    $this->form[]= array(
+      'name' => 'prodi',
+      'label'=> 'Prodi',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Prodis'), 
+        array('data-field' => 'nama')
+      ),
+    );
+  
+    $this->form[]= array(
+      'name' => 'unit',
+      'label'=> 'Unit',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Units'), 
+        array('data-field' => 'nama')
+      ),
+    );
+  
+    $this->form[]= array(
+      'name' => 'urusan',
+      'label'=> 'Urusan',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Urusans'), 
+        array('data-field' => 'nama')
+      ),
     );
   }
 

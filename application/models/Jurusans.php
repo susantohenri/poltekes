@@ -24,7 +24,7 @@ class Jurusans extends MY_Model {
   }
 
   function dt () {
-    $this->datatables->select('urutan, kode, nama');
+    $this->datatables->select('uuid, urutan, kode, nama');
     return parent::dt();
   }
 

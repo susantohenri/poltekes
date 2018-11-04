@@ -10,19 +10,21 @@ class Migration_user extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
         `password` varchar(255) NOT NULL,
-        `role` varchar(255) NOT NULL,
+        `jabatan` varchar(255) NOT NULL,
+        `jurusan` varchar(255) NOT NULL,
+        `prodi` varchar(255) NOT NULL,
+        `unit` varchar(255) NOT NULL,
+        `urusan` varchar(255) NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $generate = $this->db->select('UUID() uuid', false)->get()->row_array();
-    $record['uuid'] = $generate['uuid'];
-
-    $this->db->insert('user', array(
-      'uuid' => $record['uuid'],
+    $this->load->model('Users');
+    $this->Users->save(array(
       'email' => 'admin',
-      'password' => md5('admin'),
-      'role' => 'admin'
+      'password' => 'admin',
+      'confirm_password' => 'admin'
     ));
 
   }

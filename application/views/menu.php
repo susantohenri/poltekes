@@ -4,6 +4,9 @@
             <a href="<?= site_url('User/') ?>"><i class="fa fa-group"></i>User</a>
         </li>
         <li>
+            <a href="<?= site_url('Jabatan/') ?>"><i class="fa fa-angle-double-down"></i>Jabatan</a>
+        </li>
+        <li>
             <a href="<?= site_url('Jurusan/') ?>"><i class="fa fa-tags"></i>Jurusan</a>
         </li>
         <li>
