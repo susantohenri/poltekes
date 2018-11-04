@@ -13,9 +13,19 @@ class Jurusans extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'kode',
+      'label'=> 'Kode'
+    );
+
+    $this->form[]= array(
     	'name' => 'nama',
     	'label'=> 'Nama Jurusan'
     );
+  }
+
+  function dt () {
+    $this->datatables->select('urutan, kode, nama');
+    return parent::dt();
   }
 
 }

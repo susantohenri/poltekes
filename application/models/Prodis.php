@@ -14,14 +14,33 @@ class Prodis extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'kode',
+      'label'=> 'Kode'
+    );
+
+    $this->form[]= array(
     	'name' => 'nama',
     	'label'=> 'Nama Prodi'
     );
+
+    $this->form[]= array(
+      'name' => 'jurusan',
+      'label'=> 'Jurusan',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Jurusans'),
+        array('data-field' => 'nama'),
+      ),
+    );
+
   }
 
   function dt () {
     $this->datatables
-      ->select("{$this->table}.*")
+      ->select("{$this->table}.urutan")
+      ->select("{$this->table}.kode")
+      ->select("{$this->table}.nama")
       ->select("jurusan.nama as nama_jurusan", false)
       ->join('jurusan', "jurusan.uuid = {$this->table}.jurusan", 'left');
     return parent::dt();

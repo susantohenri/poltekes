@@ -6,7 +6,7 @@
                 <p class="title-description"> Manajemen <?= $page_title ?> </p>
             </div>
 
-            <?php if ('User' === $current['controller'] || 'Program' === $current['controller']) : ?>
+            <?php if (!in_array($current['controller'], array('KegiatanProgram', 'OutputProgram', 'SubOutputProgram', 'KomponenProgram', 'SubKomponenProgram', 'AkunProgram', 'Detail', 'Spj'))) : ?>
             <div class="col-sm-6 text-right">
                 <a href="<?= site_url($current['controller'] . '/create') ?>" class="btn btn-primary">
                     <i class="fa fa-plus"></i>&nbsp;Add New <?= $page_title ?>
