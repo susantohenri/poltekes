@@ -1,4 +1,4 @@
-<div class="form-group row">
+<div class="form-group row" data-urutan="<?= isset ($item) ? $item['urutan'] : '' ?>">
 
     <?php foreach ($form as $field) : ?>
         <?php switch($field['type']): case 'hidden': ?>

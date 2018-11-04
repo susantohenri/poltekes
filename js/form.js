@@ -13,9 +13,28 @@ window.onload = function () {
     var fchild = $(this)
     var controller = site_url + fchild.attr('data-controller')
     var uuids = JSON.parse(fchild.attr('data-uuids').split("'").join('"'))
-    for (var u in uuids) $.get(controller + '/subformread/' + uuids[u], function (form) {
+    var requests = []
+    for (var u in uuids) requests.push($.ajax({url: controller + '/subformread/' + uuids[u], success: function (form) {
       fchild.prepend(form)
       formInit()
+    }}))
+    $.when.apply(undefined, requests).then(function () {
+      var elements = $('.form-child .row')
+      var elems = []
+      for( var i = 0; i < elements.length; ++i ) {
+        var el = elements[i]
+        elems.push(el)
+      }
+      var sorted = elems.sort(function (a, b) {
+        var aValue = parseInt(a.getAttribute('data-urutan'), 10)
+        var bValue = parseInt(b.getAttribute('data-urutan'), 10)
+        return aValue - bValue
+      })
+
+      var html = ''
+      elements.remove()
+      for( var i = 0; i < sorted.length; ++i ) html += sorted[i].outerHTML
+      $(html).insertBefore($('.btn.btn-warning.btn-sm.btn-add'))
     })
     fchild.find('.btn-add').click(function () {
         var beforeButton = $(this).parents('.form-group');
@@ -119,7 +138,7 @@ function formInit () {
 }
 
 function calculateProgramDetail () {
-  if ($('[name="pagu"]').length < 1) return true
+  if (window.location.href.indexOf ('/Detail/') < 0) return true
   markMinus(getNumber ($('[name="realisasi"]')))
   $('[name="vol"], [name="hargasat"]').keyup(function () {
     $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
