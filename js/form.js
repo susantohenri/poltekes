@@ -1,6 +1,14 @@
 window.onload = function () {
 
   formInit()
+  calculateSpj()
+  $('[name="last_submit"]').parent('form').submit(function () {
+    $('[data-number]').each (function () {
+      $(this).val(getNumber($(this)))
+    })
+    return true
+  })
+
   $('.form-child').each (function () {
     var fchild = $(this)
     var controller = site_url + fchild.attr('data-controller')
@@ -104,4 +112,54 @@ function formInit () {
   //   locale: {format: 'YYYY-MM-DD HH:mm:ss'},
   //   startDate: moment().format('YYYY-MM-DD HH:mm:ss')
   // })
+  $('[data-number="true"]').keyup(function () {
+    $(this).val(currency(getNumber($(this))))
+  })
+  calculateProgramDetail()
+}
+
+function calculateProgramDetail () {
+  if ($('[name="pagu"]').length < 1) return true
+  markMinus(getNumber ($('[name="realisasi"]')))
+  $('[name="vol"], [name="hargasat"]').keyup(function () {
+    $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
+  })
+  $('[name^="Spj_vol["], [name^="Spj_hargasat["]').keyup(function () {
+    var row = $(this).parent().parent()
+    var vol = getNumber(row.find('[name^="Spj_vol["]'))
+    var hargasat = getNumber(row.find('[name^="Spj_hargasat["]'))
+    var realisasi= currency(vol * hargasat)
+    row.find('[name^="Spj_realisasi["]').val(realisasi)
+    var realisasi_total = 0
+    $('[name^="Spj_realisasi["]').each(function () {
+      realisasi_total += getNumber($(this))
+    })
+    $('[name="realisasi"]').val(currency (realisasi_total))
+    markMinus(realisasi_total)
+  })
+}
+
+function calculateSpj () {
+  if (window.location.href.indexOf ('/Spj/') < 0) return true
+  $('[name="vol"], [name="hargasat"]').keyup(function () {
+    $('[name="realisasi"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
+  })
+}
+
+function getNumber (element) {
+  var val = element.val() || element.html()
+  val = val.split(',').join('')
+  return isNaN(val) || val.length < 1 ? 0 : parseInt (val)
+}
+
+function currency (number) {
+  var reverse = number.toString().split('').reverse().join(''),
+  currency  = reverse.match(/\d{1,3}/g)
+  return currency.join(',').split('').reverse().join('')
+}
+
+function markMinus (realisasi_total) {
+  var inlineStyle = $('[name="realisasi"]').attr('style') || ''
+  if (realisasi_total > getNumber ($('[name="pagu"]'))) $('[name="realisasi"]').css('background-color', '#ffcccc')
+  else $('[name="realisasi"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
 }

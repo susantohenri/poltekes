@@ -73,7 +73,8 @@ class Details extends MY_Model {
     $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
       ->select("{$this->table}.*")
-      ->select("{$this->table}.akun_program parent", false)
+      ->select("FORMAT({$this->table}.vol, 0) vol", false)
+      ->select("FORMAT({$this->table}.hargasat, 0) hargasat", false)
       ->select("FORMAT({$this->table}.hargasat * {$this->table}.vol, 0) pagu", false)
       ->select("FORMAT(SUM(spj.hargasat * spj.vol), 0) realisasi", false)
       ->join('spj', "{$this->table}.uuid = spj.detail", 'left')

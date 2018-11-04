@@ -1,4 +1,4 @@
-<div class="form-group row" data-uuid="<?= $uuid ?>" data-urutan="<?= $item['urutan'] ?>" data-parent="<?= $item['parent'] ?>">
+<div class="form-group row">
 
     <?php foreach ($form as $field) : ?>
         <?php switch($field['type']): case 'hidden': ?>

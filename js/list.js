@@ -1,5 +1,5 @@
-$(document).ready(activateExpandButton)
-
+$(document).ready(function () {
+	activateExpandButton()
 	markMinus($('li[data-uuid]'))
 
 	$('.btn-save').click(function () {
@@ -8,6 +8,7 @@ $(document).ready(activateExpandButton)
 		})
 		$('form#form_list').submit()
 	})
+})
 
 function activateExpandButton () {
 	$('.expand-btn').unbind('click').bind('click', function () {
