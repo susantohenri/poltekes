@@ -9,7 +9,7 @@ class OutputPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'kode_output', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '30%'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right'),

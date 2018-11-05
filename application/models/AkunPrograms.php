@@ -9,7 +9,7 @@ class AkunPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right')

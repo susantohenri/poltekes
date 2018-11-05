@@ -9,7 +9,7 @@ class KegiatanPrograms extends MY_Model {
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'kode_kegiatan', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian_kegiatan', 'sTitle' => 'Kegiatan', 'width' => '30%'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right'),

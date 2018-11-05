@@ -9,7 +9,7 @@ class Programs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '30%'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
       (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right'),
@@ -149,7 +149,7 @@ class Programs extends MY_Model {
     return $program;
   }
 
-  function getListItem ($uuid) { // sing iki durung
+  function getListItem ($uuid) {
     $this->db
       ->select("{$this->table}.*")
       ->select("'' parent", false)

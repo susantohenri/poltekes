@@ -12,7 +12,7 @@ class Users extends MY_Model {
 
     $this->form[]= array(
     	'name' => 'email',
-    	'label'=> 'Email Address'
+    	'label'=> 'Email'
     );
 
     $this->form[]= array(
@@ -24,7 +24,7 @@ class Users extends MY_Model {
     $this->form[]= array(
         'type' => 'password',
         'name' => 'confirm_password',
-        'label'=> 'Confirm Password'
+        'label'=> 'Ulangi Password'
     );
   
     $this->form[]= array(
