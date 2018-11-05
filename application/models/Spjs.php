@@ -66,20 +66,25 @@ class Spjs extends MY_Model {
   }
 
   function dt () {
-    $this->datatables
+    $this->load->model('Users');
+    $this->Users->filterDt();
+    return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
-      ->select("hargasat * vol as realisasi", false)
-      ;
-    return parent::dt();
+      ->group_by("{$this->table}.uuid")
+      ->where("{$this->table}.uuid", 'IS NOT NULL')
+      ->generate();
   }
 
   function getListItem ($uuid) {
-    $this->db
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    return $this->db
+      ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.detail parent", false)
       ->select("FORMAT(vol, 0) vol_format", false)
@@ -88,8 +93,9 @@ class Spjs extends MY_Model {
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)
-      ->group_by("{$this->table}.uuid");
-    return parent::getListItem ($uuid);
+      ->group_by("{$this->table}.uuid")
+      ->get()
+      ->row_array();
   }
 
 }

@@ -87,6 +87,9 @@ class Details extends MY_Model {
   }
 
   function dt () {
+    $this->load->model('Users');
+    $this->Users->filterDt();
+    return 
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.uraian")
@@ -97,13 +100,15 @@ class Details extends MY_Model {
       ->select("SUM(spj.vol * spj.hargasat) realisasi")
       ->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
       ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
-      ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
-      ->group_by("{$this->table}.uuid");
-    return parent::dt();
+      ->group_by("{$this->table}.uuid")
+      ->generate();
   }
 
   function getListItem ($uuid) {
-    $this->db
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    return $this->db
+      ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.akun_program parent", false)
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
@@ -113,9 +118,9 @@ class Details extends MY_Model {
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
       ->select("''  kode", false)
-      ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
-      ->group_by("{$this->table}.uuid");
-    return parent::getListItem ($uuid);
+      ->group_by("{$this->table}.uuid")
+      ->get()
+      ->row_array();
   }
 
   function updateByList ($data) {

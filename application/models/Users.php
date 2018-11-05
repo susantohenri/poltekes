@@ -98,4 +98,56 @@ class Users extends MY_Model {
     return $record;
   }
 
+  function filterDt () {
+    $this->datatables
+      // ->where('sub_komponen.kode', 'A')
+      ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
+      ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
+
+      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
+      ->join('output', "output.uuid = output_program.output", 'left')
+
+      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
+      ->join('sub_output', "sub_output.uuid = sub_output_program.sub_output", 'left')
+
+      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
+      ->join('komponen', "komponen.uuid = komponen_program.komponen", 'left')
+
+      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
+      ->join('sub_komponen', "sub_komponen.uuid = sub_komponen_program.sub_komponen", 'left')
+
+      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
+      ->join('akun', "akun_program.akun = akun.uuid", 'left')
+
+      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('spj', "detail.uuid = spj.detail", 'left')
+      ->from('program');
+  }
+
+  function filterListItem () {
+    $this->db
+      // ->where('sub_komponen.kode', 'A')
+      ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
+      ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
+
+      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
+      ->join('output', "output.uuid = output_program.output", 'left')
+
+      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
+      ->join('sub_output', "sub_output.uuid = sub_output_program.sub_output", 'left')
+
+      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
+      ->join('komponen', "komponen.uuid = komponen_program.komponen", 'left')
+
+      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
+      ->join('sub_komponen', "sub_komponen.uuid = sub_komponen_program.sub_komponen", 'left')
+
+      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
+      ->join('akun', "akun_program.akun = akun.uuid", 'left')
+
+      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('spj', "detail.uuid = spj.detail", 'left')
+      ->from('program');
+  }
+
 }

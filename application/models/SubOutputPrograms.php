@@ -20,7 +20,10 @@ class SubOutputPrograms extends MY_Model {
   }
 
   function getListItem ($uuid) {
-    $this->db
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    return $this->db
+      ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.output_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
@@ -29,18 +32,15 @@ class SubOutputPrograms extends MY_Model {
       ->select("'KomponenProgram' childController", false)
       ->select('sub_output.kode kode', false)
       ->select('sub_output.uraian uraian', false)
-      ->join('sub_output', "{$this->table}.sub_output = sub_output.uuid", 'left')
-      ->join('komponen_program', "{$this->table}.uuid = komponen_program.{$this->table}", 'left')
-      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
-      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
-      ->join('spj', "detail.uuid = spj.detail", 'left')
-      ->group_by("{$this->table}.uuid");
-    return parent::getListItem ($uuid);
+      ->group_by("{$this->table}.uuid")
+      ->get()
+      ->row_array();
   }
 
   function dt () {
-    $this->datatables
+    $this->load->model('Users');
+    $this->Users->filterDt();
+    return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
       ->select('sub_output.kode as kode_sub_output', false)
@@ -49,14 +49,8 @@ class SubOutputPrograms extends MY_Model {
       ->select("SUM(spj.hargasat * spj.vol) as realisasi", false)
       ->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
       ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
-      ->join('sub_output', "{$this->table}.sub_output = sub_output.uuid", 'left')
-      ->join('komponen_program', "{$this->table}.uuid = komponen_program.{$this->table}", 'left')
-      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
-      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
-      ->join('spj', "detail.uuid = spj.detail", 'left')
-      ->group_by("{$this->table}.uuid");
-    return parent::dt();
+      ->group_by("{$this->table}.uuid")
+      ->generate();
   }
 
 }

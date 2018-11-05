@@ -42,7 +42,10 @@ class AkunPrograms extends MY_Model {
   }
 
   function getListItem ($uuid) {
-    $this->db
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    return $this->db
+      ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.sub_komponen_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
@@ -51,11 +54,9 @@ class AkunPrograms extends MY_Model {
       ->select("'Detail' childController", false)
       ->select('akun.kode kode', false)
       ->select('akun.nama uraian', false)
-      ->join('akun', "{$this->table}.akun = akun.uuid", 'left')
-      ->join('detail', "{$this->table}.uuid = detail.akun_program", 'left')
-      ->join('spj', "detail.uuid = spj.detail", 'left')
-      ->group_by("{$this->table}.uuid");
-    return parent::getListItem ($uuid);
+      ->group_by("{$this->table}.uuid")
+      ->get()
+      ->row_array();
   }
 
   function findOne ($param) {
@@ -70,7 +71,9 @@ class AkunPrograms extends MY_Model {
   }
 
   function dt () {
-  	$this->datatables
+  	$this->load->model('Users');
+    $this->Users->filterDt();
+    return $this->datatables
   		->select("{$this->table}.uuid")
   		->select("{$this->table}.urutan")
       ->select('akun.kode as kode_akun', false)
@@ -79,11 +82,8 @@ class AkunPrograms extends MY_Model {
       ->select("SUM(spj.hargasat * spj.vol) as realisasi", false)
   		->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
       ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
-      ->join('akun', "{$this->table}.akun = akun.uuid", 'left')
-  		->join('detail', "{$this->table}.uuid = detail.akun_program", 'left')
-      ->join('spj', "detail.uuid = spj.detail", 'left')
-  		->group_by("{$this->table}.uuid");
-  	return parent::dt();
+  		->group_by("{$this->table}.uuid")
+      ->generate();
   }
 
 }
