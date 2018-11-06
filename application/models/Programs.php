@@ -152,7 +152,8 @@ class Programs extends MY_Model {
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
-    return $this->db
+    return 
+    $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("'' parent", false)

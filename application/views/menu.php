@@ -7,18 +7,6 @@
             <a href="<?= site_url('Jabatan/') ?>"><i class="fa fa-angle-double-down"></i>Jabatan</a>
         </li>
         <li>
-            <a href="<?= site_url('Jurusan/') ?>"><i class="fa fa-tags"></i>Jurusan</a>
-        </li>
-        <li>
-            <a href="<?= site_url('Prodi/') ?>"><i class="fa fa-tag"></i>Prodi</a>
-        </li>
-        <li>
-            <a href="<?= site_url('Unit/') ?>"><i class="fa fa-crosshairs"></i>Unit</a>
-        </li>
-        <li>
-            <a href="<?= site_url('Urusan/') ?>"><i class="fa fa-dot-circle-o"></i>Urusan</a>
-        </li>
-        <li>
             <a href="<?= site_url('Program/') ?>"><i class="fa fa-laptop"></i>Program</a>
         </li>
         <li>
