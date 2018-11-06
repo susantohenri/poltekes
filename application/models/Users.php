@@ -7,6 +7,7 @@ class Users extends MY_Model {
     $this->table = 'user';
     $this->thead = array(
       (object) array('mData' => 'email', 'sTitle' => 'Email'),
+      (object) array('mData' => 'nama_jabatan', 'sTitle' => 'Jabatan'),
     );
     $this->form  = array ();
 
@@ -37,50 +38,6 @@ class Users extends MY_Model {
         array('data-field' => 'nama')
       ),
     );
-  
-    $this->form[]= array(
-      'name' => 'jurusan',
-      'label'=> 'Jurusan',
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Jurusans'), 
-        array('data-field' => 'nama')
-      ),
-    );
-  
-    $this->form[]= array(
-      'name' => 'prodi',
-      'label'=> 'Prodi',
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Prodis'), 
-        array('data-field' => 'nama')
-      ),
-    );
-  
-    $this->form[]= array(
-      'name' => 'unit',
-      'label'=> 'Unit',
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Units'), 
-        array('data-field' => 'nama')
-      ),
-    );
-  
-    $this->form[]= array(
-      'name' => 'urusan',
-      'label'=> 'Urusan',
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Urusans'), 
-        array('data-field' => 'nama')
-      ),
-    );
   }
 
   function save ($data) {
@@ -98,9 +55,35 @@ class Users extends MY_Model {
     return $record;
   }
 
-  function filterDt () {
+  function dt () {
     $this->datatables
-      // ->where('sub_komponen.kode', 'A')
+      ->select("{$this->table}.uuid")
+      ->select("{$this->table}.urutan")
+      ->select("{$this->table}.email")
+      ->select("jabatan.nama as nama_jabatan", false)
+      ->join('jabatan', 'user.jabatan = jabatan.uuid', 'left');
+    return parent::dt();
+  }
+
+  function filterByRole () {
+    $user = $this->session->userdata();
+    $this->load->model('Jabatans');
+    $role = $this->Jabatans->findOne($user['jabatan']);
+
+    if (strlen ($role['kode']) > 0) {
+      $akses_level = $role['akses_level'];
+      $akses_level = strtolower($akses_level);
+      $akses_level = str_replace(' ', '_', $akses_level);
+      $kode = $role['kode'];
+      if (strpos($kode, '%') > -1) return array("{$akses_level}.kode LIKE" => $kode);
+      else return array("{$akses_level}.kode" => $kode);
+    }
+    return array();
+  }
+
+  function filterDt () {
+    $this->datatables->where($this->filterByRole())
+
       ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
       ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
 
@@ -125,8 +108,8 @@ class Users extends MY_Model {
   }
 
   function filterListItem () {
-    $this->db
-      // ->where('sub_komponen.kode', 'A')
+    $this->db->where($this->filterByRole())
+
       ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
       ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
 
