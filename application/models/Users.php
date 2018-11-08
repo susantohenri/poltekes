@@ -66,23 +66,34 @@ class Users extends MY_Model {
   }
 
   function filterByRole () {
+    $filter = array();
     $user = $this->session->userdata();
     $this->load->model('Jabatans');
     $role = $this->Jabatans->findOne($user['jabatan']);
+    if (!$role) return $filter;
 
-    if (strlen ($role['kode']) > 0) {
-      $akses_level = $role['akses_level'];
-      $akses_level = strtolower($akses_level);
-      $akses_level = str_replace(' ', '_', $akses_level);
-      $kode = $role['kode'];
-      if (strpos($kode, '*') > -1) return array("{$akses_level}.kode LIKE" => str_replace('*', '%', $kode));
-      else return array("{$akses_level}.kode" => $kode);
+    $akses_level = $role['akses_level'];
+    $akses_level = strtolower($akses_level);
+    $akses_level = str_replace(' ', '_', $akses_level);
+    $kode = $role['kode'];
+    $items= $role['items'];
+
+    if (strlen($role['items']) > 0) $filter['where_in'] = array("{$akses_level}_program.uuid", explode(',', $items));
+    if (strlen ($kode) > 0) {
+      if (strpos($kode, '*') > -1) $filter['where'] = array("{$akses_level}.kode LIKE", str_replace('*', '%', $kode));
+      else $filter['where'] = array("{$akses_level}.kode", $kode);
     }
-    return array();
+    return $filter;
   }
 
   function filterDt () {
-    $this->datatables->where($this->filterByRole())
+    $index = 0;
+    foreach ($this->filterByRole() as $fn => $query) {
+      if (0 !== $index) $fn = "or_{$fn}";
+      $this->datatables->$fn($query[0], $query[1]);
+      $index++;
+    }
+    $this->datatables
 
       ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
       ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
@@ -108,7 +119,13 @@ class Users extends MY_Model {
   }
 
   function filterListItem () {
-    $this->db->where($this->filterByRole())
+    $index = 0;
+    foreach ($this->filterByRole() as $fn => $query) {
+      if (0 !== $index) $fn = "or_{$fn}";
+      $this->db->$fn($query[0], $query[1]);
+      $index++;
+    }
+    $this->db
 
       ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
       ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
