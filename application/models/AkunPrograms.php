@@ -86,4 +86,22 @@ class AkunPrograms extends MY_Model {
       ->generate();
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid id", false)
+      ->select("CONCAT(akun.kode, ' ', akun.uraian) text", false)
+      ->limit(10)
+      ->like("CONCAT(akun.kode, ' ', akun.uraian)", $term)
+      ->join('akun', "{$this->table}.akun = akun.uuid", 'left')
+      ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT(akun.kode, ' ', akun.uraian) uraian", false)
+      ->join('akun', "{$this->table}.akun = akun.uuid", 'left');
+    return parent::findIn("{$this->table}.{$field}", $value);
+  }
+
 }

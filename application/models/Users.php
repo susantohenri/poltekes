@@ -75,7 +75,7 @@ class Users extends MY_Model {
       $akses_level = strtolower($akses_level);
       $akses_level = str_replace(' ', '_', $akses_level);
       $kode = $role['kode'];
-      if (strpos($kode, '%') > -1) return array("{$akses_level}.kode LIKE" => $kode);
+      if (strpos($kode, '*') > -1) return array("{$akses_level}.kode LIKE" => str_replace('*', '%', $kode));
       else return array("{$akses_level}.kode" => $kode);
     }
     return array();

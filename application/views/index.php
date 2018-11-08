@@ -272,7 +272,7 @@
                 var thead = <?= json_encode ($thead) ?>
             </script>
             <script type="text/javascript" src="<?= base_url('js/table.js') ?>"></script>
-        <?php elseif ('form' === $page_name): ?>
+        <?php elseif (in_array($page_name, array('form', 'form-jabatan-assignment'))): ?>
             <script type="text/javascript" src="<?= base_url('js/select2.full.min.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/bootstrap-datepicker.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/form.js') ?>"></script>

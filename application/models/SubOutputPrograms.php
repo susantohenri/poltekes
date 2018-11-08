@@ -53,4 +53,22 @@ class SubOutputPrograms extends MY_Model {
       ->generate();
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid id", false)
+      ->select("CONCAT(sub_output.kode, ' ', sub_output.uraian) text", false)
+      ->limit(10)
+      ->like("CONCAT(sub_output.kode, ' ', sub_output.uraian)", $term)
+      ->join('sub_output', "{$this->table}.sub_output = sub_output.uuid", 'left')
+      ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT(sub_output.kode, ' ', sub_output.uraian) uraian", false)
+      ->join('sub_output', "{$this->table}.sub_output = sub_output.uuid", 'left');
+    return parent::findIn("{$this->table}.{$field}", $value);
+  }
+
 }

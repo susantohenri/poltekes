@@ -44,7 +44,7 @@ class Migration_jabatan extends CI_Migration {
         $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$jurusan}",
           'akses_level' => 'Sub Komponen',
-          'kode' => "{$kode}%"
+          'kode' => "{$kode}*"
         ));
       }
     }

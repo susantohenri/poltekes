@@ -11,6 +11,8 @@
                 <a target="_blank" href="<?= site_url($current['controller']) . '/readList/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
+                &nbsp;
+                <a href="<?= site_url("Jabatan/assignment/{$current['controller']}/{$item['uuid']}") ?>" target="_blank"><i class="fa fa-unlock-alt"></i></a>
             </div>
         </div>
         <div class="item-col item-col-header text-right">

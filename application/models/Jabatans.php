@@ -37,18 +37,18 @@ class Jabatans extends MY_Model {
 
     $this->form[]= array(
       'name' => 'kode',
-      'label'=> 'Kode Filter'
+      'label'=> 'Akses Kode'
     );
 
     $this->form[]= array(
       'name'    => 'items',
-      'label'   => 'Item Filter',
+      'label'   => 'Akses Item',
       'multiple'=> true,
       'options' => array(),
       'attributes' => array(
         array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Komponens'), 
-        array('data-field' => 'kode')
+        array('data-model' => 'KomponenPrograms'), 
+        array('data-field' => 'uraian')
       ),
     );
 
@@ -57,6 +57,29 @@ class Jabatans extends MY_Model {
   function dt () {
     $this->datatables->select('uuid,urutan, nama, akses_level, kode');
     return parent::dt();
+  }
+
+  function getAssignmentForm ($controller) {
+    $akses_level = trim(implode(' ', preg_split('/(?=[A-Z])/', str_replace('Program', '', $controller))));
+    $this->form = $options = array();
+    foreach($this->find(array('akses_level' => $akses_level)) as $jbtn) $options[] = array('value' => $jbtn->uuid, 'text' => $jbtn->nama);
+    $this->form[]= array(
+      'name' => 'jabatan',
+      'label'=> 'Pilih Jabatan',
+      'options' => $options
+    );
+    return $this->getForm();
+  }
+
+  function assign ($jabatanUuid, $itemUuid) {
+    $jabatan = $this->findOne($jabatanUuid);
+    if (strpos($jabatan['items'], $itemUuid) > -1) return true;
+    else {
+      $items = strlen ($jabatan['items']) > 0 ? explode(',', $jabatan['items']) : array();
+      $items[] = $itemUuid;
+      $jabatan['items'] = implode(',', $items);
+      return $this->update($jabatan);
+    }
   }
 
 }

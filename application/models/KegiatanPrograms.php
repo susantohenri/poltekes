@@ -53,4 +53,22 @@ class KegiatanPrograms extends MY_Model {
       ->generate();
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid id", false)
+      ->select("CONCAT(kegiatan.kode, ' ', kegiatan.uraian) text", false)
+      ->limit(10)
+      ->like("CONCAT(kegiatan.kode, ' ', kegiatan.uraian)", $term)
+      ->join('kegiatan', "{$this->table}.kegiatan = kegiatan.uuid", 'left')
+      ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT(kegiatan.kode, ' ', kegiatan.uraian) uraian", false)
+      ->join('kegiatan', "{$this->table}.kegiatan = kegiatan.uuid", 'left');
+    return parent::findIn("{$this->table}.{$field}", $value);
+  }
+
 }

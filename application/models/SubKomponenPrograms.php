@@ -97,4 +97,22 @@ class SubKomponenPrograms extends MY_Model {
       ->generate();
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid id", false)
+      ->select("CONCAT(sub_komponen.kode, ' ', sub_komponen.uraian) text", false)
+      ->limit(10)
+      ->like("CONCAT(sub_komponen.kode, ' ', sub_komponen.uraian)", $term)
+      ->join('sub_komponen', "{$this->table}.sub_komponen = sub_komponen.uuid", 'left')
+      ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT(sub_komponen.kode, ' ', sub_komponen.uraian) uraian", false)
+      ->join('sub_komponen', "{$this->table}.sub_komponen = sub_komponen.uuid", 'left');
+    return parent::findIn("{$this->table}.{$field}", $value);
+  }
+
 }

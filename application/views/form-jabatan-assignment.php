@@ -9,7 +9,7 @@
     </div>
     <section class="section">
         <div class="card card-block">
-            <form action="<?= site_url($current['controller']) ?>" class="form-horizontal form-groups" enctype="multipart/form-data" method="POST">
+            <form action="" class="form-horizontal form-groups" enctype="multipart/form-data" method="POST">
             <input type="hidden" name="last_submit" value="<?= time() ?>">        
 
             <?php foreach ($form as $field) : ?>
@@ -73,7 +73,7 @@
                 <?php if (!empty ($uuid)): ?>
                 <a href="<?= site_url($current['controller'] . "/delete/$uuid") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Delete</a>
                 <?php endif ?>
-                <a href="<?= site_url($current['controller']) ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> &nbsp; Cancel</a>
+                <a href="javascript:window.close()" class="btn btn-info"><i class="fa fa-arrow-left"></i> &nbsp; Cancel</a>
               </div>
             </div>
 

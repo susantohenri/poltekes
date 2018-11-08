@@ -53,4 +53,22 @@ class OutputPrograms extends MY_Model {
       ->generate();
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid id", false)
+      ->select("CONCAT(output.kode, ' ', output.uraian) text", false)
+      ->limit(10)
+      ->like("CONCAT(output.kode, ' ', output.uraian)", $term)
+      ->join('output', "{$this->table}.output = output.uuid", 'left')
+      ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT(output.kode, ' ', output.uraian) uraian", false)
+      ->join('output', "{$this->table}.output = output.uuid", 'left');
+    return parent::findIn("{$this->table}.{$field}", $value);
+  }
+
 }
