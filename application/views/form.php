@@ -56,7 +56,7 @@
               <hr>
               <div class="form-child" data-controller="<?= $subfield['controller'] ?>" data-uuids="<?= str_replace('"', "'", json_encode($subfield['uuids'])) ?>">
                 <div class="form-group">
-                  <div class="col-sm-offset-3 col-sm-8">
+                  <div class="col-sm-offset-3 col-sm-12">
                     <a class="btn btn-warning btn-sm btn-add">
                       <i class="fa fa-plus"></i> &nbsp;Add <?= $subfield['label'] ?>
                     </a>

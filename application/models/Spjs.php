@@ -74,9 +74,10 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.uraian")
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
+      ->select("{$this->table}.vol * {$this->table}.hargasat as realisasi", false)
       ->select("{$this->table}.hargasat")
       ->group_by("{$this->table}.uuid")
-      ->where("{$this->table}.uuid", 'IS NOT NULL')
+      ->where("{$this->table}.uuid IS", 'NOT NULL', false)
       ->generate();
   }
 
@@ -87,9 +88,9 @@ class Spjs extends MY_Model {
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(vol, 0) vol_format", false)
-      ->select("FORMAT(hargasat, 0) hargasat_format", false)
-      ->select("FORMAT(vol*hargasat, 0) realisasi", false)
+      ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
+      ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
+      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) realisasi", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)
