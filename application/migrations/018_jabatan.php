@@ -9,6 +9,7 @@ class Migration_jabatan extends CI_Migration {
       CREATE TABLE `jabatan` (
         `uuid` varchar(255) NOT NULL,
         `nama` varchar(255) NOT NULL,
+        `parent` varchar(255) NOT NULL,
         `akses_level` varchar(255) NOT NULL,
         `kode` varchar(255) NOT NULL,
         `items` varchar(255) NOT NULL,
@@ -20,13 +21,23 @@ class Migration_jabatan extends CI_Migration {
     $this->load->model('Jabatans');
     foreach (array (
       'Perencanaan',
-      'Atasan Langsung Bendahara Pengeluaran',
-      'Bendahara Pengeluaran Direktorat',
       'Bendahara Pembantu Pengeluaran Direktorat',
-      'Bendahara Gaji',
     ) as $jabatan) $this->Jabatans->save(array(
       'nama' => $jabatan, 
     ));
+
+    $atasan = '';
+    foreach (array (
+      'Atasan Langsung Bendahara Pengeluaran',
+      'Bendahara Pengeluaran Direktorat',
+      'Verifikator Direktorat',
+    ) as $jabatan) {
+      $atasan = $this->Jabatans->save(array(
+        'nama'  => $jabatan,
+        'parent'=> $atasan
+      ));
+    }
+    $verifDir = $atasan;
 
     foreach (array (
       array ("A", "Jurusan Keperawatan"), 
@@ -38,13 +49,15 @@ class Migration_jabatan extends CI_Migration {
       array ("G", "Jurusan Teknik Radiodiagnostik & Radioterapi"), 
       array ("H", "Jurusan Rekam Medis dan Informasi Kesehatan"),
     ) as $jur) {
-      foreach (array ('Sekretaris', 'Bendahara') as $jabatan) {
+      $parent = array();
+      foreach (array ('Kepala', 'Sekretaris', 'Bendahara') as $jabatan) {
         $kode = $jur[0];
         $jurusan = $jur[1];
-        $this->Jabatans->save(array(
+        $parent[] = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$jurusan}",
           'akses_level' => 'Sub Komponen',
-          'kode' => "{$kode}*"
+          'kode' => "{$kode}*",
+          'parent' => 2 === count($parent) ? implode(',', $parent) : $verifDir
         ));
       }
     }
@@ -90,16 +103,24 @@ class Migration_jabatan extends CI_Migration {
       array ("HA", "D-III Rekam Medis dan Informasi Kesehatan"), 
       array ("HB", "D-IV Rekam Medis dan Informasi Kesehatan")
     ) as $prod) {
+      $kode = $prod[0];
+      $prodi= $prod[1];
+      $parent = array();
+      $jurusan= $this->Jabatans->findOne(array('kode' => substr($kode, 0, -1) . '*', 'nama LIKE' => 'Bendahara%'));
       foreach (array ('Kaprodi', 'Sekretaris Prodi', 'Bendahara Prodi') as $jabatan) {
-        $kode = $prod[0];
-        $prodi = $prod[1];
-        $this->Jabatans->save(array(
+        $parent[] = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$prodi}",
           'akses_level' => 'Sub Komponen',
-          'kode' => $kode
+          'kode' => $kode,
+          'parent' => 2 === count($parent) ? implode(',', $parent) : $jurusan['uuid']
         ));
       }
     }
+
+    $this->Jabatans->save(array(
+      'nama' => "Bendahara Gaji",
+      'parent' => $verifDir
+    ));
 
     foreach (array(
       'Penjaminan Mutu',
@@ -111,13 +132,15 @@ class Migration_jabatan extends CI_Migration {
       'Asrama',
       'Pengembangan Bahasa'
     ) as $unit) $this->Jabatans->save(array(
-      'nama' => "Kepala Unit {$unit}", 
+      'nama' => "Kepala Unit {$unit}",
+      'parent' => $verifDir
     ));
 
     foreach (array(
       'Umum'
     ) as $urusan) $this->Jabatans->save(array(
-      'nama' => "Kepala Urusan {$urusan}", 
+      'nama' => "Kepala Urusan {$urusan}",
+      'parent' => $verifDir
     ));
   }
 

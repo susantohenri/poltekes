@@ -11,6 +11,7 @@ class Jabatans extends MY_Model {
       (object) array('mData' => 'nama', 'sTitle' => 'Jabatan'),
       (object) array('mData' => 'akses_level', 'sTitle' => 'Akses Level'),
       (object) array('mData' => 'kode', 'sTitle' => 'Kode Filter'),
+      (object) array('mData' => 'parent_name', 'sTitle' => 'Atasan', 'width' => '40%', 'searchable' => false),
     );
 
     $this->form[]= array(
@@ -52,10 +53,26 @@ class Jabatans extends MY_Model {
       ),
     );
 
+    $this->form[]= array(
+      'name'    => 'parent',
+      'label'   => 'Atasan',
+      'multiple'=> true,
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Jabatans'), 
+        array('data-field' => 'nama')
+      ),
+    );
+
   }
 
   function dt () {
-    $this->datatables->select('uuid,urutan, nama, akses_level, kode');
+    $this->datatables
+      ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama, {$this->table}.akses_level, {$this->table}.kode")
+      ->select("GROUP_CONCAT(parent.nama SEPARATOR ', ') as parent_name", false)
+      ->join('`jabatan` `parent`', "FIND_IN_SET(parent.uuid, {$this->table}.parent)", 'left')
+      ->group_by("{$this->table}.uuid");
     return parent::dt();
   }
 
