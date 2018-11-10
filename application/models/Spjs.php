@@ -53,6 +53,30 @@ class Spjs extends MY_Model {
       ),
     );
 
+    $this->childs[] = array('label' => '', 'controller' => 'Spjlog', 'model' => 'Spjlogs');
+    $this->load->model('Spjlogs');
+  }
+
+  function create ($data) {
+    $result = parent::create($data);
+    $this->Spjlogs->create(array(
+      'spj'   => $result,
+      'user'  => $this->session->userdata('uuid'),
+      'taken' => date('Y-m-d H:i:s'),
+      'action'=> 'create'
+    ));
+    return $result;
+  }
+
+  function update ($data) {
+    $result = parent::update($data);
+    $this->Spjlogs->create(array(
+      'spj'   => $data['uuid'],
+      'user'  => $this->session->userdata('uuid'),
+      'taken' => date('Y-m-d H:i:s'),
+      'action'=> 'update'
+    ));
+    return $result;
   }
 
   function findOne ($param) {
