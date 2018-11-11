@@ -66,24 +66,10 @@ class Users extends MY_Model {
   }
 
   function filterByRole () {
-    $filter = array();
-    $user = $this->session->userdata();
+    $user = $this->session->all_userdata();
     $this->load->model('Jabatans');
-    $role = $this->Jabatans->findOne($user['jabatan']);
-    if (!$role) return $filter;
-
-    $akses_level = $role['akses_level'];
-    $akses_level = strtolower($akses_level);
-    $akses_level = str_replace(' ', '_', $akses_level);
-    $kode = $role['kode'];
-    $items= $role['items'];
-
-    if (strlen($role['items']) > 0) $filter['where_in'] = array("{$akses_level}_program.uuid", explode(',', $items));
-    if (strlen ($kode) > 0) {
-      if (strpos($kode, '*') > -1) $filter['where'] = array("{$akses_level}.kode LIKE", str_replace('*', '%', $kode));
-      else $filter['where'] = array("{$akses_level}.kode", $kode);
-    }
-    return $filter;
+    $this->Jabatans->getUserAttr($user);
+    return $user['filter'];
   }
 
   function filterDt () {

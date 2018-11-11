@@ -57,26 +57,47 @@ class Spjs extends MY_Model {
     $this->load->model('Spjlogs');
   }
 
+  function save ($data) {
+    if (isset ($data['status'])) {
+      if ('verify' === $data['status']) $this->verify($data['uuid']);
+      else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
+      return $data['uuid'];
+      unset($data['status']);
+    }
+    if (isset ($data['uraian'])) return parent::save($data);
+  }
+
   function create ($data) {
     $result = parent::create($data);
     $this->Spjlogs->create(array(
       'spj'   => $result,
-      'user'  => $this->session->userdata('uuid'),
-      'taken' => date('Y-m-d H:i:s'),
       'action'=> 'create'
     ));
+    $this->verify($result);
     return $result;
   }
 
   function update ($data) {
-    $result = parent::update($data);
+    $this->db->where('uuid', $data['uuid'])->update($this->table, $data);
     $this->Spjlogs->create(array(
       'spj'   => $data['uuid'],
-      'user'  => $this->session->userdata('uuid'),
-      'taken' => date('Y-m-d H:i:s'),
       'action'=> 'update'
     ));
     return $result;
+  }
+
+  function verify ($uuid) {
+    $this->Spjlogs->create(array(
+      'spj'   => $uuid,
+      'action'=> 'verify'
+    ));
+  }
+
+  function unverify ($uuid) {
+    $this->Spjlogs->create(array(
+      'spj'   => $uuid,
+      'action'=> 'unverify'
+    ));
   }
 
   function findOne ($param) {
@@ -108,9 +129,10 @@ class Spjs extends MY_Model {
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
-    return $this->db
+    $spj = $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
+      ->select("FORMAT(detail.vol * detail.hargasat, 0) as pagu", false)
       ->select("{$this->table}.detail parent", false)
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
@@ -121,6 +143,30 @@ class Spjs extends MY_Model {
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
+    $this->setStatus($spj);
+    return $spj;
+  }
+
+  function setStatus (&$spj) {
+    $this->load->model(array('Jabatans', 'Spjlogs'));
+    $user = $this->session->all_userdata();
+    $this->Jabatans->getUserAttr($user);
+    $lastLog = $this->Spjlogs->getLast($spj['uuid']);
+
+    $spj['viewer'] = 'list';
+    $spj['status'] = 'unverifiable';
+    if (in_array($lastLog['user'], $user['atasan'])) {
+      if ('verify' === $lastLog['action']) $spj['status'] = 'verified';
+      if ('unverify' === $lastLog['action']) {
+        $spj['status'] = 'verifiable';
+        $spj['viewer'] = 'form';
+      }
+    } else if (in_array($lastLog['user'], $user['letting'])) {
+
+    } else if (in_array($lastLog['user'], $user['bawahan'])) {
+      if ('verify' === $lastLog['action']) $spj['status'] = 'verifiable';
+    }
+    if (0 == $user['allow_edit_spj']) $spj['viewer'] = 'list';
   }
 
 }

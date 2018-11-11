@@ -63,4 +63,18 @@ class Spjlogs extends MY_Model {
     return parent::findOne($param);
   }
 
+  function getLast($spjUuid) {
+    $this->db
+      ->order_by('urutan', 'desc')
+      ->limit(1);
+    return parent::findOne(array('spj' => $spjUuid));
+  }
+
+  function create ($data) {
+    date_default_timezone_set("Asia/Jakarta");
+    $data['taken']= date('Y-m-d H:i:s');
+    $data['user'] = $this->session->userdata('uuid');
+    return parent::create($data);
+  }
+
 }

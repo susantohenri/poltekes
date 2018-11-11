@@ -13,9 +13,9 @@
                 <p class="title-description"> Detail <?= $page_title ?> </p>
             </div>
             <div class="col-sm-6 text-right">
-                <a class="btn btn-info btn-save"><i class="fa fa-save"></i> Save</a>
-                <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Delete</a>
-                <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Cancel</a>
+                <a class="btn btn-info btn-save"><i class="fa fa-save"></i> Simpan</a>
+                <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
+                <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Batal</a>
             </div>
         </div>
     </div>
@@ -25,7 +25,7 @@
             <li class="item item-list-header">
                 <div class="item-row">
                     <div class="item-col fixed item-col-check">
-                        <label class="item-check" id="select-all-items">
+                        <label class="item-check">
                           &nbsp;
                           <span></span>
                         </label>
@@ -52,7 +52,7 @@
                 <li class="item item-list-header" data-uuid="<?= $item['uuid'] ?>" data-child-controller="<?= $item['childController'] ?>" data-child-uuid="<?= $item['childUuid'] ?>">
                     <div class="item-row">
                         <div class="item-col fixed item-col-check">
-                            <label class="item-check" id="select-all-items">
+                            <label class="item-check">
                               <i class="fa fa-plus-square expand-btn"></i>
                               <span></span>
                             </label>

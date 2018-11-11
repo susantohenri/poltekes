@@ -6,7 +6,8 @@ class Spj extends MY_Controller {
     $data = array();
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);
-    $this->loadview('subformlist-spj', $data);
+    $viewer = 'form' === $data['item']['viewer'] ? 'subformlist-spj-editable' : 'subformlist-spj';
+    $this->loadview($viewer, $data);
   }
 
   function subformlistcreate ($parentUuid) {

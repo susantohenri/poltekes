@@ -1,7 +1,7 @@
 <li class="item" data-uuid="<?= $item['uuid'] ?>" data-child-controller="<?= $item['childController'] ?>" data-child-uuid="<?= $item['childUuid'] ?>" data-urutan="<?= $item['urutan'] ?>" data-parent="<?= $item['parent'] ?>">
     <div class="item-row">
         <div class="item-col fixed item-col-check">
-            <label class="item-check" id="select-all-items">
+            <label class="item-check">
               <i class="fa fa-plus-square expand-btn"></i>
               <span></span>
             </label>

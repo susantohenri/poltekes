@@ -19,6 +19,8 @@
             }
             [data-number] {text-align: right;}
             .btn {color: #fff !important}
+            .btn-oval{padding: 2px 4px; font-size: 12px}
+            .hidden{display: none;}
         </style>
     </head>
     <body>
@@ -44,6 +46,7 @@
 
                     <div class="header-block header-block-nav">
                         <a class="dropdown-item" href="<?= site_url('Login/Logout') ?>">
+                            <b><?= $this->session->userdata('email') ?></b> |
                             <i class="fa fa-power-off icon"></i> Logout
                         </a>
                     </div>

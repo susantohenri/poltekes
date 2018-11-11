@@ -84,7 +84,10 @@ function expandItem (btn, cb) {
 		})
 		activateBtnDelete()
 		activateRealtimeCalculation()
-		if ('Spj' === parent.childController) activateAddBtn(parent)
+		if ('Spj' === parent.childController) {
+			activateAddBtn(parent)
+			activateVerificationButton(parent)
+		}
 		cb()
 	})
 }
@@ -163,4 +166,24 @@ function markMinus (li) {
 	if (li.find('.pagu').length < 1) return true
 	if (getNumber(li.find('.realisasi')) > getNumber(li.find('.pagu'))) li.css('background-color', '#ffcccc')
 	else li.attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
+}
+
+function activateVerificationButton (parent) {
+	$('[data-parent="' + parent.uuid + '"]').each(function () {
+		var spj = $(this)
+		var statusInput = spj.find('input[type="hidden"][name*="status"]')
+		var status = statusInput.val()
+		spj.find('.btn-oval').hide()
+		spj.find('.btn.' + status).show()
+		spj.find('.btn-verify').click(function () {
+			statusInput.val('verify')
+			spj.find('.btn-oval').hide()
+			spj.find('.btn.verified').show()
+		})
+		spj.find('.btn-unverify').click(function () {
+			statusInput.val('unverify')
+			spj.find('.btn-oval').hide()
+			spj.find('.btn.unverified').show()
+		})
+	})
 }
