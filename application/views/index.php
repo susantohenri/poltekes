@@ -32,23 +32,30 @@
                             <i class="fa fa-bars"></i>
                         </button>
                     </div>
-                    <div class="header-block header-block-search">
-                    </div>
-
                     <div class="header-block header-block-buttons">
-                        <?php if ($error): ?>
-                        <a class="btn btn-sm header-btn" style="color: white; background-color: #fe821d">
-                            <i class="fa fa-exclamation-triangle"></i>
-                            <span><?= $error ?></span>
-                        </a>
-                        <?php endif ?>
+                      <?php if ($error): ?>
+                      <a class="btn btn-sm header-btn" style="color: white; background-color: #fe821d">
+                          <i class="fa fa-exclamation-triangle"></i>
+                          <span><?= $error ?></span>
+                      </a>
+                      <?php endif ?>
                     </div>
-
                     <div class="header-block header-block-nav">
-                        <a class="dropdown-item" href="<?= site_url('Login/Logout') ?>">
-                            <b><?= $this->session->userdata('email') ?></b> |
-                            <i class="fa fa-power-off icon"></i> Logout
-                        </a>
+                        <ul class="nav-profile">
+                            <li class="profile dropdown">
+                                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                                    <span class="name"> <?= $this->session->userdata('email') ?> </span>
+                                </a>
+                                <div class="dropdown-menu profile-dropdown-menu" aria-labelledby="dropdownMenu1" x-placement="bottom-start" style="position: absolute; transform: translate3d(0px, 30px, 0px); top: 0px; left: 0px; will-change: transform; font-size: 12px">
+                                    <a class="dropdown-item" href="<?= site_url("ChangePassword/read/{$this->session->userdata('uuid')}") ?>">
+                                        <i class="fa fa-key icon"></i> Change Password
+                                    </a>
+                                    <a class="dropdown-item" href="<?= site_url('Login/Logout') ?>">
+                                        <i class="fa fa-power-off icon"></i> Logout
+                                    </a>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </header>
                 <aside class="sidebar">
@@ -258,7 +265,7 @@
                 <div class="color-secondary"></div>
             </div>
         </div>
-        <script type="text/javascript" src="<?= base_url('js/jquery-3.3.1.min.js') ?>"></script>
+        <script type="text/javascript" src="<?= base_url('js/vendor.js') ?>"></script>
         <script type="text/javascript">
             $('nav.menu li a').each(function () {
                 var href = $(this).attr('href')

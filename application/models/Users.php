@@ -40,6 +40,11 @@ class Users extends MY_Model {
     );
   }
 
+  function delete ($uuid) {
+    $user = $this->findOne($uuid);
+    if ('admin' !== $user['email']) return parent::delete($uuid);
+  }
+
   function save ($data) {
     if (strlen ($data['password']) > 0) {
       if ($data['password'] !== $data['confirm_password']) return array('error' => array('message' => 'password did not match'));

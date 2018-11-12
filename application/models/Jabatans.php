@@ -146,10 +146,12 @@ class Jabatans extends MY_Model {
       $kode = $userAttr['kode'];
       $items= $userAttr['items'];
 
-      if (strlen($userAttr['items']) > 0) $user['filter']['where_in'] = array("{$akses_level}_program.uuid", explode(',', $items));
-      if (strlen ($kode) > 0) {
-        if (strpos($kode, '*') > -1) $user['filter']['where'] = array("{$akses_level}.kode LIKE", str_replace('*', '%', $kode));
-        else $user['filter']['where'] = array("{$akses_level}.kode", $kode);
+      if ($akses_level) {
+        if (strlen($userAttr['items']) > 0) $user['filter']['where_in'] = array("{$akses_level}_program.uuid", explode(',', $items));
+        if (strlen ($kode) > 0) {
+          if (strpos($kode, '*') > -1) $user['filter']['where'] = array("{$akses_level}.kode LIKE", str_replace('*', '%', $kode));
+          else $user['filter']['where'] = array("{$akses_level}.kode", $kode);
+        }
       }
     }
   }

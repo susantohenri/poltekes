@@ -51,6 +51,7 @@ window.onload = function () {
       else if (atr === null){ $(this).remove(); } 
   });    
 
+  if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
 }
 
 function formInit () {
