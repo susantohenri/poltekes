@@ -2,4 +2,10 @@
 
 class User extends MY_Controller {
 
+	function dashboard () {
+    $vars = array();
+    $vars['page_name'] = 'dashboard';
+    $this->loadview('index', $vars);
+	}
+
 }

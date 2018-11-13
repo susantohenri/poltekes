@@ -1,5 +1,8 @@
 <nav class="menu">
     <ul class="sidebar-menu metismenu" id="sidebar-menu">
+        <li>
+            <a href="<?= site_url('User/dashboard') ?>"><i class="fa fa-dashboard"></i>Dashboard</a>
+        </li>
         <?php if ('admin' === $this->session->userdata('email')): ?>
         <li>
             <a href="<?= site_url('User/') ?>"><i class="fa fa-group"></i>User</a>

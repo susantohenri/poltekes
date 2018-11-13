@@ -10,9 +10,9 @@ class OutputPrograms extends MY_Model {
       (object) array('mData' => 'kode_output', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '30%'),
 
-      (object) array('mData' => 'detail_vol', 'sTitle' => 'Detail', 'className' => 'text-right'),
+      (object) array('mData' => 'detail_vol', 'sTitle' => 'Detail', 'className' => 'text-right', 'searchable' => 'false'),
       (object) array('mData' => 'detail_sat', 'sTitle' => 'Satuan', 'width' => '10%'),
-      (object) array('mData' => 'spj_vol', 'sTitle' => 'Realisasi', 'className' => 'text-right'),
+      (object) array('mData' => 'spj_vol', 'sTitle' => 'Realisasi', 'className' => 'text-right', 'searchable' => 'false'),
       (object) array('mData' => 'spj_sat', 'sTitle' => 'Satuan', 'width' => '10%'),
       (object) array('mData' => 'prosentase', 'sTitle' => 'Prosentase', 'searchable' => 'false', 'className' => 'text-right', 'width' => '10%'),
     );

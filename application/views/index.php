@@ -318,6 +318,9 @@
             <script type="text/javascript" src="<?= base_url('js/form.js') ?>"></script>
         <?php elseif ('list' === $page_name): ?>
             <script type="text/javascript" src="<?= base_url('js/list.js') ?>"></script>
+        <?php elseif ('dashboard' === $page_name): ?>
+            <script type="text/javascript" src="<?= base_url('js/gauge.min.js') ?>"></script>
+            <script type="text/javascript" src="<?= base_url('js/dashboard.js') ?>"></script>
         <?php endif ?>
     </body>
 </html>
