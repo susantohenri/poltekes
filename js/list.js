@@ -3,10 +3,16 @@ $(document).ready(function () {
 	markMinus($('li[data-uuid]'))
 
 	$('.btn-save').click(function () {
-		$('[data-number]').each (function () {
-			$(this).val(getNumber($(this)))
-		})
-		$('form#form_list').submit()
+		if ($('li[data-uuid]').filter(function () {
+		  return $(this).css('background-color') === 'rgb(255, 204, 204)'
+		}).length > 0) {
+			showError('Formulir gagal dikirim, perhitungan minus')
+		} else {
+			$('[data-number]').each (function () {
+				$(this).val(getNumber($(this)))
+			})
+			$('form#form_list').submit()
+		}
 	})
 })
 

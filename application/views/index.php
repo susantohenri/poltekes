@@ -33,12 +33,10 @@
                         </button>
                     </div>
                     <div class="header-block header-block-buttons">
-                      <?php if ($error): ?>
-                      <a class="btn btn-sm header-btn" style="color: white; background-color: #fe821d">
-                          <i class="fa fa-exclamation-triangle"></i>
-                          <span><?= $error ?></span>
-                      </a>
-                      <?php endif ?>
+                      <span class="error-placeholder btn btn-sm header-btn <?= !$error?'hidden':'' ?>" style="color: white; background-color: #197b30">
+                        <i class="fa fa-exclamation-triangle"></i>
+                        <span class="error-message"><?= $error ? $error : '' ?></span>
+                      </span>
                     </div>
                     <div class="header-block header-block-nav">
                         <ul class="nav-profile">
@@ -273,6 +271,38 @@
                 else $(this).parent('li').removeClass('active')
             })
             if ($('nav.menu li.active').length < 1) $('nav.menu li:first').addClass('active')
+
+            $('#sidebar-menu, #customize-menu').metisMenu({activeClass: 'open'})
+            $('#sidebar-collapse-btn').on('click', function(event){
+                event.preventDefault()
+                $("#app").toggleClass("sidebar-open")
+            })
+            $("#sidebar-overlay").on('click', function() {
+                $("#app").removeClass("sidebar-open")
+            })
+            if ($.browser.mobile) {
+                var $appContainer = $('#app ')
+                var $mobileHandle = $('#sidebar-mobile-menu-handle ')
+                $mobileHandle.swipe({
+                    swipeLeft: function() {
+                        if($appContainer.hasClass("sidebar-open")) {
+                            $appContainer.removeClass("sidebar-open")  
+                        }
+                    },
+                    swipeRight: function() {
+                        if(!$appContainer.hasClass("sidebar-open")) {
+                            $appContainer.addClass("sidebar-open")
+                        }
+                    },
+                    triggerOnTouchEnd: false
+                })
+            }
+
+            function showError (msg) {
+                $('.error-message').html(msg)
+                $('.error-placeholder').slideDown()
+            }
+
             var site_url = '<?= site_url('/') ?>'
             var current_controller = '<?= site_url ($current['controller']) ?>'
         </script>

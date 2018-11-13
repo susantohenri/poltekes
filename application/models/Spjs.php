@@ -61,10 +61,10 @@ class Spjs extends MY_Model {
     if (isset ($data['status'])) {
       if ('verify' === $data['status']) $this->verify($data['uuid']);
       else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
-      return $data['uuid'];
       unset($data['status']);
     }
     if (isset ($data['uraian'])) return parent::save($data);
+    else return $data['uuid'];
   }
 
   function create ($data) {

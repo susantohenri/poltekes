@@ -20,6 +20,10 @@
                     <i class="fa fa-ban"></i>
                     unverified
                 </a>
+                <input type="hidden" value="<?= $item['uraian'] ?>" name="<?= "{$item['parent']}[Spj_uraian][]" ?>">
+                <input type="hidden" value="<?= $item['vol'] ?>" name="<?= "{$item['parent']}[Spj_vol][]" ?>">
+                <input type="hidden" value="<?= $item['sat'] ?>" name="<?= "{$item['parent']}[Spj_sat][]" ?>">
+                <input type="hidden" value="<?= $item['hargasat'] ?>" name="<?= "{$item['parent']}[Spj_hargasat][]" ?>">
                 <input type="hidden" value="<?= $item['status'] ?>" name="<?= "{$item['parent']}[Spj_status][]" ?>">
                 <input type="hidden" value="<?= $item['uuid'] ?>" name="<?= "{$item['parent']}[Spj_uuid][]" ?>">
                 <a target="_blank" href="<?= site_url($current['controller']) . '/read/' . $item['uuid'] ?>">
