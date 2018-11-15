@@ -9,6 +9,7 @@ class User extends MY_Controller {
     $this->load->model(array('Programs', 'AkunPrograms'));
     $vars['gauge'] = $this->Programs->gauge();
     $vars['komposisiRealisasi'] = $this->AkunPrograms->komposisiRealisasi();
+    $vars['komposisiAlokasi'] = $this->AkunPrograms->komposisiAlokasi();
 
     $this->loadview('index', $vars);
 	}

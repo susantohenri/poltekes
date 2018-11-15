@@ -46,6 +46,11 @@
                     <div class="card-block">
                         <div id="dashboard-komposisi-chart" style="position: relative; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
                         </div>
+                        <p style="font-size: 14px; text-align: center">
+                            <?php foreach ($komposisiRealisasi as $kr): ?>
+                                <?= $kr->absis ?> <b><?= number_format($kr->ordinat, 2, ',', '.') ?> %</b><br>
+                            <?php endforeach ?>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -59,6 +64,11 @@
                     <div class="card-block">
                         <div class="dashboard-alokasi-chart" id="dashboard-alokasi-chart">
                         </div>
+                        <p style="font-size: 14px; text-align: center">
+                            <?php foreach ($komposisiAlokasi as $ka): ?>
+                                <?= $ka->label ?> <b><?= $ka->value ?> %</b><br>
+                            <?php endforeach ?>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -85,4 +95,5 @@
 <script type="text/javascript">
     var gaugeData = <?= json_encode($gauge) ?>;
     var barData = <?= json_encode($komposisiRealisasi) ?>;
+    var donutData = <?= json_encode($komposisiAlokasi) ?>;
 </script>

@@ -119,9 +119,7 @@ function drawAlokasiChart () {
     $dashboardAlokasiBreakdownChart.empty()
     Morris.Donut({
         element: 'dashboard-alokasi-chart',
-        data: [{ label: "Download Alokasi", value: 12 },
-            { label: "In-Store Alokasi", value: 30 },
-            { label: "Mail-Order Alokasi", value: 20 } ],
+        data: donutData,
         resize: true,
         colors: [
             tinycolor('rgb(133, 206, 54)'.toString()).lighten(10).toString(),

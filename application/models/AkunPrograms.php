@@ -53,6 +53,25 @@ class AkunPrograms extends MY_Model {
       ->result();
   }
 
+  function komposisiAlokasi () {
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    $result = $this->db
+      ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
+      ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'Belanja Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'Belanja Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'Belanja Modal' END) as label", false)
+      ->select("IFNULL(SUM(detail.vol * detail.hargasat), 0) value", false)
+      ->group_by("SUBSTR(akun.kode, 1, 2)")
+      ->get()
+      ->result();
+    $total = 0;
+    foreach ($result as $res) $total += (int) $res->value;
+    foreach ($result as &$res) {
+      $res->value /= $total / 100;
+      $res->value = number_format ((float) $res->value, 2, '.', '');
+    }
+    return $result;
+  }
+
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
