@@ -83,5 +83,6 @@
     </section>
 </article>
 <script type="text/javascript">
-    var gaugeData = <?= json_encode($gauge) ?>
+    var gaugeData = <?= json_encode($gauge) ?>;
+    var barData = <?= json_encode($komposisiRealisasi) ?>;
 </script>

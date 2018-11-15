@@ -41,6 +41,18 @@ class AkunPrograms extends MY_Model {
 
   }
 
+  function komposisiRealisasi () {
+    $this->load->model('Users');
+    $this->Users->filterListItem();
+    return $this->db
+      ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
+      ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'B. Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'B. Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'B. Modal' END) as absis", false)
+      ->select("IFNULL(SUM(spj.vol * spj.hargasat), 0) / IFNULL(SUM(detail.vol * detail.hargasat), 0) * 100 ordinat", false)
+      ->group_by("SUBSTR(akun.kode, 1, 2)")
+      ->get()
+      ->result();
+  }
+
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();

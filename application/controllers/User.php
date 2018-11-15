@@ -6,8 +6,9 @@ class User extends MY_Controller {
     $vars = array();
     $vars['page_name'] = 'dashboard';
 
-    $this->load->model('Programs');
+    $this->load->model(array('Programs', 'AkunPrograms'));
     $vars['gauge'] = $this->Programs->gauge();
+    $vars['komposisiRealisasi'] = $this->AkunPrograms->komposisiRealisasi();
 
     $this->loadview('index', $vars);
 	}

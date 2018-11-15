@@ -99,54 +99,12 @@ function drawRealisasiChart () {
 }
 
 function drawKomposisiChart () {
-    var dataDownloads = [
-        {
-            year: '2006',
-            downloads: 1300
-        },
-        {
-            year: '2007',
-            downloads: 1526
-        },
-        {
-            year: '2008',
-            downloads: 2000
-        },
-        {
-            year: '2009',
-            downloads: 1800
-        },
-        {
-            year: '2010',
-            downloads: 1650
-        },
-        {
-            year: '2011',
-            downloads: 620
-        },
-        {
-            year: '2012',
-            downloads: 1000
-        },
-        {
-            year: '2013',
-            downloads: 1896
-        },
-        {
-            year: '2014',
-            downloads: 850
-        },
-        {
-            year: '2015',
-            downloads: 1500
-        }
-    ];
     Morris.Bar({
         element: 'dashboard-komposisi-chart',
-        data: dataDownloads,
-        xkey: 'year',
-        ykeys: ['downloads'],
-        labels: ['Downloads'],
+        data: barData,
+        xkey: 'absis',
+        ykeys: ['ordinat'],
+        labels: ['Realisasi'],
         hideHover: 'auto',
         resize: true,
         barColors: [
