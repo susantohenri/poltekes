@@ -52,6 +52,7 @@ window.onload = function () {
   });    
 
   if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
+  if (window.location.href.indexOf('Jabatan') > -1) jabatanDropDown()
 }
 
 function formInit () {
@@ -182,4 +183,12 @@ function markMinus (realisasi_total) {
   var inlineStyle = $('[name="realisasi"]').attr('style') || ''
   if (realisasi_total > getNumber ($('[name="pagu"]'))) $('[name="realisasi"]').css('background-color', '#ffcccc')
   else $('[name="realisasi"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
+}
+
+function jabatanDropDown () {
+  $('[name="akses_level"]').change(function () {
+    var model = $(this).val().replace(' ', '') + 's'
+    $('[name="items[]"]').attr('data-model', model).val('').select2('destroy')
+    formInit()
+  })
 }

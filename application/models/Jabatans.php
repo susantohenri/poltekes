@@ -60,7 +60,7 @@ class Jabatans extends MY_Model {
       'options' => array(),
       'attributes' => array(
         array('data-autocomplete' => 'true'), 
-        array('data-model' => 'KomponenPrograms'), 
+        array('data-model' => ''), 
         array('data-field' => 'uraian')
       ),
     );
@@ -154,6 +154,32 @@ class Jabatans extends MY_Model {
         }
       }
     }
+  }
+
+  function prepopulate ($uuid) {
+    $record = $this->findOne($uuid);
+    foreach ($this->form as &$f) {
+      if (isset ($f['attributes']) && in_array(array('data-autocomplete' => 'true'), $f['attributes'])) {
+        $model = '';
+        $field = '';
+        foreach ($f['attributes'] as $attr) foreach ($attr as $key => $value) switch ($key) {
+          case 'data-model': $model = $value; break;
+          case 'data-field': $field = $value; break;
+        }
+        if ('items' === $f['name'] && strlen($record['akses_level']) > 0) {
+          $model = str_replace(' ', '', $record['akses_level']) . 's';
+        }
+        if (strlen($model) > 0) {
+          $this->load->model($model);
+          foreach ($this->$model->findIn('uuid', explode(',', $record[$f['name']])) as $option)
+            $f['options'][] = array('text' => $option->$field, 'value' => $option->uuid);
+        }
+      }
+      if (isset ($f['multiple'])) $f['value'] = explode(',', $record[$f['name']]);
+      else if ($f['name'] === 'password') $f['value'] = '';
+      else $f['value'] = $record[$f['name']];
+    }
+    return $this->form;
   }
 
 }
