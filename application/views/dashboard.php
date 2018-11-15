@@ -6,7 +6,7 @@
                 <div class="card" data-exclude="xs,sm,lg">
                     <div class="card-header">
                         <div class="header-block">
-                            <h3 class="title"> Penyerapan Anggaran </h3>
+                            <h3 class="title"> Penyerapan Anggaran&nbsp;<i>(Dummy)</i> </h3>
                         </div>
                     </div>
                     <div class="card-block">
@@ -25,6 +25,10 @@
                     </div>
                     <div class="card-block">
                         <canvas id="realisasi" style="width: 500px"></canvas>
+                        <p style="font-size: 14px; text-align: center">
+                            Pagu <b><?= number_format($gauge['pagu'],0,',','.') ?></b><br>
+                            Realisasi <b><?= number_format($gauge['realisasi'],0,',','.') ?></b>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -78,3 +82,6 @@
         </div>
     </section>
 </article>
+<script type="text/javascript">
+    var gaugeData = <?= json_encode($gauge) ?>
+</script>

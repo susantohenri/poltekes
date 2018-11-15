@@ -10,6 +10,7 @@ class Migration_program extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `kode` varchar(255) NOT NULL,
         `uraian` varchar(255) NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");

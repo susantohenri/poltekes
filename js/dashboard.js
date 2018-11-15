@@ -44,6 +44,9 @@ function drawPenyerapanChart(){
 }
 
 function drawRealisasiChart () {
+    gaugeData.pagu = gaugeData.pagu / 1000000
+    gaugeData.realisasi = gaugeData.realisasi / 1000000
+
     var opts = {
       angle: -0.2, // The span of the gauge arc
       lineWidth: 0.02, // The line thickness
@@ -60,14 +63,39 @@ function drawRealisasiChart () {
       strokeColor: '#E0E0E0',  // to see which ones work best for you
       generateGradient: true,
       highDpiSupport: true,     // High resolution support
-      
+      renderTicks: {
+        divisions: 5,
+        divWidth: 1.1,
+        divLength: 0.7,
+        divColor: '#333333',
+        subDivisions: 3,
+        subLength: 0.5,
+        subWidth: 0.6,
+        subColor: '#666666'
+      },
+      percentColors: [[0.0, "#a9d70b" ], [0.50, "#f9c802"], [1.0, "#ff0000"]],
+      staticLabels: {
+        font: "10px sans-serif",  // Specifies font
+        labels: [0,
+            gaugeData.pagu / 3,
+            2 * (gaugeData.pagu / 3),
+            gaugeData.pagu
+        ],  // Print labels at these values
+        color: "#000000",  // Optional: Label text color
+        fractionDigits: 0  // Optional: Numerical precision. 0=round off.
+      },
+      staticZones: [
+       {strokeStyle: "#F03E3E", min: 0, max: gaugeData.pagu / 3}, // Red from 100 to 130
+       {strokeStyle: "#FFDD00", min: gaugeData.pagu / 3, max:  2 * (gaugeData.pagu / 3)}, // Yellow
+       {strokeStyle: "#30B32D", min: 2 * (gaugeData.pagu / 3), max: gaugeData.pagu}, // Green
+      ],
     };
     var target = document.getElementById('realisasi'); // your canvas element
     var gauge = new Gauge(target).setOptions(opts); // create sexy gauge!
-    gauge.maxValue = 3000; // set max gauge value
+    gauge.maxValue = gaugeData.pagu; // set max gauge value
     gauge.setMinValue(0);  // Prefer setter over gauge.minValue = 0
     gauge.animationSpeed = 32; // set animation speed (32 is default value)
-    gauge.set(1250); // set actual value
+    gauge.set(gaugeData.realisasi); // set actual value
 }
 
 function drawKomposisiChart () {

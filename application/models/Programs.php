@@ -149,6 +149,18 @@ class Programs extends MY_Model {
     return $program;
   }
 
+  function gauge () {
+    $this->Users->filterListItem();
+    return $this->db
+      ->select("IFNULL(SUM(detail.vol * detail.hargasat), 0) pagu", false)
+      ->select("IFNULL(SUM(spj.vol * spj.hargasat), 0) realisasi", false)
+      ->group_by("{$this->table}.uuid")
+      ->order_by("{$this->table}.urutan", 'desc')
+      ->limit(1)
+      ->get()
+      ->row_array();
+  }
+
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
