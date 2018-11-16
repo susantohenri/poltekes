@@ -78,6 +78,13 @@ class Spjs extends MY_Model {
   }
 
   function update ($data) {
+    $changes = array();
+    $prev = $this->db->get_where($this->table, array('uuid' => $data['uuid']))->row_array();
+    foreach ($data as $field => $value) {
+      if (isset ($prev[$field]) && $prev[$field] !== $value) $changes[] = array($field, $prev[$field], $value);
+    }
+    if (empty ($changes)) return $data['uuid'];
+
     $this->db->where('uuid', $data['uuid'])->update($this->table, $data);
     $this->Spjlogs->create(array(
       'spj'   => $data['uuid'],
