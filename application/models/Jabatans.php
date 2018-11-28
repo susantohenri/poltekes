@@ -74,6 +74,8 @@ class Jabatans extends MY_Model {
       )
     );
 
+    $this->childs[] = array('label' => '', 'controller' => 'Permission', 'model' => 'Permissions');
+
   }
 
   function dt () {

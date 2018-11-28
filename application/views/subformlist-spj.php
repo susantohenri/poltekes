@@ -29,8 +29,10 @@
                 <a target="_blank" href="<?= site_url($current['controller']) . '/read/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
+                <?php if (in_array('create', $permitted_jabatan_actions)) : ?>
                 &nbsp;
                 <a href="<?= site_url("Jabatan/assignment/{$current['controller']}/{$item['uuid']}") ?>" target="_blank"><i class="fa fa-unlock-alt"></i></a>
+                <?php endif ?>
             </div>
         </div>
         <div class="item-col item-col-header text-right">

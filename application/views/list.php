@@ -13,8 +13,12 @@
                 <p class="title-description"> Detail <?= $page_title ?> </p>
             </div>
             <div class="col-sm-6 text-right">
+                <?php if (in_array('update', $permitted_actions)) : ?>
                 <a class="btn btn-info btn-save"><i class="fa fa-save"></i> Simpan</a>
+                <?php endif ?>
+                <?php if (in_array('delete', $permitted_actions)) : ?>
                 <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
+                <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Batal</a>
             </div>
         </div>

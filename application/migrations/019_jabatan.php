@@ -19,8 +19,29 @@ class Migration_jabatan extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $this->load->model('Jabatans');
-    $this->Jabatans->save(array('nama' => 'Perencanaan'));
+    $this->load->model(array('Jabatans', 'Permissions'));
+    $entities = $this->Permissions->getEntities();
+
+    $planner = $this->Jabatans->save(array('nama' => 'Perencanaan'));
+    $this->db->set('jabatan', $planner)->update('user');
+    foreach (array('User', 'Jabatan') as $e) {
+      foreach (array('index', 'create', 'read', 'update', 'delete') as $a) {
+        $this->Permissions->save(array(
+          'jabatan'=> $planner,
+          'entity' => $e,
+          'action' => $a
+        ));
+      }
+    }
+    foreach ($this->Permissions->getGeneralEntities() as $e) {
+      foreach (array('index', 'create', 'delete') as $a) {
+        $this->Permissions->save(array(
+          'jabatan'=> $planner,
+          'entity' => $e,
+          'action' => $a
+        ));
+      }
+    }
 
     $atasan = '';
     foreach (array (
@@ -142,6 +163,8 @@ class Migration_jabatan extends CI_Migration {
       'parent' => $verifDir,
       'allow_edit_spj' => 1
     ));
+
+    foreach ($this->Jabatans->find() as $jbtn) $this->Permissions->setGeneralPermission($jbtn->uuid);
   }
 
   function down () {

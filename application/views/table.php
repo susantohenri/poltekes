@@ -6,7 +6,7 @@
                 <p class="title-description"> Manajemen <?= $page_title ?> </p>
             </div>
 
-            <?php if (!in_array($current['controller'], array('KegiatanProgram', 'OutputProgram', 'SubOutputProgram', 'KomponenProgram', 'SubKomponenProgram', 'AkunProgram', 'Detail', 'Spj'))) : ?>
+            <?php if (in_array('create', $permitted_actions)) : ?>
             <div class="col-sm-6 text-right">
                 <a href="<?= site_url($current['controller'] . '/create') ?>" class="btn btn-primary">
                     <i class="fa fa-plus"></i>&nbsp;Add New <?= $page_title ?>
@@ -23,3 +23,6 @@
         </div>
     </section>
 </article>
+<script type="text/javascript">
+    var allow_read = <?= in_array('read', $permitted_actions) ?>
+</script>

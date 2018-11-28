@@ -6,6 +6,7 @@ class Users extends MY_Model {
     parent::__construct();
     $this->table = 'user';
     $this->thead = array(
+      (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'email', 'sTitle' => 'Email'),
       (object) array('mData' => 'nama_jabatan', 'sTitle' => 'Jabatan'),
     );
