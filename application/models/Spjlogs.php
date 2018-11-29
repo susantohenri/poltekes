@@ -74,6 +74,14 @@ class Spjlogs extends MY_Model {
     date_default_timezone_set("Asia/Jakarta");
     $data['taken']= date('Y-m-d H:i:s');
     $data['user'] = $this->session->userdata('uuid');
+    if ('verify' === $data['action']) {
+      $this->load->model('Jabatans');
+      $jab = $this->Jabatans->findOne($this->session->userdata('jabatan'));
+      if ($jab && empty ($jab['parent'])) {
+        $this->load->model('Spjs');
+        $this->Spjs->update(array('uuid' => $data['spj'], 'global_status' => 'verified'));
+      }
+    }
     return parent::create($data);
   }
 

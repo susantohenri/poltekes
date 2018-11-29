@@ -164,7 +164,15 @@ class Migration_jabatan extends CI_Migration {
       'allow_edit_spj' => 1
     ));
 
-    foreach ($this->Jabatans->find() as $jbtn) $this->Permissions->setGeneralPermission($jbtn->uuid);
+    foreach ($this->Jabatans->find() as $jbtn) {
+      $this->Permissions->setGeneralPermission($jbtn->uuid);
+      $this->Users->save(array(
+        'email' => $jbtn->nama,
+        'password' => '123',
+        'confirm_password' => '123',
+        'jabatan' => $jbtn->uuid
+      ));
+    }
   }
 
   function down () {

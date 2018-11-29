@@ -5,6 +5,11 @@ class Migration_spj extends CI_Migration {
 
   function up () {
 
+    /*
+      STATUS means personal status for loggedin user
+      GLOBAL STATUS: unverified, verified, paid 
+    */
+
     $this->db->query("
       CREATE TABLE `spj` (
         `uuid` varchar(255) NOT NULL,
@@ -13,6 +18,7 @@ class Migration_spj extends CI_Migration {
         `vol` float NOT NULL,
         `sat` varchar(255) NOT NULL,
         `hargasat` float NOT NULL,
+        `global_status` varchar(255) NOT NULL DEFAULT 'unverified',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`detail`)

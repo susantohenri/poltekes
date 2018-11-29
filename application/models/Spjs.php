@@ -150,11 +150,11 @@ class Spjs extends MY_Model {
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
-    $this->setStatus($spj);
+    $this->putStatus($spj);
     return $spj;
   }
 
-  function setStatus (&$spj) {
+  function putStatus (&$spj) {
     $this->load->model(array('Jabatans', 'Spjlogs'));
     $user = $this->session->all_userdata();
     $this->Jabatans->getUserAttr($user);
@@ -162,7 +162,9 @@ class Spjs extends MY_Model {
 
     $spj['viewer'] = 'list';
     $spj['status'] = 'unverifiable';
-    if (in_array($lastLog['user'], $user['atasan'])) {
+
+    if ('verified' === $spj['global_status']) $spj['status'] = 'verified';
+    else if (in_array($lastLog['user'], $user['atasan'])) {
       if ('verify' === $lastLog['action']) $spj['status'] = 'verified';
       if ('unverify' === $lastLog['action']) {
         $spj['status'] = 'verifiable';
