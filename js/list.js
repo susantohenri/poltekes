@@ -135,7 +135,11 @@ function sortItem (li) {
 function activateRealtimeCalculation () {
 	$('[data-number]').unbind('keyup').bind('keyup', function () {
 		var li = $(this).parent().parent().parent().parent().parent()
-		li.find('.realisasi').val(currency (getNumber (li.find('.input-vol')) * getNumber (li.find('.input-hargasat'))))
+		var vol= getNumber (li.find('.input-vol'))
+		var hargasat = getNumber (li.find('.input-hargasat'))
+		var ppn = getNumber (li.find('.input-ppn'))
+		var pph = getNumber (li.find('.input-pph'))
+		li.find('.realisasi').val(currency (vol * hargasat + ppn + pph))
 		$(this).val(currency (getNumber ($(this))))
 		calculateBottomUp (li)
 	})
