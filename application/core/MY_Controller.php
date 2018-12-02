@@ -120,6 +120,9 @@ class MY_Controller extends CI_Controller {
   }
 
   function subformlist ($uuid) {
+    $this->load->model('Permissions');
+    $perms = $this->Permissions->getPermittedActions($this->controller);
+    if (!in_array('read', $perms)) return false;
     $data = array();
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);

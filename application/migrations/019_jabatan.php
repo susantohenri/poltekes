@@ -26,22 +26,13 @@ class Migration_jabatan extends CI_Migration {
     $this->db->set('jabatan', $planner)->update('user');
     foreach (array('User', 'Jabatan') as $e) {
       foreach (array('index', 'create', 'read', 'update', 'delete') as $a) {
-        $this->Permissions->save(array(
-          'jabatan'=> $planner,
-          'entity' => $e,
-          'action' => $a
-        ));
+        $this->Permissions->setPermission($planner, $e, $a);
       }
     }
     foreach ($this->Permissions->getGeneralEntities() as $e) {
-      foreach (array('index', 'create', 'delete') as $a) {
-        $this->Permissions->save(array(
-          'jabatan'=> $planner,
-          'entity' => $e,
-          'action' => $a
-        ));
-      }
+      foreach (array('index', 'create', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
     }
+    foreach (array('Detail', 'Spj') as $entity) $this->Permissions->setPermission($planner, $entity, 'read');
 
     $atasan = '';
     foreach (array (
@@ -173,6 +164,14 @@ class Migration_jabatan extends CI_Migration {
         'jabatan' => $jbtn->uuid
       ));
     }
+
+    $allow_edit_spj = $this->db
+      ->where('nama', 'Bendahara Pembantu Pengeluaran Direktorat')
+      ->or_like('nama', 'Bendahara Prodi')
+      ->or_like('nama', 'Bendahara Jurusan')
+      ->get('jabatan')
+      ->result();
+    foreach ($allow_edit_spj as $jab) $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');
   }
 
   function down () {

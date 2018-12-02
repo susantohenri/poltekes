@@ -67,6 +67,7 @@ class Permissions extends MY_Model {
         $this->setPermission($jabatan, $entity, $action);
       }
     }
+    foreach (array('Detail', 'Spj') as $entity) $this->setPermission($jabatan, $entity, 'read');
   }
 
   function getPermittedActions ($entity) {
