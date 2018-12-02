@@ -42,9 +42,17 @@
                 <input type="hidden" value="<?= $item['uuid'] ?>" name="<?= "{$item['parent']}[Spj_uuid][]" ?>">
                 <input type="hidden" value="<?= $item['global_status'] ?>" name="<?= "{$item['parent']}[Spj_global_status][]" ?>">
                 <input type="hidden" value="<?= $item['payment_status'] ?>" name="<?= "{$item['parent']}[Spj_payment_status][]" ?>">
+                <input type="hidden" value="<?= $item['unverify_reason'] ?>" name="<?= "{$item['parent']}[Spj_unverify_reason][]" ?>">
+                <input type="hidden" value="<?= $item['unpaid_reason'] ?>" name="<?= "{$item['parent']}[Spj_unpaid_reason][]" ?>">
                 <a target="_blank" href="<?= site_url($current['controller']) . '/read/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
+                <?php if (strlen ($item['unverify_reason'])) : ?>
+                    <br><small><b>unverify reason:</b> <?= $item['unverify_reason'] ?></small>
+                <?php endif ?>
+                <?php if (strlen ($item['unpaid_reason'])) : ?>
+                    <br><small><b>unpaid reason:</b> <?= $item['unpaid_reason'] ?></small>
+                <?php endif ?>
                 <?php if (in_array('create', $permitted_jabatan_actions)) : ?>
                 &nbsp;
                 <a href="<?= site_url("Jabatan/assignment/{$current['controller']}/{$item['uuid']}") ?>" target="_blank"><i class="fa fa-unlock-alt"></i></a>

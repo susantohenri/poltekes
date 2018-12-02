@@ -84,3 +84,27 @@
         </div>
     </section>
 </article>
+
+<div id="modalDialog" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h7 class="modal-title">Sertakan Alasan</h7>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <textarea class="form-control"></textarea>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" data-dismiss="modal">
+            <i class="fa fa-save"></i>
+            Simpan
+        </button>
+        <button type="button" class="btn btn-warning" data-dismiss="modal">
+            <i class="fa fa-times"></i>
+            Abaikan
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

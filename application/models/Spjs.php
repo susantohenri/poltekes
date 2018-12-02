@@ -58,8 +58,10 @@ class Spjs extends MY_Model {
   }
 
   function save ($data) {
+    if (isset ($data['payment_status'])) unset($data['payment_status']);
     if (isset ($data['status'])) {
       if ('verify' === $data['status']) {
+        $data['unverify_reason'] = '';
         $this->verify($data['uuid']);
         $this->load->model('Jabatans');
         $jab = $this->Jabatans->findOne($this->session->userdata('jabatan'));

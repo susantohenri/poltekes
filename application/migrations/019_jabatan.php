@@ -157,7 +157,7 @@ class Migration_jabatan extends CI_Migration {
     ));
 
     foreach (array(
-      'Umum'
+      'PPM'
     ) as $urusan) $this->Jabatans->save(array(
       'nama' => "Kepala Urusan {$urusan}",
       'parent' => $verifDir,

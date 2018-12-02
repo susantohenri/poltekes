@@ -19,6 +19,8 @@ class Migration_spj extends CI_Migration {
         `sat` varchar(255) NOT NULL,
         `hargasat` float NOT NULL,
         `global_status` varchar(255) NOT NULL DEFAULT 'unverified',
+        `unverify_reason` varchar(255) NOT NULL,
+        `unpaid_reason` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`detail`)

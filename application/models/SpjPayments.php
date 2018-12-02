@@ -46,6 +46,11 @@ class SpjPayments extends MY_Model {
       ),
     );
 
+    $this->form[]= array(
+      'name'    => 'unpaid_reason',
+      'label'   => 'Alasan Tidak Dibayar',
+    );
+
     $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
     $this->load->model('Spjlogs');
   }

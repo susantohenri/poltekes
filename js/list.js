@@ -191,6 +191,14 @@ function activateVerificationButton (parent) {
 			statusInput.val('unverify')
 			spj.find('.btn-status').hide()
 			spj.find('.btn.unverified').show()
+			var modal = $('#modalDialog')
+			var input = modal.find('textarea')
+			input.html('')
+			modal.modal()
+			$('#modalDialog .fa-save').parent().unbind('click').bind('click', function () {
+				var reason = input.val()
+				spj.find('input[type="hidden"][name*="Spj_unverify_reason"]').val(reason)
+			})
 		})
 	})
 }
