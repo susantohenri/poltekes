@@ -2,30 +2,46 @@
     <div class="item-row">
         <div class="item-col item-col-header fixed col-sm-9">
             <div>
-                <a class="btn btn-sm btn-oval btn-warning unverifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-warning unverifiable">
                     <i class="fa fa-clock-o"></i>
                     unverifiable
                 </a>
-                <a class="btn btn-sm btn-oval btn-success btn-verify verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-success btn-verify verifiable">
                     <i class="fa fa-check"></i> verify
                 </a>
-                <a class="btn btn-sm btn-oval btn-danger btn-unverify verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-danger btn-unverify verifiable">
                     <i class="fa fa-ban"></i> unverify
                 </a>
-                <a class="btn btn-sm btn-oval btn-success verified">
+                <a class="btn btn-sm btn-oval btn-status btn-success verified">
                     <i class="fa fa-check-square-o"></i>
                     verified
                 </a>
-                <a class="btn btn-sm btn-oval btn-danger unverified">
+                <a class="btn btn-sm btn-oval btn-status btn-danger unverified">
                     <i class="fa fa-ban"></i>
                     unverified
                 </a>
+
+                <a class="btn btn-sm btn-oval btn-payment btn-success fully-paid" href="<?= site_url("SpjPayment/read/{$item['uuid']}") ?>" target="_blank">
+                    <i class="fa fa-star"></i>
+                    fully paid
+                </a>
+                <a class="btn btn-sm btn-oval btn-payment btn-warning partially-paid" href="<?= site_url("SpjPayment/read/{$item['uuid']}") ?>" target="_blank">
+                    <i class="fa fa-star-half-o"></i>
+                    partially paid
+                </a>
+                <a class="btn btn-sm btn-oval btn-payment btn-danger unpaid" href="<?= site_url("SpjPayment/read/{$item['uuid']}") ?>" target="_blank">
+                    <i class="fa fa-star-o"></i>
+                    unpaid
+                </a>
+
                 <input type="hidden" value="<?= $item['uraian'] ?>" name="<?= "{$item['parent']}[Spj_uraian][]" ?>">
                 <input type="hidden" value="<?= $item['vol'] ?>" name="<?= "{$item['parent']}[Spj_vol][]" ?>">
                 <input type="hidden" value="<?= $item['sat'] ?>" name="<?= "{$item['parent']}[Spj_sat][]" ?>">
                 <input type="hidden" value="<?= $item['hargasat'] ?>" name="<?= "{$item['parent']}[Spj_hargasat][]" ?>">
                 <input type="hidden" value="<?= $item['status'] ?>" name="<?= "{$item['parent']}[Spj_status][]" ?>">
                 <input type="hidden" value="<?= $item['uuid'] ?>" name="<?= "{$item['parent']}[Spj_uuid][]" ?>">
+                <input type="hidden" value="<?= $item['global_status'] ?>" name="<?= "{$item['parent']}[Spj_global_status][]" ?>">
+                <input type="hidden" value="<?= $item['payment_status'] ?>" name="<?= "{$item['parent']}[Spj_payment_status][]" ?>">
                 <a target="_blank" href="<?= site_url($current['controller']) . '/read/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>

@@ -93,6 +93,7 @@ function expandItem (btn, cb) {
 		if ('Spj' === parent.childController) {
 			activateAddBtn(parent)
 			activateVerificationButton(parent)
+			adjustPaymentButton(parent)
 		}
 		cb()
 	})
@@ -177,19 +178,30 @@ function markMinus (li) {
 function activateVerificationButton (parent) {
 	$('[data-parent="' + parent.uuid + '"]').each(function () {
 		var spj = $(this)
-		var statusInput = spj.find('input[type="hidden"][name*="status"]')
+		var statusInput = spj.find('input[type="hidden"][name*="Spj_status"]')
 		var status = statusInput.val()
-		spj.find('.btn-oval').hide()
+		spj.find('.btn-status').hide()
 		spj.find('.btn.' + status).show()
 		spj.find('.btn-verify').click(function () {
 			statusInput.val('verify')
-			spj.find('.btn-oval').hide()
+			spj.find('.btn-status').hide()
 			spj.find('.btn.verified').show()
 		})
 		spj.find('.btn-unverify').click(function () {
 			statusInput.val('unverify')
-			spj.find('.btn-oval').hide()
+			spj.find('.btn-status').hide()
 			spj.find('.btn.unverified').show()
 		})
+	})
+}
+
+function adjustPaymentButton (parent) {
+	$('[data-parent="' + parent.uuid + '"]').each(function () {
+		var spj = $(this)
+		spj.find('.btn-payment').hide()
+		if ('verified' === spj.find('input[type="hidden"][name*="global_status"]').val()) {
+			var paymentStatus= spj.find('input[type="hidden"][name*="payment_status"]').val()
+			spj.find('.btn.' + paymentStatus).show()
+		}
 	})
 }

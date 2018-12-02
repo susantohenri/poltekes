@@ -59,8 +59,12 @@ class Spjs extends MY_Model {
 
   function save ($data) {
     if (isset ($data['status'])) {
-      if ('verify' === $data['status']) $this->verify($data['uuid']);
-      else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
+      if ('verify' === $data['status']) {
+        $this->verify($data['uuid']);
+        $this->load->model('Jabatans');
+        $jab = $this->Jabatans->findOne($this->session->userdata('jabatan'));
+        if ($jab && empty ($jab['parent'])) $data['global_status'] = 'verified';
+      } else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
       unset($data['status']);
     }
     if (isset ($data['uraian'])) return parent::save($data);
@@ -83,14 +87,14 @@ class Spjs extends MY_Model {
     foreach ($data as $field => $value) {
       if (isset ($prev[$field]) && $prev[$field] !== $value) $changes[] = array($field, $prev[$field], $value);
     }
-    if (empty ($changes)) return $data['uuid'];
-
-    $this->db->where('uuid', $data['uuid'])->update($this->table, $data);
-    $this->Spjlogs->create(array(
-      'spj'   => $data['uuid'],
-      'action'=> 'update'
-    ));
-    return $result;
+    if (!empty ($changes)) {
+      $this->db->where('uuid', $data['uuid'])->update($this->table, $data);
+      $this->Spjlogs->create(array(
+        'spj'   => $data['uuid'],
+        'action'=> 'update'
+      ));
+    }
+    return $data['uuid'];
   }
 
   function verify ($uuid) {
@@ -158,7 +162,7 @@ class Spjs extends MY_Model {
     $this->load->model(array('Jabatans', 'Spjlogs'));
     $user = $this->session->all_userdata();
     $this->Jabatans->getUserAttr($user);
-    $lastLog = $this->Spjlogs->getLast($spj['uuid']);
+    $lastLog = $this->Spjlogs->getLastVerification($spj['uuid']);
 
     $spj['viewer'] = 'list';
     $spj['status'] = 'unverifiable';
@@ -176,6 +180,8 @@ class Spjs extends MY_Model {
       if ('verify' === $lastLog['action']) $spj['status'] = 'verifiable';
     }
     if (0 == $user['allow_edit_spj']) $spj['viewer'] = 'list';
+    $this->load->model('Payments');
+    $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $spj['hargasat'] * $spj['vol']);
   }
 
 }
