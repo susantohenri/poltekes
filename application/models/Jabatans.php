@@ -12,7 +12,6 @@ class Jabatans extends MY_Model {
       (object) array('mData' => 'parent_name', 'sTitle' => 'Atasan', 'width' => '30%', 'searchable' => false),
       (object) array('mData' => 'akses_level', 'sTitle' => 'Akses Level'),
       (object) array('mData' => 'kode', 'sTitle' => 'Kode Filter'),
-      (object) array('mData' => 'edit_spj', 'sTitle' => 'Edit SPJ'),
     );
 
     $this->form[]= array(
@@ -65,15 +64,6 @@ class Jabatans extends MY_Model {
       ),
     );
 
-    $this->form[]= array(
-      'name' => 'allow_edit_spj',
-      'label'=> 'Izinkan Edit SPJ',
-      'options' => array(
-        array('text' => 'Diizinkan', 'value' => '1'),
-        array('text' => 'Tidak Diizinkan', 'value' => '0'),
-      )
-    );
-
     $this->childs[] = array('label' => '', 'controller' => 'Permission', 'model' => 'Permissions');
 
   }
@@ -81,7 +71,6 @@ class Jabatans extends MY_Model {
   function dt () {
     $this->datatables
       ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama, {$this->table}.akses_level, {$this->table}.kode")
-      ->select("IF({$this->table}.allow_edit_spj = 1, 'Diizinkan', 'Tidak Diizinkan') as edit_spj", false)
       ->select("GROUP_CONCAT(parent.nama SEPARATOR ', ') as parent_name", false)
       ->join('`jabatan` `parent`', "parent.uuid = {$this->table}.parent", 'left')
       ->group_by("{$this->table}.uuid");
@@ -121,7 +110,6 @@ class Jabatans extends MY_Model {
       ->select('jabatan.akses_level')
       ->select('jabatan.kode')
       ->select('jabatan.items')
-      ->select('jabatan.allow_edit_spj')
       ->select("GROUP_CONCAT(user_atasan.uuid) as atasans", false)
       ->select("GROUP_CONCAT(user_letting.uuid) as lettings", false)
       ->select("GROUP_CONCAT(user_bawahan.uuid) as bawahans", false)
@@ -140,7 +128,6 @@ class Jabatans extends MY_Model {
       $user['atasan'] = explode(',', $userAttr['atasans']);
       $user['letting']= explode(',', $userAttr['lettings']);
       $user['bawahan']= explode(',', $userAttr['bawahans']);
-      $user['allow_edit_spj']= $userAttr['allow_edit_spj'];
 
       $akses_level = $userAttr['akses_level'];
       $akses_level = strtolower($akses_level);

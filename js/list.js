@@ -48,7 +48,7 @@ function activateAddBtn (li) {
 	var addBtn = '<li class="item" data-uuid="" data-parent="' + li.uuid + '" style="padding-left: ' + indent + '">\
 	    <div class="item-row">\
         <div class="item-col">\
-					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i></a>\
+					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i> Input SPJ</a>\
 				</div>\
 			</div>\
 	</li>'
@@ -134,7 +134,7 @@ function sortItem (li) {
 
 function activateRealtimeCalculation () {
 	$('[data-number]').unbind('keyup').bind('keyup', function () {
-		var li = $(this).parent().parent().parent().parent().parent()
+		var li = $(this).parent().parent().parent().parent().parent().parent().parent()
 		var vol= getNumber (li.find('.input-vol'))
 		var hargasat = getNumber (li.find('.input-hargasat'))
 		var ppn = getNumber (li.find('.input-ppn'))
@@ -197,7 +197,7 @@ function activateVerificationButton (parent) {
 			spj.find('.btn.unverified').show()
 			var modal = $('#modalDialog')
 			var input = modal.find('textarea')
-			input.html('')
+			input.val('')
 			modal.modal()
 			$('#modalDialog .fa-save').parent().unbind('click').bind('click', function () {
 				var reason = input.val()

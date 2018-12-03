@@ -149,6 +149,8 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.detail parent", false)
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
+      ->select("FORMAT({$this->table}.ppn, 0) ppn_format", false)
+      ->select("FORMAT({$this->table}.pph, 0) pph_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) realisasi", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
@@ -181,7 +183,6 @@ class Spjs extends MY_Model {
     } else if (in_array($lastLog['user'], $user['bawahan'])) {
       if ('verify' === $lastLog['action']) $spj['status'] = 'verifiable';
     }
-    if (0 == $user['allow_edit_spj']) $spj['viewer'] = 'list';
     $this->load->model('Payments');
     $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $spj['hargasat'] * $spj['vol']);
   }

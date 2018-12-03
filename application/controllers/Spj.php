@@ -9,7 +9,7 @@ class Spj extends MY_Controller {
     $data = array();
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);
-    $viewer = 'form' === $data['item']['viewer'] ? 'subformlist-spj-editable' : 'subformlist-spj';
+    $viewer = 'form' === $data['item']['viewer'] ? 'subformlistread-spj' : 'subformlist-spj';
     $this->loadview($viewer, $data);
   }
 

@@ -13,7 +13,6 @@ class Migration_jabatan extends CI_Migration {
         `akses_level` varchar(255) NOT NULL,
         `kode` varchar(255) NOT NULL,
         `items` varchar(255) NOT NULL,
-        `allow_edit_spj` TINYINT(1) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -121,7 +120,6 @@ class Migration_jabatan extends CI_Migration {
           'akses_level' => 'Sub Komponen',
           'kode' => $kode,
           'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan['uuid'],
-          'allow_edit_spj' => 1
         ));
       }
     }
@@ -129,7 +127,6 @@ class Migration_jabatan extends CI_Migration {
     foreach (array ('Bendahara Gaji', 'Bendahara Pembantu Pengeluaran Direktorat') as $custom) $this->Jabatans->save(array(
       'nama' => $custom,
       'parent' => $verifDir,
-      'allow_edit_spj' => 1
     ));
 
     foreach (array(
@@ -144,7 +141,6 @@ class Migration_jabatan extends CI_Migration {
     ) as $unit) $this->Jabatans->save(array(
       'nama' => "Kepala Unit {$unit}",
       'parent' => $verifDir,
-      'allow_edit_spj' => 1
     ));
 
     foreach (array(
@@ -152,7 +148,6 @@ class Migration_jabatan extends CI_Migration {
     ) as $urusan) $this->Jabatans->save(array(
       'nama' => "Kepala Urusan {$urusan}",
       'parent' => $verifDir,
-      'allow_edit_spj' => 1
     ));
 
     foreach ($this->Jabatans->find() as $jbtn) {

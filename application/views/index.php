@@ -265,6 +265,9 @@
         </div>
         <script type="text/javascript" src="<?= base_url('js/vendor.js') ?>"></script>
         <script type="text/javascript">
+            $('.error-placeholder').click(function () {
+                $(this).slideUp()
+            })
             $('#sidebar-menu, #customize-menu').metisMenu({activeClass: 'open'})
             $('#sidebar-collapse-btn').on('click', function(event){
                 event.preventDefault()
