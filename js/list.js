@@ -32,7 +32,7 @@ function activateExpandButton () {
 
 function activateBtnDelete () {
 	$('.btn-delete').unbind('click').bind('click', function () {
-		var li = $(this).parent().parent().parent().parent().parent()
+		var li = $(this).parent().parent().parent().parent().parent().parent().parent()
 		li.remove()
 		calculateBottomUp (li)
 	})
@@ -94,6 +94,7 @@ function expandItem (btn, cb) {
 			activateAddBtn(parent)
 			activateVerificationButton(parent)
 			adjustPaymentButton(parent)
+			activateVerifikasiUlangSPJ(parent)
 		}
 		cb()
 	})
@@ -214,6 +215,35 @@ function adjustPaymentButton (parent) {
 		if ('verified' === spj.find('input[type="hidden"][name*="global_status"]').val()) {
 			var paymentStatus= spj.find('input[type="hidden"][name*="payment_status"]').val()
 			spj.find('.btn.' + paymentStatus).show()
+		}
+	})
+}
+
+function activateVerifikasiUlangSPJ (parent) {
+	$('.verifikasi-ulang-spj').unbind('click').bind('click', function () {
+		if ($('li[data-uuid]').filter(function () {
+		  return $(this).css('background-color') === 'rgb(255, 204, 204)'
+		}).length > 0) showError('Formulir gagal dikirim, perhitungan minus')
+		else {
+			var li = $(this).parent().parent().parent().parent().parent().parent().parent()
+			var formdata = {}
+			li.find('input').not('[disabled]').each(function () {
+				var name = $(this).attr('name').split('[')[1].split(']')[0].replace('Spj_', '')
+				formdata[name] = $(this).val()
+			})
+			$.post(site_url + 'Spj/ReVerify', formdata, function () {
+				$.ajax({
+					url: site_url + 'Spj/subformlist/' + formdata.uuid,
+					success: function (item) {
+						li.replaceWith(item)
+						li = $('[data-uuid="'+formdata.uuid+'"]')
+						li.css('padding-left', parent.indent + 10 + 'px')
+						markMinus(li)
+						activateVerificationButton(parent)
+						adjustPaymentButton(parent)
+					}
+				})
+			})
 		}
 	})
 }

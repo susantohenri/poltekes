@@ -1,4 +1,5 @@
 <li class="item form-spj" data-uuid="<?= $item['uuid'] ?>" data-child-controller="<?= $item['childController'] ?>" data-child-uuid="<?= $item['childUuid'] ?>" data-urutan="<?= $item['urutan'] ?>" data-parent="<?= $item['parent'] ?>">
+    <input type="hidden" name="<?= "{$item['parent']}[Spj_uuid][]" ?>" value="<?= $item['uuid'] ?>">
     <div class="item-row">
         <div class="item-col">
             <div class="form-group row">
@@ -59,7 +60,7 @@
                             <a class="btn btn-danger btn-delete" data-uuid="<?= $item['uuid'] ?>">
                               <i class="fa fa-trash-o"></i> Hapus SPJ
                             </a>
-                            <a class="btn btn-success">
+                            <a class="btn btn-success verifikasi-ulang-spj">
                               <i class="fa fa-check-circle"></i> Verifikasi Ulang SPJ
                             </a>
                         </div>

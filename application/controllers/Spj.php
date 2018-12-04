@@ -20,4 +20,11 @@ class Spj extends MY_Controller {
     $this->loadview('subformlistcreate-spj', array('item' => array ('parent' => $parentUuid)));
   }
 
+  function ReVerify () {
+    $post = $this->input->post();
+    $post['status'] = 'verify';
+    $this->{$this->model}->save($post);
+    echo '{}';
+  }
+
 }

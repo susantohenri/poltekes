@@ -21,6 +21,7 @@
             .btn {color: #fff !important}
             .btn-oval{padding: 2px 4px; font-size: 12px}
             .hidden{display: none;}
+            .form-spj .form-group {margin-bottom: 2px}
         </style>
     </head>
     <body>

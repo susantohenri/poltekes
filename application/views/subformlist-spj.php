@@ -53,10 +53,6 @@
                 <?php if (strlen ($item['unpaid_reason'])) : ?>
                     <br><small><b>unpaid reason:</b> <?= $item['unpaid_reason'] ?></small>
                 <?php endif ?>
-                <?php if (in_array('create', $permitted_jabatan_actions)) : ?>
-                &nbsp;
-                <a href="<?= site_url("Jabatan/assignment/{$current['controller']}/{$item['uuid']}") ?>" target="_blank"><i class="fa fa-unlock-alt"></i></a>
-                <?php endif ?>
             </div>
         </div>
         <div class="item-col item-col-header text-right">
