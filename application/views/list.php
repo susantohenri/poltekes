@@ -46,7 +46,7 @@
                     </div>
                     <div class="item-col item-col-header text-right">
                         <div>
-                            <span class="">REALISASI</span>
+                            <span class="">TOTAL SPJ</span>
                         </div>
                     </div>
                 </div>
@@ -73,7 +73,7 @@
                         </div>
                         <div class="item-col item-col-header text-right">
                             <div>
-                                <span class="realisasi"><?= $item['realisasi'] ?></span>
+                                <span class="total_spj"><?= $item['total_spj'] ?></span>
                             </div>
                         </div>
                     </div>

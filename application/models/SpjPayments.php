@@ -37,8 +37,8 @@ class SpjPayments extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'realisasi',
-      'label'=> 'Realisasi',
+      'name' => 'total_spj',
+      'label'=> 'Total SPJ',
       'value'=> 0,
       'attributes' => array(
         array('disabled' => 'disabled'),
@@ -61,7 +61,7 @@ class SpjPayments extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol, 0) realisasi", false);
+      ->select("FORMAT(hargasat * vol, 0) total_spj", false);
     return parent::findOne($param);
   }
 

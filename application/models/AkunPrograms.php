@@ -10,9 +10,7 @@ class AkunPrograms extends MY_Model {
       (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode', 'className' => 'text-right'),
       (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
-      (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right')
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right')
     );
 
     $this->form = array();
@@ -80,7 +78,7 @@ class AkunPrograms extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.sub_komponen_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) realisasi", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT detail.uuid) childUuid", false)
       ->select("'Detail' childController", false)
       ->select('akun.kode kode', false)
@@ -110,9 +108,7 @@ class AkunPrograms extends MY_Model {
       ->select('akun.kode as kode_akun', false)
   		->select('akun.nama as nama_akun', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj.hargasat * spj.vol) as realisasi", false)
-  		->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
-      ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
+      ->select("SUM(spj.hargasat * spj.vol) as total_spj", false)
   		->group_by("{$this->table}.uuid")
       ->generate();
   }

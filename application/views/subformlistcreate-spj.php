@@ -43,9 +43,9 @@
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-sm-3 control-label">Realisasi</label>
+                      <label class="col-sm-3 control-label">Total SPJ</label>
                       <div class="col-sm-8">
-                        <input class="form-control realisasi" type="text" disabled="disabled" data-number="true">
+                        <input class="form-control total_spj" type="text" disabled="disabled" data-number="true">
                       </div>
                     </div>
                     <div class="form-group row">

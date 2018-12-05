@@ -11,8 +11,7 @@ class OutputPrograms extends MY_Model {
       (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '30%'),
       (object) array('mData' => 'detail_sat', 'sTitle' => 'Satuan', 'width' => '10%'),
       (object) array('mData' => 'detail_vol', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => 'false'),
-      (object) array('mData' => 'spj_vol', 'sTitle' => 'Realisasi', 'className' => 'text-right', 'searchable' => 'false'),
-      (object) array('mData' => 'prosentase', 'sTitle' => 'Prosentase', 'searchable' => 'false', 'className' => 'text-right', 'width' => '10%'),
+      (object) array('mData' => 'spj_vol', 'sTitle' => 'SPJ', 'className' => 'text-right', 'searchable' => 'false'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'SubOutputProgram', 'model' => 'SubOutputPrograms');
@@ -27,7 +26,7 @@ class OutputPrograms extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.kegiatan_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) realisasi", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT sub_output_program.uuid) childUuid", false)
       ->select("'SubOutputProgram' childController", false)
       ->select('output.kode kode', false)
@@ -50,7 +49,6 @@ class OutputPrograms extends MY_Model {
       ->select('detail.sat as detail_sat', false)
       ->select('SUM(spj.vol) as spj_vol', false)
       ->select('spj.sat as spj_sat', false)
-      ->select("SUM(spj.vol) / SUM(detail.vol) * 100 as prosentase")
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

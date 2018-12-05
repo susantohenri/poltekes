@@ -12,7 +12,7 @@ class Spjs extends MY_Model {
       (object) array('mData' => 'vol', 'sTitle' => 'Vol', 'className' => 'text-right'),
       (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
       (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
-      (object) array('mData' => 'realisasi', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
     );
 
     $this->form[]= array(
@@ -44,8 +44,8 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'realisasi',
-      'label'=> 'Realisasi',
+      'name' => 'total_spj',
+      'label'=> 'Total SPJ',
       'value'=> 0,
       'attributes' => array(
         array('disabled' => 'disabled'),
@@ -119,7 +119,7 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol, 0) realisasi", false);
+      ->select("FORMAT(hargasat * vol, 0) total_spj", false);
     return parent::findOne($param);
   }
 
@@ -132,7 +132,7 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.uraian")
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
-      ->select("{$this->table}.vol * {$this->table}.hargasat as realisasi", false)
+      ->select("{$this->table}.vol * {$this->table}.hargasat as total_spj", false)
       ->select("{$this->table}.hargasat")
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)
@@ -151,7 +151,7 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.ppn, 0) ppn_format", false)
       ->select("FORMAT({$this->table}.pph, 0) pph_format", false)
-      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) realisasi", false)
+      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) total_spj", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)

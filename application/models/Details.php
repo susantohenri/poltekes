@@ -12,9 +12,7 @@ class Details extends MY_Model {
       (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
       (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
-      (object) array('mData' => 'realisasi', 'sTitle' => 'Realisasi', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
-      (object) array('mData' => 'sisa', 'sTitle' => 'Sisa', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'prosentase', 'sTitle' => 'Serapan', 'searchable' => 'false', 'className' => 'text-right')
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency')
     );
 
     $this->form[]= array(
@@ -59,8 +57,8 @@ class Details extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'realisasi',
-      'label'=> 'Realisasi',
+      'name' => 'total_spj',
+      'label'=> 'SPJ',
       'value'=> 0,
       'attributes' => array(
         array('disabled' => 'disabled'),
@@ -80,7 +78,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat", false)
       ->select("FORMAT({$this->table}.hargasat * {$this->table}.vol, 0) pagu", false)
-      ->select("FORMAT(SUM(spj.hargasat * spj.vol), 0) realisasi", false)
+      ->select("FORMAT(SUM(spj.hargasat * spj.vol), 0) total_spj", false)
       ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::findOne($param);
@@ -97,9 +95,7 @@ class Details extends MY_Model {
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.hargasat * {$this->table}.vol as pagu", false)
-      ->select("SUM(spj.vol * spj.hargasat) realisasi")
-      ->select("IF(SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol) > 0, SUM(detail.hargasat * detail.vol) - SUM(spj.hargasat * spj.vol), 0) as sisa")
-      ->select("SUM(spj.hargasat * spj.vol) / SUM(detail.hargasat * detail.vol) * 100 as prosentase")
+      ->select("SUM(spj.vol * spj.hargasat) total_spj")
       ->group_by("{$this->table}.uuid")
       ->generate();
   }
@@ -114,7 +110,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)
-      ->select("FORMAT(spj.vol * spj.hargasat, 0) realisasi", false)
+      ->select("FORMAT(spj.vol * spj.hargasat, 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
       ->select("''  kode", false)

@@ -139,7 +139,7 @@ function formInit () {
 
 function calculateProgramDetail () {
   if (window.location.href.indexOf ('/Detail/') < 0) return true
-  markMinus(getNumber ($('[name="realisasi"]')))
+  markMinus(getNumber ($('[name="total_spj"]')))
   $('[name="vol"], [name="hargasat"]').keyup(function () {
     $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
   })
@@ -147,21 +147,21 @@ function calculateProgramDetail () {
     var row = $(this).parent().parent()
     var vol = getNumber(row.find('[name^="Spj_vol["]'))
     var hargasat = getNumber(row.find('[name^="Spj_hargasat["]'))
-    var realisasi= currency(vol * hargasat)
-    row.find('[name^="Spj_realisasi["]').val(realisasi)
-    var realisasi_total = 0
-    $('[name^="Spj_realisasi["]').each(function () {
-      realisasi_total += getNumber($(this))
+    var total_spj= currency(vol * hargasat)
+    row.find('[name^="Spj_total_spj["]').val(total_spj)
+    var spj_total = 0
+    $('[name^="Spj_total_spj["]').each(function () {
+      spj_total += getNumber($(this))
     })
-    $('[name="realisasi"]').val(currency (realisasi_total))
-    markMinus(realisasi_total)
+    $('[name="total_spj"]').val(currency (spj_total))
+    markMinus(spj_total)
   })
 }
 
 function calculateSpj () {
   if (window.location.href.indexOf ('/Spj/') < 0) return true
   $('[name="vol"], [name="hargasat"]').keyup(function () {
-    $('[name="realisasi"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
+    $('[name="total_spj"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
   })
 }
 
@@ -177,10 +177,10 @@ function currency (number) {
   return currency.join(',').split('').reverse().join('')
 }
 
-function markMinus (realisasi_total) {
-  var inlineStyle = $('[name="realisasi"]').attr('style') || ''
-  if (realisasi_total > getNumber ($('[name="pagu"]'))) $('[name="realisasi"]').css('background-color', '#ffcccc')
-  else $('[name="realisasi"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
+function markMinus (spj_total) {
+  var inlineStyle = $('[name="total_spj"]').attr('style') || ''
+  if (spj_total > getNumber ($('[name="pagu"]'))) $('[name="total_spj"]').css('background-color', '#ffcccc')
+  else $('[name="total_spj"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
 }
 
 function jabatanDropDown () {

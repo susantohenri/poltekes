@@ -140,7 +140,7 @@ function activateRealtimeCalculation () {
 		var hargasat = getNumber (li.find('.input-hargasat'))
 		var ppn = getNumber (li.find('.input-ppn'))
 		var pph = getNumber (li.find('.input-pph'))
-		li.find('.realisasi').val(currency (vol * hargasat + ppn + pph))
+		li.find('.total_spj').val(currency (vol * hargasat + ppn + pph))
 		$(this).val(currency (getNumber ($(this))))
 		calculateBottomUp (li)
 	})
@@ -151,11 +151,11 @@ function calculateBottomUp (li) {
 	else {
 		var parentUuid = li.attr('data-parent')
 		var parentLi = $('[data-uuid="' + li.attr('data-parent') + '"]')
-		var realisasi = 0
+		var total_spj = 0
 		$('[data-parent="' + parentUuid + '"]').each(function () {
-			realisasi += $(this).find('.realisasi').length > 0 ? getNumber($(this).find('.realisasi')) : 0
+			total_spj += $(this).find('.total_spj').length > 0 ? getNumber($(this).find('.total_spj')) : 0
 		})
-		parentLi.find('.realisasi').html(currency (realisasi))
+		parentLi.find('.total_spj').html(currency (total_spj))
 		markMinus(parentLi)
 		calculateBottomUp (parentLi)
 	}
@@ -176,7 +176,7 @@ function currency (number) {
 function markMinus (li) {
 	var inlineStyle = li.attr('style') || ''
 	if (li.find('.pagu').length < 1) return true
-	if (getNumber(li.find('.realisasi')) > getNumber(li.find('.pagu'))) li.css('background-color', '#ffcccc')
+	if (getNumber(li.find('.total_spj')) > getNumber(li.find('.pagu'))) li.css('background-color', '#ffcccc')
 	else li.attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
 }
 
