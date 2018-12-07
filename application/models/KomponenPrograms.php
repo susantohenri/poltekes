@@ -26,7 +26,7 @@ class KomponenPrograms extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.sub_output_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT sub_komponen_program.uuid) childUuid", false)
       ->select("'SubKomponenProgram' childController", false)
       ->select('komponen.kode kode', false)
@@ -45,7 +45,7 @@ class KomponenPrograms extends MY_Model {
       ->select('komponen.kode as kode_komponen', false)
       ->select('komponen.uraian as uraian_komponen', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj.hargasat * spj.vol) as total_spj", false)
+      ->select("SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph) as total_spj", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

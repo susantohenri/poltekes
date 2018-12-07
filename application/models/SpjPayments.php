@@ -61,7 +61,7 @@ class SpjPayments extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol, 0) total_spj", false);
+      ->select("FORMAT(hargasat * vol + ppn + pph, 0) total_spj", false);
     return parent::findOne($param);
   }
 

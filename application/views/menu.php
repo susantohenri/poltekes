@@ -1,7 +1,7 @@
 <nav class="menu">
     <ul class="sidebar-menu metismenu" id="sidebar-menu">
         <li>
-            <a href="<?= site_url('User/dashboard') ?>"><i class="fa fa-dashboard"></i>Dashboard</a>
+            <a href="<?= site_url('Dashboard') ?>"><i class="fa fa-dashboard"></i>Dashboard</a>
         </li>
         <?php if (in_array('User', $permitted_menus)) : ?>
         <li>

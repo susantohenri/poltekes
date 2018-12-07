@@ -6,7 +6,7 @@
                 <div class="card" data-exclude="xs,sm,lg">
                     <div class="card-header">
                         <div class="header-block">
-                            <h3 class="title"> Penyerapan Anggaran&nbsp;<i>(Dummy)</i> </h3>
+                            <h3 class="title"> Penyerapan Anggaran </h3>
                         </div>
                     </div>
                     <div class="card-block">
@@ -48,7 +48,7 @@
                         </div>
                         <p style="font-size: 14px; text-align: center">
                             <?php foreach ($komposisiRealisasi as $kr): ?>
-                                <?= $kr->absis ?> <b><?= number_format($kr->ordinat, 2, ',', '.') ?> %</b><br>
+                                <?= str_replace('B.', 'Belanja ', $kr->absis) ?> <b>Rp <?= number_format($kr->ordinat, 0, ',', '.') ?></b><br>
                             <?php endforeach ?>
                         </p>
                     </div>
@@ -77,6 +77,7 @@
     </section>
 </article>
 <script type="text/javascript">
+    var lineData = <?= json_encode($penyerapanAnggaran) ?>;
     var gaugeData = <?= json_encode($gauge) ?>;
     var barData = <?= json_encode($komposisiRealisasi) ?>;
     var donutData = <?= json_encode($komposisiAlokasi) ?>;

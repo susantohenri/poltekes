@@ -78,7 +78,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat", false)
       ->select("FORMAT({$this->table}.hargasat * {$this->table}.vol, 0) pagu", false)
-      ->select("FORMAT(SUM(spj.hargasat * spj.vol), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph), 0) total_spj", false)
       ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::findOne($param);
@@ -95,7 +95,7 @@ class Details extends MY_Model {
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.hargasat * {$this->table}.vol as pagu", false)
-      ->select("SUM(spj.vol * spj.hargasat) total_spj")
+      ->select("SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph) total_spj")
       ->group_by("{$this->table}.uuid")
       ->generate();
   }
@@ -110,7 +110,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)
-      ->select("FORMAT(spj.vol * spj.hargasat, 0) total_spj", false)
+      ->select("FORMAT(spj.vol * spj.hargasat + spj.ppn + spj.pph, 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
       ->select("''  kode", false)

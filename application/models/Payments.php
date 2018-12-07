@@ -21,11 +21,17 @@ class Payments extends MY_Model {
     $this->form[]= array(
       'name' => 'transfer_time',
       'label'=> 'Waktu transfer',
+      'attributes' => array (
+        array ('data-date' => 'datepicker')
+      )
     );
 
     $this->form[]= array(
       'name' => 'amount',
       'label'=> 'Nominal',
+      'attributes' => array (
+        array ('data-number' => 'true')
+      )
     );
   }
 

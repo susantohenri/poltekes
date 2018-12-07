@@ -56,7 +56,7 @@ class SubKomponenPrograms extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.komponen_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT akun_program.uuid) childUuid", false)
       ->select("'AkunProgram' childController", false)
       ->select('sub_komponen.kode kode', false)
@@ -71,7 +71,7 @@ class SubKomponenPrograms extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("CONCAT('Rp ', FORMAT(SUM(detail.hargasat * detail.vol), 0)) pagu", false)
-      ->select("CONCAT('Rp ', FORMAT(SUM(spj.hargasat * spj.vol), 0)) total_spj", false)
+      ->select("CONCAT('Rp ', FORMAT(SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph), 0)) total_spj", false)
       ->join('akun_program', "{$this->table}.uuid = akun_program.{$this->table}", 'left')
       ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
@@ -88,7 +88,7 @@ class SubKomponenPrograms extends MY_Model {
       ->select('sub_komponen.kode as kode_sub_komponen', false)
       ->select('sub_komponen.uraian as uraian_sub_komponen', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj.hargasat * spj.vol) as total_spj", false)
+      ->select("SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph) as total_spj", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

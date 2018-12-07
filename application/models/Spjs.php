@@ -44,6 +44,22 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'ppn',
+      'label'=> 'PPN',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
+    );
+
+    $this->form[]= array(
+      'name' => 'pph',
+      'label'=> 'PPH',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
+    );
+
+    $this->form[]= array(
       'name' => 'total_spj',
       'label'=> 'Total SPJ',
       'value'=> 0,
@@ -119,7 +135,7 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol, 0) total_spj", false);
+      ->select("FORMAT(hargasat * vol + ppn + pph, 0) total_spj", false);
     return parent::findOne($param);
   }
 
@@ -132,7 +148,7 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.uraian")
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
-      ->select("{$this->table}.vol * {$this->table}.hargasat as total_spj", false)
+      ->select("{$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph as total_spj", false)
       ->select("{$this->table}.hargasat")
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)
@@ -151,7 +167,7 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.ppn, 0) ppn_format", false)
       ->select("FORMAT({$this->table}.pph, 0) pph_format", false)
-      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) total_spj", false)
+      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph, 0) total_spj", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)

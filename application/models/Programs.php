@@ -147,18 +147,6 @@ class Programs extends MY_Model {
     return $program;
   }
 
-  function gauge () {
-    $this->Users->filterListItem();
-    return $this->db
-      ->select("IFNULL(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("IFNULL(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
-      ->group_by("{$this->table}.uuid")
-      ->order_by("{$this->table}.urutan", 'desc')
-      ->limit(1)
-      ->get()
-      ->row_array();
-  }
-
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
@@ -168,7 +156,7 @@ class Programs extends MY_Model {
       ->select("{$this->table}.*")
       ->select("'' parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT kegiatan_program.uuid) childUuid", false)
       ->select("'KegiatanProgram' childController", false)
       ->group_by("{$this->table}.uuid")
@@ -184,7 +172,7 @@ class Programs extends MY_Model {
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj.hargasat * spj.vol) as total_spj", false)
+      ->select("SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph) as total_spj", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

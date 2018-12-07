@@ -39,37 +39,6 @@ class AkunPrograms extends MY_Model {
 
   }
 
-  function komposisiRealisasi () {
-    $this->load->model('Users');
-    $this->Users->filterListItem();
-    return $this->db
-      ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
-      ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'B. Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'B. Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'B. Modal' END) as absis", false)
-      ->select("IFNULL(SUM(spj.vol * spj.hargasat), 0) / IFNULL(SUM(detail.vol * detail.hargasat), 0) * 100 ordinat", false)
-      ->group_by("SUBSTR(akun.kode, 1, 2)")
-      ->get()
-      ->result();
-  }
-
-  function komposisiAlokasi () {
-    $this->load->model('Users');
-    $this->Users->filterListItem();
-    $result = $this->db
-      ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
-      ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'Belanja Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'Belanja Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'Belanja Modal' END) as label", false)
-      ->select("IFNULL(SUM(detail.vol * detail.hargasat), 0) value", false)
-      ->group_by("SUBSTR(akun.kode, 1, 2)")
-      ->get()
-      ->result();
-    $total = 0;
-    foreach ($result as $res) $total += (int) $res->value;
-    foreach ($result as &$res) {
-      $res->value /= $total / 100;
-      $res->value = number_format ((float) $res->value, 2, '.', '');
-    }
-    return $result;
-  }
-
   function getListItem ($uuid) {
     $this->load->model('Users');
     $this->Users->filterListItem();
@@ -78,7 +47,7 @@ class AkunPrograms extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.sub_komponen_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT detail.uuid) childUuid", false)
       ->select("'Detail' childController", false)
       ->select('akun.kode kode', false)
@@ -108,7 +77,7 @@ class AkunPrograms extends MY_Model {
       ->select('akun.kode as kode_akun', false)
   		->select('akun.nama as nama_akun', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj.hargasat * spj.vol) as total_spj", false)
+      ->select("SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph) as total_spj", false)
   		->group_by("{$this->table}.uuid")
       ->generate();
   }

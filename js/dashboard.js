@@ -6,32 +6,18 @@ $(document).ready(function () {
 })
 
 function drawPenyerapanChart(){
-    var dataPenyerapan = [
-        { x: '2015-09-01', y: 70},
-        { x: '2015-09-02', y: 75 },
-        { x: '2015-09-03', y: 50},
-        { x: '2015-09-04', y: 75 },
-        { x: '2015-09-05', y: 50 },
-        { x: '2015-09-06', y: 75 },
-        { x: '2015-09-07', y: 86 }
-    ];
-
     Morris.Line({
         element: 'dashboard-penyerapan-chart',
-        data: dataPenyerapan,
+        data: lineData,
         xkey: 'x',
         ykeys: ['y'],
-        ymin: 'auto 40',
-        labels: ['Penyerapan'],
-        xLabels: "day",
+        labels: ['Realisasi'],
+        xLabels: "month",
         hideHover: 'auto',
-        yLabelFormat: function (y) {
-            if (y === parseInt(y, 10)) {
-                return y;
-            }
-            else {
-                return '';
-            }
+        yLabelFormat: function (number) {
+          var reverse = number.toString().split('').reverse().join(''),
+          currency  = reverse.match(/\d{1,3}/g)
+          return 'Rp ' + currency.join(',').split('').reverse().join('')
         },
         resize: true,
         lineColors: [
