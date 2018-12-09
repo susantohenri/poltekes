@@ -57,11 +57,14 @@
                     <div class="form-group row">
                         <label class="col-sm-3 control-label"></label>
                         <div class="col-sm-9">
-                            <a class="btn btn-danger btn-delete" data-uuid="<?= $item['uuid'] ?>">
-                              <i class="fa fa-trash-o"></i> Hapus SPJ
-                            </a>
                             <a class="btn btn-success verifikasi-ulang-spj">
-                              <i class="fa fa-check-circle"></i> Verifikasi Ulang SPJ
+                              <i class="fa fa-check-circle"></i> Verify
+                            </a>
+                            <a class="btn btn-warning unverify-ulang-spj">
+                              <i class="fa fa-times-circle"></i> Unverify
+                            </a>
+                            <a class="btn btn-danger btn-delete" data-uuid="<?= $item['uuid'] ?>">
+                              <i class="fa fa-trash-o"></i> Delete
                             </a>
                         </div>
                     </div>

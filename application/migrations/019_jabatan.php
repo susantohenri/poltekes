@@ -138,17 +138,29 @@ class Migration_jabatan extends CI_Migration {
       'CDC',
       'Asrama',
       'Pengembangan Bahasa'
-    ) as $unit) $this->Jabatans->save(array(
-      'nama' => "Kepala Unit {$unit}",
-      'parent' => $verifDir,
-    ));
+    ) as $unit) {
+      $kepalaUnit = $this->Jabatans->save(array(
+        'nama' => "Kepala Unit {$unit}",
+        'parent' => $verifDir,
+      ));
+      $this->Jabatans->save(array(
+        'nama' => "Bendahara Unit {$unit}",
+        'parent' => $kepalaUnit
+      ));
+    }
 
     foreach (array(
       'PPM'
-    ) as $urusan) $this->Jabatans->save(array(
-      'nama' => "Kepala Urusan {$urusan}",
-      'parent' => $verifDir,
-    ));
+    ) as $urusan) {
+      $kepalaUrusan = $this->Jabatans->save(array(
+        'nama' => "Kepala Urusan {$urusan}",
+        'parent' => $verifDir,
+      ));
+      $this->Jabatans->save(array(
+        'nama' => "Bendahara Urusan {$urusan}",
+        'parent' => $kepalaUrusan,
+      ));
+    }
 
     foreach ($this->Jabatans->find() as $jbtn) {
       $this->Permissions->setGeneralPermission($jbtn->uuid);
@@ -163,7 +175,11 @@ class Migration_jabatan extends CI_Migration {
     $allow_edit_spj = $this->db
       ->where('nama', 'Bendahara Pembantu Pengeluaran Direktorat')
       ->or_like('nama', 'Bendahara Prodi')
+      ->or_like('nama', 'Kaprodi')
       ->or_like('nama', 'Bendahara Jurusan')
+      ->or_like('nama', 'Bendahara Gaji')
+      ->or_like('nama', 'Bendahara Unit')
+      ->or_like('nama', 'Bendahara Urusan')
       ->get('jabatan')
       ->result();
     foreach ($allow_edit_spj as $jab) $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');

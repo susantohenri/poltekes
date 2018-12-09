@@ -220,6 +220,23 @@ function adjustPaymentButton (parent) {
 }
 
 function activateVerifikasiUlangSPJ (parent) {
+	$('.unverify-ulang-spj').unbind('click').bind('click', function () {
+		var li = $(this).parent().parent().parent().parent().parent().parent().parent()
+		var spjUuid = li.attr('data-uuid')
+		$.post(site_url + 'Spj/ReUnVerify', {uuid: spjUuid}, function () {
+			$.ajax({
+				url: site_url + 'Spj/subformlist/' + spjUuid,
+				success: function (item) {
+					li.replaceWith(item)
+					li = $('[data-uuid="'+spjUuid+'"]')
+					li.css('padding-left', parent.indent + 10 + 'px')
+					markMinus(li)
+					activateVerificationButton(parent)
+					adjustPaymentButton(parent)
+				}
+			})
+		})
+	})
 	$('.verifikasi-ulang-spj').unbind('click').bind('click', function () {
 		if ($('li[data-uuid]').filter(function () {
 		  return $(this).css('background-color') === 'rgb(255, 204, 204)'
@@ -229,7 +246,7 @@ function activateVerifikasiUlangSPJ (parent) {
 			var formdata = {}
 			li.find('input').not('[disabled]').each(function () {
 				var name = $(this).attr('name').split('[')[1].split(']')[0].replace('Spj_', '')
-				formdata[name] = $(this).val()
+				formdata[name] = $(this).is('[data-number]') ? getNumber($(this)) : $(this).val()
 			})
 			$.post(site_url + 'Spj/ReVerify', formdata, function () {
 				$.ajax({

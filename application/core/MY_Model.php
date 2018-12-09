@@ -25,7 +25,10 @@ class MY_Model extends CI_Model {
   }
 
   function save ($record) {
-    foreach ($record as $field => &$value) if (is_array($value)) $value = implode(',', $value);
+    foreach ($record as $field => &$value) {
+      if (is_array($value)) $value = implode(',', $value);
+      else if (strpos($value, '[comma-replacement]') > -1) $value = str_replace('[comma-replacement]', ',', $value);
+    }
     return isset ($record['uuid']) ? $this->update($record) : $this->create($record);
   }
 

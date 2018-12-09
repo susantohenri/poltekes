@@ -110,7 +110,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)
-      ->select("FORMAT(spj.vol * spj.hargasat + spj.ppn + spj.pph, 0) total_spj", false)
+      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
       ->select("''  kode", false)
@@ -122,7 +122,7 @@ class Details extends MY_Model {
   function updateByList ($data) {
     foreach ($data as $uuid => $child) {
       $child = array('uuid' => $uuid) + $child;
-      foreach ($child as &$c) if (is_array ($c)) $c = implode(',', $c);
+      foreach ($child as &$c) if (is_array ($c)) $c = implode(',', str_replace(',', '[comma-replacement]', $c));
       $this->update($child);
     }
   }
