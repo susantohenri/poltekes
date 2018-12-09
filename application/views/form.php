@@ -69,8 +69,10 @@
             <div class="form-group row">
               <div class="col-sm-2"></div>
               <div class="col-sm-6">
+                <?php if((empty($uuid) && in_array('create', $permitted_actions)) || (!empty($uuid) && in_array('update', $permitted_actions))) : ?>
                 <button class="btn btn-primary"><i class="fa fa-save"></i> &nbsp; Save</button>
-                <?php if (!empty ($uuid)): ?>
+                <?php endif ?>
+                <?php if (!empty ($uuid) && in_array('delete', $permitted_actions)): ?>
                 <a href="<?= site_url($current['controller'] . "/delete/$uuid") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Delete</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> &nbsp; Cancel</a>

@@ -115,6 +115,11 @@ class Spjs extends MY_Model {
     return $data['uuid'];
   }
 
+  function delete ($uuid) {
+    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
+    return parent::delete($uuid);
+  }
+
   function verify ($uuid) {
     $this->Spjlogs->create(array(
       'spj'   => $uuid,

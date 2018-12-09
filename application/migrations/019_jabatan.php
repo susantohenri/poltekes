@@ -183,6 +183,13 @@ class Migration_jabatan extends CI_Migration {
       ->get('jabatan')
       ->result();
     foreach ($allow_edit_spj as $jab) $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');
+
+    $allow_create_payment = $this->db
+      ->where('nama', 'Bendahara Pengeluaran Direktorat')
+      ->get('jabatan')
+      ->row_array();
+    $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'update');
+    foreach ($this->Jabatans->find() as $jab) $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'read');
   }
 
   function down () {
