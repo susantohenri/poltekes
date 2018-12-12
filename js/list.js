@@ -48,7 +48,7 @@ function activateAddBtn (li) {
 	var addBtn = '<li class="item" data-uuid="" data-parent="' + li.uuid + '" style="padding-left: ' + indent + '">\
 	    <div class="item-row">\
         <div class="item-col">\
-					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i> Input SPJ</a>\
+					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i> SPJ</a>\
 				</div>\
 			</div>\
 	</li>'
@@ -92,9 +92,9 @@ function expandItem (btn, cb) {
 		activateRealtimeCalculation()
 		if ('Spj' === parent.childController) {
 			activateAddBtn(parent)
-			activateVerificationButton(parent)
+			activateListVerificationButton(parent)
 			adjustPaymentButton(parent)
-			activateVerifikasiUlangSPJ(parent)
+			activateFormVerificationButton(parent)
 		}
 		cb()
 	})
@@ -180,19 +180,19 @@ function markMinus (li) {
 	else li.attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
 }
 
-function activateVerificationButton (parent) {
+function activateListVerificationButton (parent) {
 	$('[data-parent="' + parent.uuid + '"]').each(function () {
 		var spj = $(this)
 		var statusInput = spj.find('input[type="hidden"][name*="Spj_status"]')
 		var status = statusInput.val()
 		spj.find('.btn-status').hide()
 		spj.find('.btn.' + status).show()
-		spj.find('.btn-verify').click(function () {
+		spj.find('.list-verification-btn').click(function () {
 			statusInput.val('verify')
 			spj.find('.btn-status').hide()
 			spj.find('.btn.verified').show()
 		})
-		spj.find('.btn-unverify').click(function () {
+		spj.find('.list-unverification-btn').click(function () {
 			statusInput.val('unverify')
 			spj.find('.btn-status').hide()
 			spj.find('.btn.unverified').show()
@@ -219,36 +219,21 @@ function adjustPaymentButton (parent) {
 	})
 }
 
-function activateVerifikasiUlangSPJ (parent) {
-	$('.unverify-ulang-spj').unbind('click').bind('click', function () {
-		var li = $(this).parent().parent().parent().parent().parent().parent().parent()
-		var spjUuid = li.attr('data-uuid')
-		$.post(site_url + 'Spj/ReUnVerify', {uuid: spjUuid}, function () {
-			$.ajax({
-				url: site_url + 'Spj/subformlist/' + spjUuid,
-				success: function (item) {
-					li.replaceWith(item)
-					li = $('[data-uuid="'+spjUuid+'"]')
-					li.css('padding-left', parent.indent + 10 + 'px')
-					markMinus(li)
-					activateVerificationButton(parent)
-					adjustPaymentButton(parent)
-				}
-			})
-		})
-	})
-	$('.verifikasi-ulang-spj').unbind('click').bind('click', function () {
-		if ($('li[data-uuid]').filter(function () {
+function activateFormVerificationButton (parent) {
+	$('.form-unverification-btn, .form-verification-btn').unbind('click').bind('click', function () {
+		var formdata = {
+			status: $(this).is('.form-verification-btn') ? 'verify' : 'unverify'
+		}
+		if ('verify' === formdata.status && $('li[data-uuid]').filter(function () {
 		  return $(this).css('background-color') === 'rgb(255, 204, 204)'
 		}).length > 0) showError('Formulir gagal dikirim, perhitungan minus')
 		else {
 			var li = $(this).parent().parent().parent().parent().parent().parent().parent()
-			var formdata = {}
-			li.find('input').not('[disabled]').each(function () {
+			li.find('input, textarea').not('[disabled]').each(function () {
 				var name = $(this).attr('name').split('[')[1].split(']')[0].replace('Spj_', '')
 				formdata[name] = $(this).is('[data-number]') ? getNumber($(this)) : $(this).val()
 			})
-			$.post(site_url + 'Spj/ReVerify', formdata, function () {
+			$.post(site_url + 'Spj/save', formdata, function () {
 				$.ajax({
 					url: site_url + 'Spj/subformlist/' + formdata.uuid,
 					success: function (item) {
@@ -256,7 +241,7 @@ function activateVerifikasiUlangSPJ (parent) {
 						li = $('[data-uuid="'+formdata.uuid+'"]')
 						li.css('padding-left', parent.indent + 10 + 'px')
 						markMinus(li)
-						activateVerificationButton(parent)
+						activateListVerificationButton(parent)
 						adjustPaymentButton(parent)
 					}
 				})

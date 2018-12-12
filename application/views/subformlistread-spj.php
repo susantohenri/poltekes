@@ -7,31 +7,36 @@
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Uraian</label>
                       <div class="col-sm-8">
-                        <input class="form-control" type="text" value="<?= $item['uraian'] ?>" name="<?= "{$item['parent']}[Spj_uraian][]" ?>" placeholder="Uraian">
+                        <input class="form-control" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        type="text" value="<?= $item['uraian'] ?>" name="<?= "{$item['parent']}[Spj_uraian][]" ?>" placeholder="Uraian">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Volume</label>
                       <div class="col-sm-8">
-                        <input class="form-control input-vol" type="text" value="<?= $item['vol_format'] ?>" name="<?= "{$item['parent']}[Spj_vol][]" ?>" data-number="true" placeholder="Volume">
+                        <input class="form-control input-vol" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        type="text" value="<?= $item['vol_format'] ?>" name="<?= "{$item['parent']}[Spj_vol][]" ?>" data-number="true" placeholder="Volume">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Satuan</label>
                       <div class="col-sm-8">
-                        <input class="form-control" type="text" value="<?= $item['sat'] ?>" name="<?= "{$item['parent']}[Spj_sat][]" ?>" placeholder="Satuan">
+                        <input class="form-control" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        type="text" value="<?= $item['sat'] ?>" name="<?= "{$item['parent']}[Spj_sat][]" ?>" placeholder="Satuan">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Harga Satuan</label>
                       <div class="col-sm-8">
-                        <input name="<?= "{$item['parent']}[Spj_hargasat][]" ?>" class="form-control input-hargasat" type="text" value="<?= $item['hargasat_format'] ?>" data-number="true" placeholder="Harga Satuan">
+                        <input name="<?= "{$item['parent']}[Spj_hargasat][]" ?>" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        class="form-control input-hargasat" type="text" value="<?= $item['hargasat_format'] ?>" data-number="true" placeholder="Harga Satuan">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">PPN</label>
                       <div class="col-sm-8">
-                        <input name="<?= "{$item['parent']}[Spj_ppn][]" ?>" class="form-control input-ppn" type="text" value="<?= $item['ppn_format'] ?>" data-number="true" placeholder="PPN">
+                        <input name="<?= "{$item['parent']}[Spj_ppn][]" ?>" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        class="form-control input-ppn" type="text" value="<?= $item['ppn_format'] ?>" data-number="true" placeholder="PPN">
                       </div>
                     </div>
                 </div>
@@ -39,28 +44,30 @@
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">PPH</label>
                       <div class="col-sm-8">
-                        <input name="<?= "{$item['parent']}[Spj_pph][]" ?>" class="form-control input-pph" type="text" value="<?= $item['pph_format'] ?>" data-number="true" placeholder="PPH">
+                        <input name="<?= "{$item['parent']}[Spj_pph][]" ?>" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        class="form-control input-pph" type="text" value="<?= $item['pph_format'] ?>" data-number="true" placeholder="PPH">
                       </div>
                     </div>
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Total SPJ</label>
                       <div class="col-sm-8">
-                        <input class="form-control total_spj" type="text" value="<?= $item['total_spj'] ?>" disabled="disabled" data-number="true">
+                        <input class="form-control total_spj" <?= !in_array('create', $permitted_actions) ? 'disabled="disabled"':'' ?>
+                        type="text" value="<?= $item['total_spj'] ?>" disabled="disabled" data-number="true">
                       </div>
                     </div>
                     <div class="form-group row">
-                      <label class="col-sm-3 control-label">Alasan</label>
+                      <label class="col-sm-3 control-label">Alasan Ditolak</label>
                       <div class="col-sm-8">
-                        <textarea class="form-control" disabled="disabled"><?= $item['unverify_reason'] ?></textarea>
+                        <textarea class="form-control" name="<?= "{$item['parent']}[Spj_unverify_reason][]" ?>"><?= $item['unverify_reason'] ?></textarea>
                       </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 control-label"></label>
                         <div class="col-sm-9">
-                            <a class="btn btn-success verifikasi-ulang-spj">
+                            <a class="btn btn-success form-verification-btn">
                               <i class="fa fa-check-circle"></i> Verify
                             </a>
-                            <a class="btn btn-warning unverify-ulang-spj">
+                            <a class="btn btn-warning form-unverification-btn">
                               <i class="fa fa-times-circle"></i> Unverify
                             </a>
                             <a class="btn btn-danger btn-delete" data-uuid="<?= $item['uuid'] ?>">

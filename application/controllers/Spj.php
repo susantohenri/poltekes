@@ -10,7 +10,7 @@ class Spj extends MY_Controller {
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);
 
-    $viewer = 'form' === $data['item']['viewer'] && in_array('create', $perms) ? 'subformlistread-spj' : 'subformlist-spj';
+    $viewer = 'form' === $data['item']['viewer'] ? 'subformlistread-spj' : 'subformlist-spj';
     $this->loadview($viewer, $data);
   }
 
@@ -21,18 +21,9 @@ class Spj extends MY_Controller {
     $this->loadview('subformlistcreate-spj', array('item' => array ('parent' => $parentUuid)));
   }
 
-  function ReVerify () {
+  function save () {
     $post = $this->input->post();
-    $post['status'] = 'verify';
-    $this->{$this->model}->save($post);
-    echo '{}';
-  }
-
-  function ReUnVerify () {
-    $post = $this->input->post();
-    $post['status'] = 'unverify';
-    $this->{$this->model}->save($post);
-    echo '{}';
+    echo $this->{$this->model}->save($post);
   }
 
 }

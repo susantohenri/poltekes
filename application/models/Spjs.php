@@ -85,8 +85,7 @@ class Spjs extends MY_Model {
       } else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
       unset($data['status']);
     }
-    if (isset ($data['uraian'])) return parent::save($data);
-    else return $data['uuid'];
+    return parent::save($data);
   }
 
   function create ($data) {
@@ -202,7 +201,10 @@ class Spjs extends MY_Model {
     } else if (in_array($lastLog['user'], $user['letting'])) {
 
     } else if (in_array($lastLog['user'], $user['bawahan'])) {
-      if ('verify' === $lastLog['action']) $spj['status'] = 'verifiable';
+      if ('verify' === $lastLog['action']) {
+        $spj['status'] = 'verifiable';
+        $spj['viewer'] = 'form';
+      }
     }
     $this->load->model('Payments');
     $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $spj['hargasat'] * $spj['vol']);

@@ -6,10 +6,10 @@
                     <i class="fa fa-clock-o"></i>
                     unverifiable
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-success btn-verify verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-success list-verification-btn verifiable">
                     <i class="fa fa-check"></i> verify
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-danger btn-unverify verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-danger list-unverification-btn verifiable">
                     <i class="fa fa-ban"></i> unverify
                 </a>
                 <a class="btn btn-sm btn-oval btn-status btn-success verified">
