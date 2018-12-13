@@ -70,8 +70,8 @@
                             <a class="btn btn-warning form-unverification-btn">
                               <i class="fa fa-times-circle"></i> Unverify
                             </a>
-                            <a class="btn btn-danger btn-delete" data-uuid="<?= $item['uuid'] ?>">
-                              <i class="fa fa-trash-o"></i> Delete
+                            <a class="btn btn-info" href="<?= site_url("Spj/read/{$item['uuid']}") ?>" target="_blank">
+                              <i class="fa fa-info-circle"></i> Detail
                             </a>
                         </div>
                     </div>
