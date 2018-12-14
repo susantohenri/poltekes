@@ -6,7 +6,7 @@
               <span></span>
             </label>
         </div>
-        <div class="item-col item-col-header fixed col-sm-9">
+        <div class="item-col item-col-header fixed col-sm-8">
             <div>
                 <a target="_blank" href="<?= site_url($current['controller']) . '/readList/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
@@ -21,6 +21,11 @@
         <div class="item-col item-col-header text-right">
             <div>
                 <span class="total_spj"><?= $item['total_spj'] ?></span>
+            </div>
+        </div>
+        <div class="item-col item-col-header text-right">
+            <div>
+                <span class="paid"><?= $item['paid'] ?></span>
             </div>
         </div>
     </div>

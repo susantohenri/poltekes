@@ -13,6 +13,7 @@ class Spjs extends MY_Model {
       (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
       (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
     );
 
     $this->form[]= array(
@@ -153,6 +154,7 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.vol")
       ->select("{$this->table}.sat")
       ->select("{$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph as total_spj", false)
+      ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->select("{$this->table}.hargasat")
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)
@@ -172,6 +174,7 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.ppn, 0) ppn_format", false)
       ->select("FORMAT({$this->table}.pph, 0) pph_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph, 0) total_spj", false)
+      ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("'' childUuid", false)
       ->select("'' childController", false)
       ->select("''  kode", false)

@@ -1,7 +1,7 @@
 window.onload = function () {
 
   for (var th in thead) {
-    if (['total_spj', 'hargasat', 'pagu', 'sisa'].indexOf(thead[th].mData) > -1)
+    if (['total_spj', 'hargasat', 'pagu', 'paid'].indexOf(thead[th].mData) > -1)
       thead[th].render = $.fn.dataTable.render.number( ',', '.', 0, 'Rp ' )
     if ('prosentase' === thead[th].mData) thead[th].render = $.fn.dataTable.render.number( ',', '.', 0, '', ' %' )
     if (['detail_vol', 'spj_vol'].indexOf(thead[th].mData) > -1)

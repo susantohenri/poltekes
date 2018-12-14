@@ -34,7 +34,7 @@
                           <span></span>
                         </label>
                     </div>
-                    <div class="item-col item-col-header fixed col-sm-9">
+                    <div class="item-col item-col-header fixed col-sm-8">
                         <div>
                             <span>URAIAN</span>
                         </div>
@@ -49,6 +49,11 @@
                             <span class="">TOTAL SPJ</span>
                         </div>
                     </div>
+                    <div class="item-col item-col-header text-right">
+                        <div>
+                            <span class="">DIBAYAR</span>
+                        </div>
+                    </div>
                 </div>
             </li>
             <form method="POST" action="<?= site_url($current['controller']) ?>" enctype="multipart/form-data" id="form_list">
@@ -61,7 +66,7 @@
                               <span></span>
                             </label>
                         </div>
-                        <div class="item-col item-col-header fixed col-sm-9">
+                        <div class="item-col item-col-header fixed col-sm-8">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
                             </div>
@@ -74,6 +79,11 @@
                         <div class="item-col item-col-header text-right">
                             <div>
                                 <span class="total_spj"><?= $item['total_spj'] ?></span>
+                            </div>
+                        </div>
+                        <div class="item-col item-col-header text-right">
+                            <div>
+                                <span class="paid"><?= $item['paid'] ?></span>
                             </div>
                         </div>
                     </div>

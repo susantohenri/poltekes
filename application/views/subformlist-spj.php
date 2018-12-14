@@ -1,6 +1,12 @@
 <li class="item" data-uuid="<?= $item['uuid'] ?>" data-child-controller="<?= $item['childController'] ?>" data-child-uuid="<?= $item['childUuid'] ?>" data-urutan="<?= $item['urutan'] ?>" data-parent="<?= $item['parent'] ?>">
     <div class="item-row">
-        <div class="item-col item-col-header fixed col-sm-9">
+        <div class="item-col fixed item-col-check">
+            <label class="item-check">
+              <!-- <i class="fa expand-btn fa-minus-square"></i> -->
+              <span></span>
+            </label>
+        </div>
+        <div class="item-col item-col-header fixed col-sm-8">
             <div>
                 <a class="btn btn-sm btn-oval btn-status btn-warning unverifiable">
                     <i class="fa fa-clock-o"></i>
@@ -57,7 +63,17 @@
         </div>
         <div class="item-col item-col-header text-right">
             <div>
+                <span class=""></span>
+            </div>
+        </div>
+        <div class="item-col item-col-header text-right">
+            <div>
                 <span class="total_spj"><?= $item['total_spj'] ?></span>
+            </div>
+        </div>
+        <div class="item-col item-col-header text-right">
+            <div>
+                <span class="paid"><?= $item['paid'] ?></span>
             </div>
         </div>
     </div>

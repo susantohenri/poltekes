@@ -84,6 +84,7 @@ class SpjPayments extends MY_Model {
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph as total_spj", false)
+      ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->select("IFNULL(SUM(amount), 0) as total_payment", false)
       ->join('payment', 'spj.uuid = payment.spj', 'left')
       ->group_by("{$this->table}.uuid")

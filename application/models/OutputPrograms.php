@@ -27,6 +27,7 @@ class OutputPrograms extends MY_Model {
       ->select("{$this->table}.kegiatan_program parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
       ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
+      ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT sub_output_program.uuid) childUuid", false)
       ->select("'SubOutputProgram' childController", false)
       ->select('output.kode kode', false)

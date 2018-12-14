@@ -107,6 +107,7 @@ class Users extends MY_Model {
 
       ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
+      ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->from('program');
   }
 
@@ -139,6 +140,7 @@ class Users extends MY_Model {
 
       ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
+      ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->from('program');
   }
 
