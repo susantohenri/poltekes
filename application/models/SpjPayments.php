@@ -55,6 +55,16 @@ class SpjPayments extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'paid',
+      'label'=> 'Total Dibayar',
+      'value'=> 0,
+      'attributes' => array(
+        array('disabled' => 'disabled'),
+        array('data-number' => 'true')
+      ),
+    );
+
+    $this->form[]= array(
       'name'    => 'unpaid_reason',
       'label'   => 'Alasan Tidak Dibayar',
     );
@@ -64,12 +74,15 @@ class SpjPayments extends MY_Model {
   }
 
   function findOne ($param) {
+    $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
       ->select("{$this->table}.*")
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol + ppn + pph, 0) total_spj", false);
+      ->select("FORMAT(SUM(amount), 0) paid", false)
+      ->select("FORMAT(hargasat * vol + ppn + pph, 0) total_spj", false)
+      ->join('payment', 'payment.spj = spj.uuid', 'left');
     return parent::findOne($param);
   }
 
