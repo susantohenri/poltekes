@@ -73,6 +73,9 @@
                             <a class="btn btn-info" href="<?= site_url("Spj/read/{$item['uuid']}") ?>" target="_blank">
                               <i class="fa fa-info-circle"></i> Detail
                             </a>
+                            <a class="btn btn-info" href="<?= site_url("SpjPayment/read/{$item['uuid']}") ?>" target="_blank">
+                              <i class="fa fa-info-circle"></i> Payment
+                            </a>
                         </div>
                     </div>
                 </div>
