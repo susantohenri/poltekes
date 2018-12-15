@@ -212,10 +212,10 @@ function adjustPaymentButton (parent) {
 	$('[data-parent="' + parent.uuid + '"]').each(function () {
 		var spj = $(this)
 		spj.find('.btn-payment').hide()
-		if ('verified' === spj.find('input[type="hidden"][name*="global_status"]').val()) {
+		// if ('verified' === spj.find('input[type="hidden"][name*="global_status"]').val()) {
 			var paymentStatus= spj.find('input[type="hidden"][name*="payment_status"]').val()
 			spj.find('.btn.' + paymentStatus).show()
-		}
+		// }
 	})
 }
 
