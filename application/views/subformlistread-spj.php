@@ -58,7 +58,7 @@
                     <div class="form-group row">
                       <label class="col-sm-3 control-label">Alasan Ditolak</label>
                       <div class="col-sm-8">
-                        <textarea class="form-control" name="<?= "{$item['parent']}[Spj_unverify_reason][]" ?>"><?= $item['unverify_reason'] ?></textarea>
+                        <textarea class="form-control" name="<?= "{$item['parent']}[Spj_unverify_reason][]" ?>" <?= strlen($userDetail['bawahan'][0]) < 1 ? 'disabled="disabled"':'' ?>><?= $item['unverify_reason'] ?></textarea>
                       </div>
                     </div>
                     <div class="form-group row">
@@ -67,9 +67,11 @@
                             <a class="btn btn-success form-verification-btn">
                               <i class="fa fa-check-circle"></i> Verify
                             </a>
+                            <?php if (strlen($userDetail['bawahan'][0]) > 0): ?>
                             <a class="btn btn-warning form-unverification-btn">
                               <i class="fa fa-times-circle"></i> Unverify
                             </a>
+                            <?php endif ?>
                             <a class="btn btn-info" href="<?= site_url("Spj/read/{$item['uuid']}") ?>" target="_blank">
                               <i class="fa fa-info-circle"></i> Detail
                             </a>

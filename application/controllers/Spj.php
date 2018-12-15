@@ -10,7 +10,13 @@ class Spj extends MY_Controller {
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);
 
-    $viewer = 'form' === $data['item']['viewer'] ? 'subformlistread-spj' : 'subformlist-spj';
+    if ('form' === $data['item']['viewer']) {
+      $viewer = 'subformlistread-spj';
+      $this->load->model('Jabatans');
+      $user = $this->session->userdata();
+      $this->Jabatans->getUserAttr($user);
+      $data['userDetail'] = $user;
+    } else $viewer = 'subformlist-spj';
     $this->loadview($viewer, $data);
   }
 
