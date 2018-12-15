@@ -8,21 +8,21 @@
         </div>
         <div class="item-col item-col-header fixed col-sm-8">
             <div>
-                <a class="btn btn-sm btn-oval btn-status btn-warning unverifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-warning unverifiable" target="_blank" href="<?= site_url("Spj/read/{$item['uuid']}") ?>">
                     <i class="fa fa-clock-o"></i>
                     unverifiable
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-success list-verification-btn verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-success list-verification-btn verifiable" target="_blank" href="<?= site_url("Spj/read/{$item['uuid']}") ?>">
                     <i class="fa fa-check"></i> verify
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-danger list-unverification-btn verifiable">
+                <a class="btn btn-sm btn-oval btn-status btn-danger list-unverification-btn verifiable" target="_blank" href="<?= site_url("Spj/read/{$item['uuid']}") ?>">
                     <i class="fa fa-ban"></i> unverify
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-success verified">
+                <a class="btn btn-sm btn-oval btn-status btn-success verified" target="_blank" href="<?= site_url("Spj/read/{$item['uuid']}") ?>">
                     <i class="fa fa-check-square-o"></i>
                     verified
                 </a>
-                <a class="btn btn-sm btn-oval btn-status btn-danger unverified">
+                <a class="btn btn-sm btn-oval btn-status btn-danger unverified" target="_blank" href="<?= site_url("Spj/read/{$item['uuid']}") ?>">
                     <i class="fa fa-ban"></i>
                     unverified
                 </a>
