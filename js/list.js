@@ -221,31 +221,44 @@ function adjustPaymentButton (parent) {
 
 function activateFormVerificationButton (parent) {
 	$('.form-unverification-btn, .form-verification-btn').unbind('click').bind('click', function () {
-		var formdata = {
-			status: $(this).is('.form-verification-btn') ? 'verify' : 'unverify'
-		}
-		if ('verify' === formdata.status && $('li[data-uuid]').filter(function () {
-		  return $(this).css('background-color') === 'rgb(255, 204, 204)'
-		}).length > 0) showError('Formulir gagal dikirim, perhitungan minus')
-		else {
-			var li = $(this).parent().parent().parent().parent().parent().parent().parent()
-			li.find('input, textarea').not('[disabled]').each(function () {
-				var name = $(this).attr('name').split('[')[1].split(']')[0].replace('Spj_', '')
-				formdata[name] = $(this).is('[data-number]') ? getNumber($(this)) : $(this).val()
-			})
-			$.post(site_url + 'Spj/save', formdata, function () {
-				$.ajax({
-					url: site_url + 'Spj/subformlist/' + formdata.uuid,
-					success: function (item) {
-						li.replaceWith(item)
-						li = $('[data-uuid="'+formdata.uuid+'"]')
-						li.css('padding-left', parent.indent + 10 + 'px')
-						markMinus(li)
-						activateListVerificationButton(parent)
-						adjustPaymentButton(parent)
+		var $this = $(this)
+		bootbox.confirm({
+			message: 'Apakah anda yakin ?',
+			buttons: {
+				cancel: {
+					className: 'btn-warning'
+				}
+			},
+			callback: function (isConfirmed) {
+				if (isConfirmed) {
+					var formdata = {
+						status: $this.is('.form-verification-btn') ? 'verify' : 'unverify'
 					}
-				})
-			})
-		}
+					if ('verify' === formdata.status && $('li[data-uuid]').filter(function () {
+					  return $this.css('background-color') === 'rgb(255, 204, 204)'
+					}).length > 0) showError('Formulir gagal dikirim, perhitungan minus')
+					else {
+						var li = $this.parent().parent().parent().parent().parent().parent().parent()
+						li.find('input, textarea').not('[disabled]').each(function () {
+							var name = $(this).attr('name').split('[')[1].split(']')[0].replace('Spj_', '')
+							formdata[name] = $(this).is('[data-number]') ? getNumber($(this)) : $(this).val()
+						})
+						$.post(site_url + 'Spj/save', formdata, function () {
+							$.ajax({
+								url: site_url + 'Spj/subformlist/' + formdata.uuid,
+								success: function (item) {
+									li.replaceWith(item)
+									li = $('[data-uuid="'+formdata.uuid+'"]')
+									li.css('padding-left', parent.indent + 10 + 'px')
+									markMinus(li)
+									activateListVerificationButton(parent)
+									adjustPaymentButton(parent)
+								}
+							})
+						})
+					}
+				}
+			}
+		})
 	})
 }
