@@ -7,11 +7,11 @@ class AkunPrograms extends MY_Model {
     $this->table = 'akun_program';
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode', 'className' => 'text-right'),
-      (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
-      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_akun', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
+      (object) array('mData' => 'nama_akun', 'sTitle' => 'Akun', 'width' => '50%'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
     );
 
     $this->form = array();

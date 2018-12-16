@@ -7,11 +7,11 @@ class Programs extends MY_Model {
     $this->table = 'program';
     $this->form = array();
     $this->thead = array(
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '30%'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
-      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '50%'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
     );
 
     $this->form[]= array(

@@ -7,8 +7,8 @@ class OutputPrograms extends MY_Model {
     $this->table = 'output_program';
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'kode_output', 'sTitle' => 'Kode', 'className' => 'text-right'),
-      (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '30%'),
+      (object) array('mData' => 'kode_output', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
+      (object) array('mData' => 'uraian_output', 'sTitle' => 'Output', 'width' => '50%'),
       (object) array('mData' => 'detail_sat', 'sTitle' => 'Satuan', 'width' => '10%'),
       (object) array('mData' => 'detail_vol', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => 'false'),
       (object) array('mData' => 'spj_vol', 'sTitle' => 'SPJ', 'className' => 'text-right', 'searchable' => 'false'),

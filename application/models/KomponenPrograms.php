@@ -8,11 +8,11 @@ class KomponenPrograms extends MY_Model {
 
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'kode_komponen', 'sTitle' => 'Kode', 'className' => 'text-right'),
-      (object) array('mData' => 'uraian_komponen', 'sTitle' => 'Komponen'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
-      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_komponen', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
+      (object) array('mData' => 'uraian_komponen', 'sTitle' => 'Komponen', 'width' => '50%'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'SubKomponenProgram', 'model' => 'SubKomponenPrograms');

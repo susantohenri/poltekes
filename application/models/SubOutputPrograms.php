@@ -7,11 +7,11 @@ class SubOutputPrograms extends MY_Model {
     $this->table = 'sub_output_program';
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'kode_sub_output', 'sTitle' => 'Kode', 'className' => 'text-right'),
-      (object) array('mData' => 'uraian_sub_output', 'sTitle' => 'Sub Output', 'width' => '30%'),
-      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false),
-      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right'),
-      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'kode_sub_output', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
+      (object) array('mData' => 'uraian_sub_output', 'sTitle' => 'Sub Output', 'width' => '50%'),
+      (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'KomponenProgram', 'model' => 'KomponenPrograms');
