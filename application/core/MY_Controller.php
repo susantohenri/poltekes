@@ -35,7 +35,7 @@ class MY_Controller extends CI_Controller {
 
     $this->load->model('Permissions');
     $vars['permitted_menus']  = $this->Permissions->getPermittedMenus();
-    $vars['permitted_actions']= $this->Permissions->getPermittedActions($this->controller);
+    if (!isset ($vars['permitted_actions'])) $vars['permitted_actions']= $this->Permissions->getPermittedActions($this->controller);
     $vars['permitted_spj_actions']= $this->Permissions->getPermittedActions('Spj');
     $vars['permitted_jabatan_actions']= $this->Permissions->getPermittedActions('Jabatan');
     $this->load->view($view, $vars);
