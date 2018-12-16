@@ -19,7 +19,7 @@ class Details extends MY_Model {
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 3
+      'width'=> 5
     );
 
     $this->form[]= array(
@@ -57,16 +57,16 @@ class Details extends MY_Model {
       'width'=> 2
     );
 
-    $this->form[]= array(
-      'name' => 'total_spj',
-      'label'=> 'SPJ',
-      'value'=> 0,
-      'attributes' => array(
-        array('disabled' => 'disabled'),
-        array('data-number' => 'true')
-      ),
-      'width'=> 2
-    );
+    // $this->form[]= array(
+    //   'name' => 'total_spj',
+    //   'label'=> 'SPJ',
+    //   'value'=> 0,
+    //   'attributes' => array(
+    //     array('disabled' => 'disabled'),
+    //     array('data-number' => 'true')
+    //   ),
+    //   'width'=> 2
+    // );
 
     $this->childs[] = array('label' => '', 'controller' => 'Spj', 'model' => 'Spjs');
 

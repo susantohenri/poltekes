@@ -135,6 +135,27 @@ function formInit () {
     $(this).val(currency(getNumber($(this))))
   })
   calculateProgramDetail()
+  calculateAkunProgram()
+}
+
+function calculateAkunProgram () {
+  if (window.location.href.indexOf ('AkunProgram/read') < 0) return true
+  $('[data-number="true"]').keyup(function () {
+    var record = $(this).parent().parent()
+    var vol = getNumber(record.find('[name*="vol"]'))
+    var hargasat = getNumber(record.find('[name*="hargasat"]'))
+    var pagu = vol * hargasat
+    record.find('[name*="pagu"]').val(currency(pagu))
+    calculatePaguTotal()
+  })
+  $('.btn-delete[data-uuid]').click(calculatePaguTotal)
+  function calculatePaguTotal () {
+    var paguTotal = 0
+    $('[name^="Detail_pagu"]').each(function () {
+      paguTotal += getNumber($(this))
+    })
+    $('[name="pagu"]').val(currency(paguTotal))
+  }
 }
 
 function calculateProgramDetail () {

@@ -69,6 +69,9 @@
                         <div class="item-col item-col-header fixed col-sm-8">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
+                                <?php if (isset ($show_link_update_pagu) && $show_link_update_pagu) : ?>
+                                    &nbsp; <a href="<?= site_url("AkunProgram/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Pagu Detail</a>
+                                <?php endif ?>
                             </div>
                         </div>
                         <div class="item-col item-col-header text-right">
