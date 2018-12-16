@@ -1,7 +1,7 @@
 <nav class="menu">
     <ul class="sidebar-menu metismenu" id="sidebar-menu">
         <li>
-            <a href="<?= site_url('Dashboard') ?>"><i class="fa fa-dashboard"></i>Dashboard</a>
+            <a href="<?= site_url('Dashboard') ?>"><i class="fa fa-bar-chart-o"></i>Dashboard</a>
         </li>
         <?php if (in_array('User', $permitted_menus)) : ?>
         <li>
@@ -56,6 +56,11 @@
         <?php if (in_array('Spj', $permitted_menus)) : ?>
         <li>
             <a href="<?= site_url('Spj/') ?>"><i class="fa fa-dropbox"></i>SPJ</a>
+        </li>
+        <?php endif ?>
+        <?php if (in_array('SpjPayment', $permitted_menus)) : ?>
+        <li>
+            <a href="<?= site_url('SpjPayment/') ?>"><i class="fa fa-ticket"></i>SPJ Payment</a>
         </li>
         <?php endif ?>
     </ul>

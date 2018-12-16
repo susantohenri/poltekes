@@ -20,7 +20,7 @@ class Payments extends MY_Model {
 
     $this->form[]= array(
       'name' => 'transfer_time',
-      'label'=> 'Waktu transfer',
+      'label'=> 'Tanggal transfer',
       'attributes' => array (
         array ('data-date' => 'datepicker')
       )

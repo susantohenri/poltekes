@@ -13,7 +13,7 @@ class SpjPayments extends MY_Model {
       (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
       (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
-      (object) array('mData' => 'total_payment', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
+      (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
     );
 
     $this->form[]= array(
@@ -98,8 +98,6 @@ class SpjPayments extends MY_Model {
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
-      ->select("IFNULL(SUM(amount), 0) as total_payment", false)
-      ->join('payment', 'spj.uuid = payment.spj', 'left')
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)
       ->generate();
