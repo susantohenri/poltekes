@@ -196,7 +196,7 @@ class Spjs extends MY_Model {
 
     if ('verified' === $spj['global_status']) $spj['status'] = 'verified';
     else if (in_array($lastLog['user'], $user['atasan'])) {
-      if ('verify' === $lastLog['action']) $spj['status'] = 'verified';
+      // if ('verify' === $lastLog['action']) $spj['status'] = 'verified';// let it wait for global status
       if ('unverify' === $lastLog['action']) {
         $spj['status'] = 'verifiable';
         $spj['viewer'] = 'form';
