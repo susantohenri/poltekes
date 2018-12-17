@@ -213,4 +213,9 @@ class Spjs extends MY_Model {
     $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $spj['hargasat'] * $spj['vol']);
   }
 
+  function getCreator ($uuid) {
+    $creator = $this->Spjlogs->findOne(array('spj' => $uuid, 'action' => 'create'));
+    return $creator['user'];
+  }
+
 }
