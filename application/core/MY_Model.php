@@ -101,7 +101,7 @@ class MY_Model extends CI_Model {
     return $this->db->where('uuid', $uuid)->delete($this->table);
   }
 
-  function getForm ($uuid = false) {
+  function getForm ($uuid = false, $isSubform = false) {
     $form = $uuid ? $this->prepopulate($uuid) : $this->form;
 
     if ($uuid) $form[] = array(

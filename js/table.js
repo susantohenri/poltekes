@@ -19,7 +19,7 @@ window.onload = function () {
     fnRowCallback: function(nRow, aData, iDisplayIndex ) {
       $(nRow).css('cursor', 'pointer').click( function () {
         if (!allow_read) return false
-        if (current_controller.indexOf('Program') > -1) window.location.href = current_controller + '/readList/' + aData.uuid
+        if (['Program', 'Kegiatan', 'Output', 'SubOutput', 'Komponen', 'SubKomponen', 'Akun'].indexOf(current_controller.replace(site_url, '')) > -1) window.location.href = current_controller + '/readList/' + aData.uuid
         else window.location.href = current_controller + '/read/' + aData.uuid
       })
     }

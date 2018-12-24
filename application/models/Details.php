@@ -108,7 +108,7 @@ class Details extends MY_Model {
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
-      ->select("{$this->table}.akun_program parent", false)
+      ->select("{$this->table}.akun parent", false)
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)

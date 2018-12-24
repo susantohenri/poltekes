@@ -11,8 +11,8 @@
                 <a target="_blank" href="<?= site_url($current['controller']) . '/readList/' . $item['uuid'] ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
-                <?php if (isset ($show_link_update_pagu) && $show_link_update_pagu) : ?>
-                    &nbsp; <a href="<?= site_url("AkunProgram/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Pagu Detail</a>
+                <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>
+                    &nbsp; <a href="<?= site_url("{$current['controller']}/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Edit</a>
                 <?php endif ?>
             </div>
         </div>

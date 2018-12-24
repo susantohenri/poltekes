@@ -31,8 +31,7 @@ class Migration_jabatan extends CI_Migration {
     foreach ($this->Permissions->getGeneralEntities() as $e) {
       foreach (array('index', 'create', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
     }
-    foreach (array('Detail', 'Spj') as $entity) $this->Permissions->setPermission($planner, $entity, 'read');
-    $this->Permissions->setPermission($planner, 'Detail', 'update');
+    foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Detail', $action);
 
     $atasan = '';
     foreach (array (

@@ -1,25 +1,28 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_akunprogram extends CI_Migration {
+class Migration_detail extends CI_Migration {
 
   function up () {
 
     $this->db->query("
-      CREATE TABLE `akun_program` (
+      CREATE TABLE `detail` (
         `uuid` varchar(255) NOT NULL,
-        `sub_komponen_program` varchar(255) NOT NULL,
         `akun` varchar(255) NOT NULL,
+        `uraian` varchar(255) NOT NULL,
+        `vol` float NOT NULL,
+        `sat` varchar(255) NOT NULL,
+        `hargasat` float NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
-        KEY `program` (`sub_komponen_program`)
+        KEY `program` (`akun`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
   }
 
   function down () {
-    $this->db->query("DROP TABLE IF EXISTS `akun_program`");
+    $this->db->query("DROP TABLE IF EXISTS `detail`");
   }
 
 }

@@ -18,34 +18,34 @@
             <a href="<?= site_url('Program/') ?>"><i class="fa fa-laptop"></i>Program</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('KegiatanProgram', $permitted_menus)) : ?>
+        <?php if (in_array('Kegiatan', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('KegiatanProgram/') ?>"><i class="fa fa-tasks"></i>Kegiatan</a>
+            <a href="<?= site_url('Kegiatan/') ?>"><i class="fa fa-tasks"></i>Kegiatan</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('OutputProgram', $permitted_menus)) : ?>
+        <?php if (in_array('Output', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('OutputProgram/') ?>"><i class="fa fa-align-justify"></i>Output</a>
+            <a href="<?= site_url('Output/') ?>"><i class="fa fa-align-justify"></i>Output</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('SubOutputProgram', $permitted_menus)) : ?>
+        <?php if (in_array('SubOutput', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('SubOutputProgram/') ?>"><i class="fa fa-list-ul"></i>Sub Output</a>
+            <a href="<?= site_url('SubOutput/') ?>"><i class="fa fa-list-ul"></i>Sub Output</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('KomponenProgram', $permitted_menus)) : ?>
+        <?php if (in_array('Komponen', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('KomponenProgram/') ?>"><i class="fa fa-th-large"></i>Komponen</a>
+            <a href="<?= site_url('Komponen/') ?>"><i class="fa fa-th-large"></i>Komponen</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('SubKomponenProgram', $permitted_menus)) : ?>
+        <?php if (in_array('SubKomponen', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('SubKomponenProgram/') ?>"><i class="fa fa-th"></i>Sub Komponen</a>
+            <a href="<?= site_url('SubKomponen/') ?>"><i class="fa fa-th"></i>Sub Komponen</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('AkunProgram', $permitted_menus)) : ?>
+        <?php if (in_array('Akun', $permitted_menus)) : ?>
         <li>
-            <a href="<?= site_url('AkunProgram/') ?>"><i class="fa fa-windows"></i>Akun</a>
+            <a href="<?= site_url('Akun/') ?>"><i class="fa fa-windows"></i>Akun</a>
         </li>
         <?php endif ?>
         <?php if (in_array('Detail', $permitted_menus)) : ?>

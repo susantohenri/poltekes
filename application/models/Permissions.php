@@ -24,12 +24,12 @@ class Permissions extends MY_Model {
   function getEntities () {
     return array(
       array('text' => 'Program', 'value' => 'Program'),
-      array('text' => 'Kegiatan', 'value' => 'KegiatanProgram'),
-      array('text' => 'Output', 'value' => 'OutputProgram'),
-      array('text' => 'Sub Output', 'value' => 'SubOutputProgram'),
-      array('text' => 'Komponen', 'value' => 'KomponenProgram'),
-      array('text' => 'Sub Komponen', 'value' => 'SubKomponenProgram'),
-      array('text' => 'Akun', 'value' => 'AkunProgram'),
+      array('text' => 'Kegiatan', 'value' => 'Kegiatan'),
+      array('text' => 'Output', 'value' => 'Output'),
+      array('text' => 'Sub Output', 'value' => 'SubOutput'),
+      array('text' => 'Komponen', 'value' => 'Komponen'),
+      array('text' => 'Sub Komponen', 'value' => 'SubKomponen'),
+      array('text' => 'Akun', 'value' => 'Akun'),
       array('text' => 'Detail', 'value' => 'Detail'),
       array('text' => 'SPJ', 'value' => 'Spj'),
       array('text' => 'SPJ Payment', 'value' => 'SpjPayment'),
@@ -58,8 +58,8 @@ class Permissions extends MY_Model {
 
   function getGeneralEntities () {
     return array (
-    'Program', 'KegiatanProgram', 'OutputProgram', 'SubOutputProgram',
-    'KomponenProgram', 'SubKomponenProgram', 'AkunProgram');
+    'Program', 'Kegiatan', 'Output', 'SubOutput',
+    'Komponen', 'SubKomponen', 'Akun');
   }
 
   function setGeneralPermission ($jabatan) {
@@ -90,5 +90,4 @@ class Permissions extends MY_Model {
     )) as $perms) $allowed[] = $perms->entity;
     return $allowed;
   }
-
 }

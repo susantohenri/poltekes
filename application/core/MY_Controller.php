@@ -83,7 +83,7 @@ class MY_Controller extends CI_Controller {
   function subformcreate () {
     $model= $this->model;
     $vars = array();
-    $vars['form'] = $this->$model->getForm();
+    $vars['form'] = $this->$model->getForm(false, true);
     $vars['subformlabel'] = $this->subformlabel;
     $vars['controller'] = $this->controller;
     $vars['uuid'] = '';
@@ -103,7 +103,7 @@ class MY_Controller extends CI_Controller {
   function subformread ($uuid) {
     $data = array();
     $model = $this->model;
-    $data['form'] = $this->$model->getForm($uuid);
+    $data['form'] = $this->$model->getForm($uuid, true);
     $data['subformlabel'] = $this->subformlabel;
     $data['controller'] = $this->controller;
     $data['uuid'] = $uuid;
@@ -116,6 +116,8 @@ class MY_Controller extends CI_Controller {
     $data['page_name'] = 'list';
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($id);
+    $this->load->model('Permissions');
+    $data['allow_edit_pagu'] = in_array('create', $this->Permissions->getPermittedActions($this->controller));
     $this->loadview('index', $data);
   }
 
@@ -126,6 +128,7 @@ class MY_Controller extends CI_Controller {
     $data = array();
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid);
+    $data['allow_edit_pagu'] = in_array('create', $perms);
     $this->loadview('subformlist', $data);
   }
 

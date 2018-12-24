@@ -87,25 +87,14 @@ class Users extends MY_Model {
     }
     $this->datatables
 
-      ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
-      ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
+      ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
+      ->join('output', "kegiatan.uuid = output.kegiatan", 'left')
+      ->join('sub_output', "output.uuid = sub_output.output", 'left')
+      ->join('komponen', "sub_output.uuid = komponen.sub_output", 'left')
+      ->join('sub_komponen', "komponen.uuid = sub_komponen.komponen", 'left')
+      ->join('akun', "sub_komponen.uuid = akun.sub_komponen", 'left')
 
-      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
-      ->join('output', "output.uuid = output_program.output", 'left')
-
-      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
-      ->join('sub_output', "sub_output.uuid = sub_output_program.sub_output", 'left')
-
-      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
-      ->join('komponen', "komponen.uuid = komponen_program.komponen", 'left')
-
-      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
-      ->join('sub_komponen', "sub_komponen.uuid = sub_komponen_program.sub_komponen", 'left')
-
-      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('akun', "akun_program.akun = akun.uuid", 'left')
-
-      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('detail', "akun.uuid = detail.akun", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->from('program');
@@ -120,25 +109,14 @@ class Users extends MY_Model {
     }
     $this->db
 
-      ->join('kegiatan_program', "program.uuid = kegiatan_program.program", 'left')
-      ->join('kegiatan', "kegiatan.uuid = kegiatan_program.kegiatan", 'left')
+      ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
+      ->join('output', "kegiatan.uuid = output.kegiatan", 'left')
+      ->join('sub_output', "output.uuid = sub_output.output", 'left')
+      ->join('komponen', "sub_output.uuid = komponen.sub_output", 'left')
+      ->join('sub_komponen', "komponen.uuid = sub_komponen.komponen", 'left')
+      ->join('akun', "sub_komponen.uuid = akun.sub_komponen", 'left')
 
-      ->join('output_program', "kegiatan_program.uuid = output_program.kegiatan_program", 'left')
-      ->join('output', "output.uuid = output_program.output", 'left')
-
-      ->join('sub_output_program', "output_program.uuid = sub_output_program.output_program", 'left')
-      ->join('sub_output', "sub_output.uuid = sub_output_program.sub_output", 'left')
-
-      ->join('komponen_program', "sub_output_program.uuid = komponen_program.sub_output_program", 'left')
-      ->join('komponen', "komponen.uuid = komponen_program.komponen", 'left')
-
-      ->join('sub_komponen_program', "komponen_program.uuid = sub_komponen_program.komponen_program", 'left')
-      ->join('sub_komponen', "sub_komponen.uuid = sub_komponen_program.sub_komponen", 'left')
-
-      ->join('akun_program', "sub_komponen_program.uuid = akun_program.sub_komponen_program", 'left')
-      ->join('akun', "akun_program.akun = akun.uuid", 'left')
-
-      ->join('detail', "akun_program.uuid = detail.akun_program", 'left')
+      ->join('detail', "akun.uuid = detail.akun", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->from('program');
