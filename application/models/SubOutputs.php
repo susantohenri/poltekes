@@ -83,7 +83,7 @@ class SubOutputs extends MY_Model {
   function findIn ($field, $value) {
     $this->db
       ->select("{$this->table}.*")
-      ->select("CONCAT(sub_output.kode, ' - ', sub_output.uraian) uraian", false);
+      ->select("CONCAT({$this->table}.kode, ' - ', {$this->table}.uraian) uraian", false);
     return parent::findIn("{$this->table}.{$field}", $value);
   }
 

@@ -10,15 +10,25 @@ class Migration_jabatan extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `nama` varchar(255) NOT NULL,
         `parent` varchar(255) NOT NULL,
-        `akses_level` varchar(255) NOT NULL,
-        `kode` varchar(255) NOT NULL,
-        `items` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $this->load->model(array('Jabatans', 'Permissions'));
+    $this->db->query("
+      CREATE TABLE `jabatan_filter` (
+        `uuid` varchar(255) NOT NULL,
+        `jabatan` varchar(255) NOT NULL,
+        `type` varchar(255) NOT NULL,
+        `level` varchar(255) NOT NULL,
+        `kode` varchar(255) NOT NULL,
+        `item` text NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
+        PRIMARY KEY (`uuid`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+
+    $this->load->model(array('Jabatans', 'JabatanFilters', 'Permissions'));
     $entities = $this->Permissions->getEntities();
 
     $planner = $this->Jabatans->save(array('nama' => 'Perencanaan'));
@@ -32,7 +42,7 @@ class Migration_jabatan extends CI_Migration {
       foreach (array('index', 'create', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
     }
     foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Detail', $action);
-
+    foreach (array('index', 'read', 'update') as $action) $this->Permissions->setPermission($planner, 'Breakdown', $action);
     $atasan = '';
     foreach (array (
       'Atasan Langsung Bendahara Pengeluaran',
@@ -60,11 +70,17 @@ class Migration_jabatan extends CI_Migration {
       foreach (array ('Kepala / Sekretaris', 'Bendahara') as $jabatan) {
         $kode = $jur[0];
         $jurusan = $jur[1];
-        $parent[] = $this->Jabatans->save(array(
+        $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$jurusan}",
-          'akses_level' => 'Sub Komponen',
-          'kode' => "{$kode}*",
           'parent' => 0 < count($parent) ? implode(',', $parent) : $verifDir
+        ));
+        $parent[] = $jab;
+        $this->JabatanFilters->create(array(
+          'jabatan' => $jab,
+          'type' => 'AND',
+          'level'=> 'Sub Komponen',
+          'kode' => "{$kode}%",
+          'item' => ''
         ));
       }
     }
@@ -113,13 +129,19 @@ class Migration_jabatan extends CI_Migration {
       $kode = $prod[0];
       $prodi= $prod[1];
       $parent = array();
-      $jurusan= $this->Jabatans->findOne(array('kode' => substr($kode, 0, -1) . '*', 'nama LIKE' => 'Bendahara%'));
+      $jurusan= $this->Jabatans->findOne(array('nama LIKE' => 'Bendahara%'));
       foreach (array ('Kaprodi / Sekretaris Prodi', 'Bendahara Prodi') as $jabatan) {
-        $parent[] = $this->Jabatans->save(array(
+        $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$prodi}",
-          'akses_level' => 'Sub Komponen',
-          'kode' => $kode,
           'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan['uuid'],
+        ));
+        $parent[] = $jab;
+        $this->JabatanFilters->create(array(
+          'jabatan' => $jab,
+          'type' => 'AND',
+          'level'=> 'Sub Komponen',
+          'kode' => "{$kode}",
+          'item' => ''
         ));
       }
     }
@@ -197,6 +219,7 @@ class Migration_jabatan extends CI_Migration {
 
   function down () {
     $this->db->query("DROP TABLE `jabatan`");
+    $this->db->query("DROP TABLE `jabatan_filter`");
   }
 
 }

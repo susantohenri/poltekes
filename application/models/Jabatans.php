@@ -10,8 +10,6 @@ class Jabatans extends MY_Model {
       (object) array('mData' => 'urutan', 'visible' => false),
       (object) array('mData' => 'nama', 'sTitle' => 'Jabatan'),
       (object) array('mData' => 'parent_name', 'sTitle' => 'Atasan', 'width' => '30%', 'searchable' => false),
-      (object) array('mData' => 'akses_level', 'sTitle' => 'Akses Level'),
-      (object) array('mData' => 'kode', 'sTitle' => 'Kode Filter'),
     );
 
     $this->form[]= array(
@@ -29,40 +27,6 @@ class Jabatans extends MY_Model {
         array('data-field' => 'nama')
       ),
     );
-  
-    $this->form[]= array(
-      'name' => 'akses_level',
-      'label'=> 'Akses Level',
-      'options' => array(
-        array('text' => 'Administator', 'value' => ''),
-        array('text' => 'Program', 'value' => 'Program'),
-        array('text' => 'Kegiatan', 'value' => 'Kegiatan'),
-        array('text' => 'Output', 'value' => 'Output'),
-        array('text' => 'Sub Output', 'value' => 'Sub Output'),
-        array('text' => 'Komponen', 'value' => 'Komponen'),
-        array('text' => 'Sub Komponen', 'value' => 'Sub Komponen'),
-        array('text' => 'Akun', 'value' => 'Akun'),
-        array('text' => 'Detail', 'value' => 'Detail'),
-        array('text' => 'SPJ', 'value' => 'SPJ'),
-      )
-    );
-
-    $this->form[]= array(
-      'name' => 'kode',
-      'label'=> 'Akses Kode'
-    );
-
-    $this->form[]= array(
-      'name'    => 'items',
-      'label'   => 'Akses Item',
-      'multiple'=> true,
-      'options' => array(),
-      'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => ''), 
-        array('data-field' => 'uraian')
-      ),
-    );
 
     $this->childs[] = array('label' => '', 'controller' => 'Permission', 'model' => 'Permissions');
 
@@ -70,34 +34,11 @@ class Jabatans extends MY_Model {
 
   function dt () {
     $this->datatables
-      ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama, {$this->table}.akses_level, {$this->table}.kode")
+      ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama")
       ->select("GROUP_CONCAT(parent.nama SEPARATOR ', ') as parent_name", false)
       ->join('`jabatan` `parent`', "parent.uuid = {$this->table}.parent", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();
-  }
-
-  function getAssignmentForm ($controller) {
-    $akses_level = trim(implode(' ', preg_split('/(?=[A-Z])/', str_replace('Program', '', $controller))));
-    $this->form = $options = array();
-    foreach($this->find(array('akses_level' => $akses_level)) as $jbtn) $options[] = array('value' => $jbtn->uuid, 'text' => $jbtn->nama);
-    $this->form[]= array(
-      'name' => 'jabatan',
-      'label'=> 'Pilih Jabatan',
-      'options' => $options
-    );
-    return $this->getForm();
-  }
-
-  function assign ($jabatanUuid, $itemUuid) {
-    $jabatan = $this->findOne($jabatanUuid);
-    if (strpos($jabatan['items'], $itemUuid) > -1) return true;
-    else {
-      $items = strlen ($jabatan['items']) > 0 ? explode(',', $jabatan['items']) : array();
-      $items[] = $itemUuid;
-      $jabatan['items'] = implode(',', $items);
-      return $this->update($jabatan);
-    }
   }
 
   function getUserAttr (&$user) {
@@ -107,9 +48,6 @@ class Jabatans extends MY_Model {
     $user['bawahan']= array();
 
     $userAttr = $this->db
-      ->select('jabatan.akses_level')
-      ->select('jabatan.kode')
-      ->select('jabatan.items')
       ->select("GROUP_CONCAT(user_atasan.uuid) as atasans", false)
       ->select("GROUP_CONCAT(user_letting.uuid) as lettings", false)
       ->select("GROUP_CONCAT(user_bawahan.uuid) as bawahans", false)
@@ -128,47 +66,7 @@ class Jabatans extends MY_Model {
       $user['atasan'] = explode(',', $userAttr['atasans']);
       $user['letting']= explode(',', $userAttr['lettings']);
       $user['bawahan']= explode(',', $userAttr['bawahans']);
-
-      $akses_level = $userAttr['akses_level'];
-      $akses_level = strtolower($akses_level);
-      $akses_level = str_replace(' ', '_', $akses_level);
-      $kode = $userAttr['kode'];
-      $items= $userAttr['items'];
-
-      if ($akses_level) {
-        if (strlen($userAttr['items']) > 0) $user['filter']['where_in'] = array("{$akses_level}.uuid", explode(',', $items));
-        if (strlen ($kode) > 0) {
-          if (strpos($kode, '*') > -1) $user['filter']['where'] = array("{$akses_level}.kode LIKE", str_replace('*', '%', $kode));
-          else $user['filter']['where'] = array("{$akses_level}.kode", $kode);
-        }
-      }
     }
-  }
-
-  function prepopulate ($uuid) {
-    $record = $this->findOne($uuid);
-    foreach ($this->form as &$f) {
-      if (isset ($f['attributes']) && in_array(array('data-autocomplete' => 'true'), $f['attributes'])) {
-        $model = '';
-        $field = '';
-        foreach ($f['attributes'] as $attr) foreach ($attr as $key => $value) switch ($key) {
-          case 'data-model': $model = $value; break;
-          case 'data-field': $field = $value; break;
-        }
-        if ('items' === $f['name'] && strlen($record['akses_level']) > 0) {
-          $model = str_replace(' ', '', $record['akses_level']) . 's';
-        }
-        if (strlen($model) > 0) {
-          $this->load->model($model);
-          foreach ($this->$model->findIn('uuid', explode(',', $record[$f['name']])) as $option)
-            $f['options'][] = array('text' => $option->$field, 'value' => $option->uuid);
-        }
-      }
-      if (isset ($f['multiple'])) $f['value'] = explode(',', $record[$f['name']]);
-      else if ($f['name'] === 'password') $f['value'] = '';
-      else $f['value'] = $record[$f['name']];
-    }
-    return $this->form;
   }
 
 }

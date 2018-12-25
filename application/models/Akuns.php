@@ -51,7 +51,7 @@ class Akuns extends MY_Model {
       ->select("GROUP_CONCAT(DISTINCT detail.uuid) childUuid", false)
       ->select("'Detail' childController", false)
       ->select('akun.kode kode', false)
-      ->select('akun.nama uraian', false)
+      ->select('akun.uraian', false)
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
@@ -64,7 +64,7 @@ class Akuns extends MY_Model {
   		->select("{$this->table}.uuid")
   		->select("{$this->table}.urutan")
       ->select('akun.kode as kode_akun', false)
-  		->select('akun.nama as nama_akun', false)
+  		->select('akun.uraian as nama_akun', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
       ->select("SUM(spj.hargasat * spj.vol + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
@@ -78,8 +78,14 @@ class Akuns extends MY_Model {
       ->select("CONCAT(akun.kode, ' - ', akun.uraian) text", false)
       ->limit(10)
       ->like("CONCAT(akun.kode, ' - ', akun.uraian)", $term)
-      ->join('akun', "{$this->table}.akun = akun.uuid", 'left')
       ->get($this->table)->result();
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT({$this->table}.kode, ' - ', {$this->table}.uraian) uraian", false);
+    return parent::findIn("{$this->table}.{$field}", $value);
   }
 
   function getForm ($uuid = false, $isSubform = false) {

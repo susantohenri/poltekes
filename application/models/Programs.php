@@ -111,12 +111,12 @@ class Programs extends MY_Model {
           'komponen' => $komponen, 'kode' => '', 'uraian' => 'Tanpa Sub Komponen'
         ));
         $akun = $this->Akuns->save(array(
-          'sub_komponen' => $subKomponen, 'kode' => $cell[0], 'nama' => $cell[1]
+          'sub_komponen' => $subKomponen, 'kode' => $cell[0], 'uraian' => $cell[1]
         ));
         $Detail = false;
       } else if (0 === $codeLength) {
         if (!$akun) $akun = $this->Akuns->save(array(
-          'sub_komponen' => $subKomponen, 'kode' => '', 'nama' => 'Tanpa Akun'
+          'sub_komponen' => $subKomponen, 'kode' => '', 'uraian' => 'Tanpa Akun'
         ));
         $Detail = $this->Details->save(array(
           'akun' => $akun,
@@ -178,6 +178,13 @@ class Programs extends MY_Model {
       );
     }
     return parent::getForm ($uuid, $isSubform);
+  }
+
+  function findIn ($field, $value) {
+    $this->db
+      ->select("{$this->table}.*")
+      ->select("CONCAT({$this->table}.kode, ' - ', {$this->table}.uraian) uraian", false);
+    return parent::findIn("{$this->table}.{$field}", $value);
   }
 
 }

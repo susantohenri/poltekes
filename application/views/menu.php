@@ -13,6 +13,11 @@
             <a href="<?= site_url('Jabatan/') ?>"><i class="fa fa-angle-double-down"></i>Jabatan</a>
         </li>
         <?php endif ?>
+        <?php if (in_array('Breakdown', $permitted_menus)) : ?>
+        <li>
+            <a href="<?= site_url('Breakdown/') ?>"><i class="fa fa-sitemap"></i>Breakdown Pagu</a>
+        </li>
+        <?php endif ?>
         <?php if (in_array('Program', $permitted_menus)) : ?>
         <li>
             <a href="<?= site_url('Program/') ?>"><i class="fa fa-laptop"></i>Program</a>
@@ -56,6 +61,11 @@
         <?php if (in_array('Spj', $permitted_menus)) : ?>
         <li>
             <a href="<?= site_url('Spj/') ?>"><i class="fa fa-dropbox"></i>SPJ</a>
+        </li>
+        <?php endif ?>
+        <?php if (in_array('Spj', $permitted_menus)) : ?>
+        <li>
+            <a href="<?= site_url('Spj/') ?>"><i class="fa fa-ticket"></i>SPJ History</a>
         </li>
         <?php endif ?>
         <?php if (in_array('SpjPayment', $permitted_menus)) : ?>

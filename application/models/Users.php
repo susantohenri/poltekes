@@ -72,18 +72,17 @@ class Users extends MY_Model {
   }
 
   function filterByRole () {
-    $user = $this->session->all_userdata();
-    $this->load->model('Jabatans');
-    $this->Jabatans->getUserAttr($user);
-    return $user['filter'];
+    $this->load->model('JabatanFilters');
+    return $this->JabatanFilters->getFilter();
   }
 
   function filterDt () {
-    $index = 0;
-    foreach ($this->filterByRole() as $fn => $query) {
-      if (0 !== $index) $fn = "or_{$fn}";
-      $this->datatables->$fn($query[0], $query[1]);
-      $index++;
+    foreach ($this->filterByRole() as $filter) {
+      $fn = $filter['fn'];
+      $field = $filter['field'];
+      $value = $filter['value'];
+      if ('or_where_in' === $fn) $this->datatables->or_where("{$field} IN ('{$value}')");
+      else $this->datatables->$fn($field, $value);
     }
     $this->datatables
 
@@ -101,11 +100,11 @@ class Users extends MY_Model {
   }
 
   function filterListItem () {
-    $index = 0;
-    foreach ($this->filterByRole() as $fn => $query) {
-      if (0 !== $index) $fn = "or_{$fn}";
-      $this->db->$fn($query[0], $query[1]);
-      $index++;
+    foreach ($this->filterByRole() as $filter) {
+      $fn = $filter['fn'];
+      $field = $filter['field'];
+      $value = $filter['value'];
+      $this->db->$fn($field, $value);
     }
     $this->db
 
@@ -120,6 +119,8 @@ class Users extends MY_Model {
       ->join('spj', "detail.uuid = spj.detail", 'left')
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->from('program');
+      // $this->db->get()->result();
+      // die($this->db->last_query());
   }
 
 }

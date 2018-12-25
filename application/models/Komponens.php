@@ -84,7 +84,7 @@ class Komponens extends MY_Model {
   function findIn ($field, $value) {
     $this->db
       ->select("{$this->table}.*")
-      ->select("CONCAT(komponen.kode, ' - ', komponen.uraian) uraian", false);
+      ->select("CONCAT({$this->table}.kode, ' - ', {$this->table}.uraian) uraian", false);
     return parent::findIn("{$this->table}.{$field}", $value);
   }
 
