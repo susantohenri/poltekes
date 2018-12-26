@@ -30,12 +30,32 @@ class Akuns extends MY_Model {
       'label'=> 'Kode',
     );
     $this->form[]= array(
-      'name' => 'nama',
+      'name' => 'uraian',
       'label'=> 'Uraian',
       'width'=> 9
     );
+    $this->form[]= array(
+      'name' => 'pagu',
+      'label'=> 'Pagu',
+      'value'=> 0,
+      'attributes' => array(
+        array('disabled' => 'disabled'),
+        array('data-number' => 'true')
+      ),
+      'width'=> 2
+    );
     $this->childs[] = array('label' => '', 'controller' => 'Detail', 'model' => 'Details');
 
+  }
+
+  function findOne ($param) {
+    $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
+    $this->db
+      ->select("{$this->table}.*")
+      ->select('FORMAT(SUM(IFNULL(vol, 0) * IFNULL(hargasat, 0)), 0) pagu')
+      ->join('detail', "{$this->table}.uuid = detail.akun", 'left')
+      ->group_by("{$this->table}.uuid");
+    return parent::findOne($param);
   }
 
   function getListItem ($uuid) {
@@ -89,7 +109,10 @@ class Akuns extends MY_Model {
   }
 
   function getForm ($uuid = false, $isSubform = false) {
-    if ($isSubform) unset($this->form[0]);
+    if ($isSubform) {
+      unset($this->form[0]);
+      unset($this->form[count ($this->form)]);
+    }
     return parent::getForm ($uuid, $isSubform);
   }
 }

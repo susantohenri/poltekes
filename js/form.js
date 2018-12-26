@@ -140,7 +140,7 @@ function formInit () {
 }
 
 function calculateAkunProgram () {
-  if (window.location.href.indexOf ('AkunProgram/read') < 0) return true
+  if (window.location.href.indexOf ('Akun/read') < 0) return true
   $('[data-number="true"]').keyup(function () {
     var record = $(this).parent().parent()
     var vol = getNumber(record.find('[name*="vol"]'))

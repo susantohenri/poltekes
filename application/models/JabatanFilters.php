@@ -28,7 +28,6 @@ class JabatanFilters extends MY_Model {
         array('text' => 'Sub Komponen', 'value' => 'Sub Komponen'),
         array('text' => 'Akun', 'value' => 'Akun'),
         array('text' => 'Detail', 'value' => 'Detail'),
-        array('text' => 'SPJ', 'value' => 'SPJ'),
       )
     );
 
