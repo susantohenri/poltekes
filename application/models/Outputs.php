@@ -45,7 +45,7 @@ class Outputs extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.kegiatan parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("FORMAT(SUM(spj.vol * spj.hargasat + spj.ppn + spj.pph), 0) total_spj", false)
+      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT sub_output.uuid) childUuid", false)
       ->select("'SubOutput' childController", false)
@@ -67,8 +67,9 @@ class Outputs extends MY_Model {
 
       ->select('SUM(detail.vol) as detail_vol', false)
       ->select('detail.sat as detail_sat', false)
-      ->select('SUM(spj.vol) as spj_vol', false)
-      ->select('spj.sat as spj_sat', false)
+      ->select('SUM(item.vol) as spj_vol', false)
+      ->select('item.sat as spj_sat', false)
+      ->join('item', 'spj.uuid = item.spj', 'left')
       ->group_by("{$this->table}.uuid")
       ->generate();
   }
