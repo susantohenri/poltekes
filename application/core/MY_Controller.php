@@ -132,6 +132,15 @@ class MY_Controller extends CI_Controller {
     $this->loadview('subformlist', $data);
   }
 
+  function subformlistcreate ($parentUuid) {
+    $this->load->model('Permissions');
+    $perms = $this->Permissions->getPermittedActions($this->controller);
+    if (!in_array('create', $perms)) return false;
+    $entity = preg_split('#([A-Z][^A-Z]*)#', $this->controller, null, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+    $entity = implode(' ', $entity);
+    $this->loadview('subformlistcreate', array('item' => array ('parent' => $parentUuid, 'entity' => $entity)));
+  }
+
   function delete ($uuid) {
     $vars = array();
     $vars['page_name'] = 'confirm';

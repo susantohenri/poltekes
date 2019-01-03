@@ -32,6 +32,7 @@ class Permissions extends MY_Model {
       array('text' => 'Akun', 'value' => 'Akun'),
       array('text' => 'Detail', 'value' => 'Detail'),
       array('text' => 'SPJ', 'value' => 'Spj'),
+      array('text' => 'SPJ History', 'value' => 'SpjHistory'),
       array('text' => 'SPJ Payment', 'value' => 'SpjPayment'),
       array('text' => 'User', 'value' => 'User'),
       array('text' => 'Jabatan', 'value' => 'Jabatan'),

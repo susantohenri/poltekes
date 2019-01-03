@@ -38,30 +38,6 @@ function activateBtnDelete () {
 	})
 }
 
-function activateAddBtn (li) {
-	var last = $('[data-parent="' + li.uuid + '"]').last()
-	var indent = last.css('padding-left')
-	if (last.length < 1) {
-		last = $('li[data-uuid="' + li.uuid + '"]')
-		indent = parseInt(last.css('padding-left').replace('px', 0))
-	}
-	var addBtn = '<li class="item" data-uuid="" data-parent="' + li.uuid + '" style="padding-left: ' + indent + '">\
-	    <div class="item-row">\
-        <div class="item-col">\
-					<a class="add-btn btn btn-info"><i class="fa fa-plus"></i> SPJ</a>\
-				</div>\
-			</div>\
-	</li>'
-	$(addBtn).css('padding-left', li.indent + 10 + 'px').insertAfter(last).find('.btn').click(function () {
-		var btn = $(this)
-		$.get(site_url + li.childController + '/subformlistcreate/' + li.uuid, function (form) {
-			$(form).insertBefore(btn.parent().parent().parent()).css('padding-left', li.indent + 10 + 'px')
-			activateBtnDelete()
-			activateRealtimeCalculation()
-		})
-	})
-}
-
 function expandItem (btn, cb) {
 	var li = btn.parent().parent().parent().parent()
 	var parent = {
@@ -74,7 +50,7 @@ function expandItem (btn, cb) {
 	var requests = []
 	for (var uuid of parent.childUuids) {
 		var url = site_url + parent.childController + '/subformlist/' + uuid
-		if ('Spj' === parent.childController && uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
+		if (uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
 		requests.push($.ajax({
 			url: url,
 			success: function (item) {
@@ -91,7 +67,6 @@ function expandItem (btn, cb) {
 		activateBtnDelete()
 		activateRealtimeCalculation()
 		if ('Spj' === parent.childController) {
-			activateAddBtn(parent)
 			activateListVerificationButton(parent)
 			adjustPaymentButton(parent)
 			activateFormVerificationButton(parent)
