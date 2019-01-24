@@ -27,9 +27,6 @@ class Breakdowns extends MY_Model {
         array('data-field' => 'nama')
       ),
     );
-
-    $this->childs[] = array('label' => '', 'controller' => 'JabatanFilter', 'model' => 'JabatanFilters');
-
   }
 
   function dt () {

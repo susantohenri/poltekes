@@ -9,6 +9,7 @@ class Migration_jabatan extends CI_Migration {
       CREATE TABLE `jabatan_group` (
         `uuid` varchar(255) NOT NULL,
         `nama` varchar(255) NOT NULL,
+        `kode` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -25,20 +26,7 @@ class Migration_jabatan extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $this->db->query("
-      CREATE TABLE `jabatan_filter` (
-        `uuid` varchar(255) NOT NULL,
-        `jabatan` varchar(255) NOT NULL,
-        `type` varchar(255) NOT NULL,
-        `level` varchar(255) NOT NULL,
-        `kode` varchar(255) NOT NULL,
-        `item` text NOT NULL,
-        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-    ");
-
-    $this->load->model(array('Jabatans', 'JabatanFilters', 'Permissions', 'JabatanGroups'));
+    $this->load->model(array('Jabatans', 'Permissions', 'JabatanGroups'));
     $entities = $this->Permissions->getEntities();
 
     $planner = $this->Jabatans->save(array('nama' => 'Perencanaan'));
@@ -76,7 +64,7 @@ class Migration_jabatan extends CI_Migration {
       array ("G", "Jurusan Teknik Radiodiagnostik & Radioterapi"), 
       array ("H", "Jurusan Rekam Medis dan Informasi Kesehatan"),
     ) as $jur) {
-      $group = $this->JabatanGroups->create(array('nama' => $jur[1]));
+      $group = $this->JabatanGroups->create(array('nama' => $jur[1], 'kode' => "{$jur[0]}%"));
       $parent = array();
       foreach (array ('Kepala / Sekretaris', 'Bendahara') as $jabatan) {
         $kode = $jur[0];
@@ -87,13 +75,6 @@ class Migration_jabatan extends CI_Migration {
           'group' => $group
         ));
         $parent[] = $jab;
-        $this->JabatanFilters->create(array(
-          'jabatan' => $jab,
-          'type' => 'AND',
-          'level'=> 'Sub Komponen',
-          'kode' => "{$kode}%",
-          'item' => ''
-        ));
       }
     }
 
@@ -138,7 +119,7 @@ class Migration_jabatan extends CI_Migration {
       array ("HA", "D-III Rekam Medis dan Informasi Kesehatan"), 
       array ("HB", "D-IV Rekam Medis dan Informasi Kesehatan")
     ) as $prod) {
-      $group = $this->JabatanGroups->create(array('nama' => "Prodi {$prod[1]}"));
+      $group = $this->JabatanGroups->create(array('nama' => "Prodi {$prod[1]}", 'kode' => "{$prod[0]}"));
       $kode = $prod[0];
       $prodi= $prod[1];
       $parent = array();
@@ -150,13 +131,6 @@ class Migration_jabatan extends CI_Migration {
           'group' => $group
         ));
         $parent[] = $jab;
-        $this->JabatanFilters->create(array(
-          'jabatan' => $jab,
-          'type' => 'AND',
-          'level'=> 'Sub Komponen',
-          'kode' => "{$kode}",
-          'item' => ''
-        ));
       }
     }
 

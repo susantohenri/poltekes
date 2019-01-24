@@ -72,8 +72,7 @@ class Users extends MY_Model {
   }
 
   function filterByRole () {
-    $this->load->model('JabatanFilters');
-    return $this->JabatanFilters->getFilter();
+    return array();
   }
 
   function filterDt () {
