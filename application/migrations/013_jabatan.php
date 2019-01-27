@@ -20,7 +20,7 @@ class Migration_jabatan extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `nama` varchar(255) NOT NULL,
         `parent` varchar(255) NOT NULL,
-        `group` varchar(255) NOT NULL,
+        `jabatan_group` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
@@ -72,7 +72,7 @@ class Migration_jabatan extends CI_Migration {
         $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$jurusan}",
           'parent' => 0 < count($parent) ? implode(',', $parent) : $verifDir,
-          'group' => $group
+          'jabatan_group' => $group
         ));
         $parent[] = $jab;
       }
@@ -128,7 +128,7 @@ class Migration_jabatan extends CI_Migration {
         $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$prodi}",
           'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan['uuid'],
-          'group' => $group
+          'jabatan_group' => $group
         ));
         $parent[] = $jab;
       }
@@ -153,12 +153,12 @@ class Migration_jabatan extends CI_Migration {
       $kepalaUnit = $this->Jabatans->save(array(
         'nama' => "Kepala Unit {$unit}",
         'parent' => $verifDir,
-        'group' => $group
+        'jabatan_group' => $group
       ));
       $this->Jabatans->save(array(
         'nama' => "Bendahara Unit {$unit}",
         'parent' => $kepalaUnit,
-        'group' => $group
+        'jabatan_group' => $group
       ));
     }
 
@@ -169,12 +169,12 @@ class Migration_jabatan extends CI_Migration {
       $kepalaUrusan = $this->Jabatans->save(array(
         'nama' => "Kepala Urusan {$urusan}",
         'parent' => $verifDir,
-        'group' => $group
+        'jabatan_group' => $group
       ));
       $this->Jabatans->save(array(
         'nama' => "Bendahara Urusan {$urusan}",
         'parent' => $kepalaUrusan,
-        'group' => $group
+        'jabatan_group' => $group
       ));
     }
 
@@ -213,7 +213,6 @@ class Migration_jabatan extends CI_Migration {
 
   function down () {
     $this->db->query("DROP TABLE `jabatan`");
-    $this->db->query("DROP TABLE `jabatan_filter`");
     $this->db->query("DROP TABLE `jabatan_group`");
   }
 

@@ -34,13 +34,18 @@ class Programs extends MY_Model {
       'SubKomponens',
       'Akuns',
       'Details',
+      'JabatanGroups',
+      'Assignments'
     ));
+    $breakdown = array();
+    foreach ($this->JabatanGroups->find() as $formula) $breakdown[$formula->kode] = $formula->uuid;
     $program = false;
     $kegiatan = false;
     $output = false;
     $subOutput = false;
     $komponen = false;
     $subKomponen = false;
+    $jabatanGroup= false;
     $akun = false;
     $Detail = false;
     foreach (explode ("\n", str_replace("\n[Base Line]", '', $xlsString)) as $rowIndex => $rowContent) {
@@ -105,6 +110,7 @@ class Programs extends MY_Model {
         $subKomponen = $this->SubKomponens->save(array(
           'komponen' => $komponen, 'kode' => $cell[0], 'uraian' => $cell[1]
         ));
+        if (isset ($breakdown[$cell[0]])) $jabatanGroup = $breakdown[$cell[0]];
         $akun = false;
       } else if (6 === $codeLength) {
         if (!$subKomponen) $subKomponen = $this->SubKomponens->save(array(
@@ -124,6 +130,10 @@ class Programs extends MY_Model {
           'vol' => $cell[2],
           'sat' => $cell[3],
           'hargasat' => $cell[4],
+        ));
+        $this->Assignments->save(array(
+          'jabatan_group' => $jabatanGroup,
+          'detail' => $Detail
         ));
       }
     }

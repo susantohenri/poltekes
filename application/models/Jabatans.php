@@ -19,7 +19,7 @@ class Jabatans extends MY_Model {
     );
 
     $this->form[]= array(
-      'name'    => 'group',
+      'name'    => 'jabatan_group',
       'label'   => 'Group',
       'options' => array(),
       'attributes' => array(
@@ -50,7 +50,7 @@ class Jabatans extends MY_Model {
       ->select("jabatan_group.nama as nama_group", false)
       ->select("GROUP_CONCAT(parent.nama SEPARATOR ', ') as parent_name", false)
       ->join('`jabatan` `parent`', "parent.uuid = {$this->table}.parent", 'left')
-      ->join('`jabatan_group`', "jabatan_group.uuid = {$this->table}.group", 'left')
+      ->join('`jabatan_group`', "jabatan_group.uuid = {$this->table}.jabatan_group", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();
   }
@@ -81,6 +81,22 @@ class Jabatans extends MY_Model {
       $user['letting']= explode(',', $userAttr['lettings']);
       $user['bawahan']= explode(',', $userAttr['bawahans']);
     }
+  }
+
+  function getTopDown ($uuid) {
+    $queue = $jabatans = array($uuid);
+    $query = "
+      SELECT jabatan.uuid, GROUP_CONCAT(bawahan.uuid) jab_bwh
+      FROM jabatan
+      LEFT JOIN jabatan bawahan ON jabatan.uuid = bawahan.parent
+      WHERE jabatan.uuid = '{uuid}'
+    ";
+    while (count($queue) > 0) {
+      $result = $this->db->query(str_replace('{uuid}', $queue[0], $query))->row_array();
+      array_shift($queue);
+      if (strlen ($result['jab_bwh']) > 0) foreach (explode(',', $result['jab_bwh']) as $bwhn) if (strlen($bwhn) > 0) $queue[] = $jabatans[] = $bwhn;
+    }
+    return $jabatans;
   }
 
 }
