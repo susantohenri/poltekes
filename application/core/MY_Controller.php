@@ -17,12 +17,6 @@ class MY_Controller extends CI_Controller {
 
     if (!isset ($this->model)) $this->model = $this->controller . 's';
     $this->load->model($this->model);
-
-    $this->load->model('Jabatans');
-    $topDown = $this->Jabatans->getTopDown($this->session->userdata('jabatan'));
-    echo '<pre>';
-    print_r(json_encode($topDown));
-    die();
   }
 
   public function loadview ($view, $vars = array()) {

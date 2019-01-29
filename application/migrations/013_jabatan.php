@@ -54,7 +54,7 @@ class Migration_jabatan extends CI_Migration {
     }
     $verifDir = $atasan;
 
-    foreach (array (
+    $jurusans = array (
       array ("A", "Jurusan Keperawatan"), 
       array ("B", "Jurusan Kebidanan"), 
       array ("C", "Jurusan Keperawatan Gigi"), 
@@ -63,7 +63,9 @@ class Migration_jabatan extends CI_Migration {
       array ("F", "Jurusan Analis Kesehatan"), 
       array ("G", "Jurusan Teknik Radiodiagnostik & Radioterapi"), 
       array ("H", "Jurusan Rekam Medis dan Informasi Kesehatan"),
-    ) as $jur) {
+    );
+    $benjurs = array();
+    foreach ($jurusans as $jur) {
       $group = $this->JabatanGroups->create(array('nama' => $jur[1], 'kode' => "{$jur[0]}%"));
       $parent = array();
       foreach (array ('Kepala / Sekretaris', 'Bendahara') as $jabatan) {
@@ -74,6 +76,7 @@ class Migration_jabatan extends CI_Migration {
           'parent' => 0 < count($parent) ? implode(',', $parent) : $verifDir,
           'jabatan_group' => $group
         ));
+        if ('Bendahara' === $jabatan) $benjurs[$kode] = $jab;
         $parent[] = $jab;
       }
     }
@@ -123,11 +126,11 @@ class Migration_jabatan extends CI_Migration {
       $kode = $prod[0];
       $prodi= $prod[1];
       $parent = array();
-      $jurusan= $this->Jabatans->findOne(array('nama LIKE' => 'Bendahara%'));
+      $jurusan = $benjurs[substr($kode, 0, -1)];
       foreach (array ('Kaprodi / Sekretaris Prodi', 'Bendahara Prodi') as $jabatan) {
         $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$prodi}",
-          'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan['uuid'],
+          'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan,
           'jabatan_group' => $group
         ));
         $parent[] = $jab;
