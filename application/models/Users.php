@@ -72,7 +72,27 @@ class Users extends MY_Model {
   }
 
   function filterByRole () {
-    return array();
+    $filters = array();
+    $this->load->model(array('Jabatans'));
+    $topdown = $this->Jabatans->getTopDown($this->session->userdata('jabatan'));
+    $groups = $this->db
+      ->distinct()
+      ->select('jabatan_group')
+      ->where_in('uuid', $topdown)
+      ->get('jabatan')
+      ->result();
+    $include_group = array();
+    foreach ($groups as $g) $include_group[] = $g->jabatan_group;
+    $details = $this->db
+      ->distinct()
+      ->select('detail')
+      ->where_in('jabatan_group', $include_group)
+      ->get('assignment')
+      ->result();
+    $include_detail = array();
+    foreach ($details as $d) $include_detail[] = $d->detail;
+    if (count ($include_detail) > 0) $filters[] = array('fn' => 'where_in', 'field' => 'details.uuid', 'value' => $include_detail);
+    return $filters;
   }
 
   function filterDt () {
