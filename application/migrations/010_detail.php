@@ -10,9 +10,9 @@ class Migration_detail extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `akun` varchar(255) NOT NULL,
         `uraian` varchar(255) NOT NULL,
-        `vol` float NOT NULL,
+        `vol` bigint(20) NOT NULL,
         `sat` varchar(255) NOT NULL,
-        `hargasat` float NOT NULL,
+        `hargasat` bigint(20) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`akun`)

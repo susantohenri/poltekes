@@ -18,8 +18,8 @@ class Migration_spj extends CI_Migration {
         `global_status` varchar(255) NOT NULL DEFAULT 'unverified',
         `unverify_reason` varchar(255) NOT NULL,
         `unpaid_reason` varchar(255) NOT NULL,
-        `ppn` float NOT NULL,
-        `pph` float NOT NULL,
+        `ppn` bigint(20) NOT NULL,
+        `pph` bigint(20) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`detail`)

@@ -91,7 +91,7 @@ class Users extends MY_Model {
       ->result();
     $include_detail = array();
     foreach ($details as $d) $include_detail[] = $d->detail;
-    if (count ($include_detail) > 0) $filters[] = array('fn' => 'where_in', 'field' => 'details.uuid', 'value' => $include_detail);
+    if (count ($include_detail) > 0) $filters[] = array('fn' => 'where_in', 'field' => 'detail.uuid', 'value' => $include_detail);
     return $filters;
   }
 
