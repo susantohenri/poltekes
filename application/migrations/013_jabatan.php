@@ -66,7 +66,7 @@ class Migration_jabatan extends CI_Migration {
     );
     $benjurs = array();
     foreach ($jurusans as $jur) {
-      $group = $this->JabatanGroups->create(array('nama' => $jur[1], 'kode' => "{$jur[0]}%"));
+      $group = $this->JabatanGroups->create(array('nama' => $jur[1], 'kode' => $jur[0]));
       $parent = array();
       foreach (array ('Kepala / Sekretaris', 'Bendahara') as $jabatan) {
         $kode = $jur[0];
