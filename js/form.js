@@ -31,7 +31,6 @@ window.onload = function () {
         elements.remove()
         for( var i = 0; i < sorted.length; ++i ) html += sorted[i].outerHTML
         fchild.prepend(html)
-        if (window.location.href.indexOf('Breakdown') > -1) jabatanFilternDropDown()
         formInit()
       }
     }})
@@ -39,7 +38,6 @@ window.onload = function () {
       var beforeButton = $(this).parents('.form-group');
       $.get(controller + '/subformcreate/', function (form) {
         $(form).insertBefore(beforeButton)
-        if (window.location.href.indexOf('Breakdown') > -1) jabatanFilternDropDown()
         formInit()
       })
     })
@@ -203,14 +201,4 @@ function markMinus (spj_total) {
   var inlineStyle = $('[name="total_spj"]').attr('style') || ''
   if (spj_total > getNumber ($('[name="pagu"]'))) $('[name="total_spj"]').css('background-color', '#ffcccc')
   else $('[name="total_spj"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
-}
-
-function jabatanFilternDropDown () {
-  $('[name*="level"]').change(function () {
-    var model = $(this).val().replace(' ', '') + 's'
-    var row = $(this).parent().parent()
-    row.find('[name*="kode"]').val('')
-    row.find('select[name*="item"]').attr('data-model', model).val('').select2('destroy')
-    formInit()
-  })
 }
