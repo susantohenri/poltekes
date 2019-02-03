@@ -18,4 +18,15 @@ class Breakdown extends MY_Controller {
 	    $this->loadview('index', $data);
 	}
 
+	function readlist ($id) {
+	    $data = array();
+	    $data['page_name'] = 'breakdown-list';
+	    $model = $this->model;
+	    $record = $this->$model->findOne($id);
+	    $data['item'] = $this->$model->getListItem($id);
+	    $data['nama_jabatan_group'] = $record['nama'];
+	    $data['allow_edit_pagu'] = true;
+	    $this->loadview('index', $data);
+	}
+
 }
