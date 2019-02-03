@@ -29,4 +29,15 @@ class Breakdown extends MY_Controller {
 	    $this->loadview('index', $data);
 	}
 
+	public function index () {
+		$model = $this->model;
+		if ($post = $this->$model->lastSubmit($this->input->post())) {
+			$this->$model->updateAssignment($post['entity'], $post['uuid'], $post['jabatan_group']);
+		}
+		$vars = array();
+		$vars['page_name'] = 'table';
+		$vars['thead'] = $this->$model->thead;
+		$this->loadview('index', $vars);
+	}
+
 }

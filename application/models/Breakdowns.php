@@ -61,8 +61,7 @@ class Breakdowns extends MY_Model {
     $this->load->model($model);
     $record = $this->{$model}->findOne($uuid);
     $details= $this->getDetails($entity, $uuid);
-    $detailUuids = array_column($details, 'uuid');
-    $groups = $this->getGroup($detailUuids);
+    $groups = $this->getGroup($entity, $uuid);
     $options= array();
     foreach ($groups as $group) $options[] = array(
       'text' => $group->nama,
@@ -85,6 +84,21 @@ class Breakdowns extends MY_Model {
         array('data-field' => 'nama')
       ),
       'value' => array_column($groups, 'jabatan_group')
+    );
+    $this->form[] = array(
+      'name' => 'entity',
+      'type' => 'hidden',
+      'value'=> $entity
+    );
+    $this->form[] = array(
+      'name' => 'model',
+      'type' => 'hidden',
+      'value'=> $model
+    );
+    $this->form[] = array(
+      'name' => 'uuid',
+      'type' => 'hidden',
+      'value'=> $uuid
     );
     $form = $this->form;
 
@@ -140,16 +154,47 @@ class Breakdowns extends MY_Model {
       ->result();
   }
 
-  function getGroup ($details) {
+  function getGroup ($entity, $uuid) {
     return $this->db
       ->distinct()
       ->select('jabatan_group')
       ->select('nama')
-      ->where_in('detail', $details)
+      ->where_in('detail', "
+        SELECT DISTINCT `detail`.`uuid` FROM `program`
+        LEFT JOIN `kegiatan` ON `program`.`uuid` = `kegiatan`.`program`
+        LEFT JOIN `output` ON `kegiatan`.`uuid` = `output`.`kegiatan`
+        LEFT JOIN `sub_output` ON `output`.`uuid` = `sub_output`.`output`
+        LEFT JOIN `komponen` ON `sub_output`.`uuid` = `komponen`.`sub_output`
+        LEFT JOIN `sub_komponen` ON `komponen`.`uuid` = `sub_komponen`.`komponen`
+        LEFT JOIN `akun` ON `sub_komponen`.`uuid` = `akun`.`sub_komponen`
+        LEFT JOIN `detail` ON `akun`.`uuid` = `detail`.`akun`
+        WHERE `{$entity}`.`uuid` = '{$uuid}'
+      ", false)
       ->join('jabatan_group', 'assignment.jabatan_group = jabatan_group.uuid', 'left')
       ->group_by('assignment.uuid')
       ->get('assignment')
       ->result();
+  }
+
+  function setGroup ($groups, $details) {
+    $this->load->model('Assignments');
+    $this->db
+      ->where_in('detail', $details)
+      ->delete('assignment');
+    foreach ($groups as $group) {
+      foreach ($details as $detail) {
+        $this->Assignments->save(array(
+          'jabatan_group' => $group,
+          'detail' => $detail
+        ));
+      }
+    }
+  }
+
+  function updateAssignment ($entity, $uuid, $groups) {
+    $details = $this->getDetails($entity, $uuid);
+    $this->setGroup($groups, $details);
+    return true;
   }
 
 }
