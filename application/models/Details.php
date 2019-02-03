@@ -131,4 +131,11 @@ class Details extends MY_Model {
     }
   }
 
+  function delete ($uuid) {
+    parent::delete($uuid);
+    $this->db
+      ->where('detail', $uuid)
+      ->delete('assignment');
+  }
+
 }
