@@ -55,4 +55,101 @@ class Breakdowns extends MY_Model {
       ->row_array();
   }
 
+  function getAssignmentForm ($entity, $uuid) {
+    $model = $entity['model'];
+    $entity= $entity['table'];
+    $this->load->model($model);
+    $record = $this->{$model}->findOne($uuid);
+    $details= $this->getDetails($entity, $uuid);
+    $detailUuids = array_column($details, 'uuid');
+    $groups = $this->getGroup($detailUuids);
+    $options= array();
+    foreach ($groups as $group) $options[] = array(
+      'text' => $group->nama,
+      'value'=> $group->jabatan_group,
+    );
+
+    $this->form[]= array(
+      'name' => 'uraian',
+      'label'=> 'Uraian',
+      'value'=> $record['uraian']
+    );
+    $this->form[]= array(
+      'name' => 'jabatan_group',
+      'label'=> 'Group Jabatan',
+      'options' => $options,
+      'multiple'=> true,
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'JabatanGroups'), 
+        array('data-field' => 'nama')
+      ),
+      'value' => array_column($groups, 'jabatan_group')
+    );
+    $form = $this->form;
+
+    foreach ($form as &$f) {
+      if (!isset ($f['attributes'])) $f['attributes']   = array();
+      if (isset ($f['options'])) $f['type'] = 'select';
+      if (isset ($f['multiple'])) {
+        $f['name']= $f['name'] . '[]';
+        $f['attributes'][] = array('multiple' => 'true');
+      }
+      if (!isset ($f['type'])) $f['type']   = 'text';
+      if (!isset ($f['width'])) $f['width'] = 2;
+      if (!isset ($f['value'])) $f['value']       = '';
+      if (!isset ($f['required'])) $f['required'] = '';
+      else $f['required'] = 'required="required"';
+
+      $f['disabled'] = !isset($f['disabled']) ? '' : 'disabled="disabled"';
+
+      if (in_array(array('data-suggestion' => true), $f['attributes'])) {
+        $fname = str_replace('[]', '', $f['name']);
+        if (isset ($f['multiple'])) {
+          $alloptions = array();
+          $f['options'] = array();
+          foreach ($this->db->select($fname)->get($this->table)->result() as $record)
+            if (strlen($record->$fname) > 0) foreach (explode(',', $record->$fname) as $option) $alloptions[] = $option;
+          foreach (array_unique ($alloptions) as $distinct) $f['options'][] = array('text' => $distinct, 'value' => $distinct);
+        } else {
+          $f['options'] = array();
+          foreach ($this->db->select($fname)->distinct()->get($this->table)->result() as $record)
+            if (strlen($record->$fname) > 0) $f['options'][] = array('text' => $record->$fname, 'value' => $record->$fname);
+        }
+      }
+
+      $f['attr'] = '';
+      foreach ($f['attributes'] as $attribute) foreach ($attribute as $key => $value) $f['attr'] .= " $key=\"$value\"";
+    }
+    return $form;
+  }
+
+  function getDetails ($entity, $uuid) {
+    return $this->db
+      ->distinct()
+      ->select('detail.uuid')
+      ->join('kegiatan', 'program.uuid = kegiatan.program', 'left')
+      ->join('output', 'kegiatan.uuid = output.kegiatan', 'left')
+      ->join('sub_output', 'output.uuid = sub_output.output', 'left')
+      ->join('komponen', 'sub_output.uuid = komponen.sub_output', 'left')
+      ->join('sub_komponen', 'komponen.uuid = sub_komponen.komponen', 'left')
+      ->join('akun', 'sub_komponen.uuid = akun.sub_komponen', 'left')
+      ->join('detail', 'akun.uuid = detail.akun', 'left')
+      ->where("{$entity}.uuid", $uuid)
+      ->get('program')
+      ->result();
+  }
+
+  function getGroup ($details) {
+    return $this->db
+      ->distinct()
+      ->select('jabatan_group')
+      ->select('nama')
+      ->where_in('detail', $details)
+      ->join('jabatan_group', 'assignment.jabatan_group = jabatan_group.uuid', 'left')
+      ->group_by('assignment.uuid')
+      ->get('assignment')
+      ->result();
+  }
+
 }
