@@ -37,9 +37,14 @@ class SubOutputs extends MY_Model {
 
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterListItem();
+    if (!is_null($jabatanGroup)) {
+      $this->Users->joinRelatedTables($this->db);
+      $this->db
+      ->join('assignment', 'assignment.detail = detail.uuid', 'right')
+      ->where('assignment.jabatan_group', $jabatanGroup);
+    } else $this->Users->filterListItem();
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")

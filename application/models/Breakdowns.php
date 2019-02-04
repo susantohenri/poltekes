@@ -23,7 +23,7 @@ class Breakdowns extends MY_Model {
     return parent::dt();
   }
 
-  function getListItem ($jabatanGroup) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->table = 'program';
 
     return $this->db

@@ -140,7 +140,7 @@ class Programs extends MY_Model {
     return $program;
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
     $this->Users->filterListItem();
     return 

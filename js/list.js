@@ -74,6 +74,9 @@ function expandItem (btn, cb) {
 	var requests = []
 	for (var uuid of parent.childUuids) {
 		var url = site_url + parent.childController + '/subformlist/' + uuid
+		if (window.location.href.includes('Breakdown')) {
+			url += '/' + window.location.href.split('/').pop()
+		}
 		if ('Spj' === parent.childController && uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
 		requests.push($.ajax({
 			url: url,

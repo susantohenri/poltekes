@@ -23,7 +23,11 @@ class Breakdown extends MY_Controller {
 	    $data['page_name'] = 'breakdown-list';
 	    $model = $this->model;
 	    $record = $this->$model->findOne($id);
-	    $data['item'] = $this->$model->getListItem($id);
+
+	    $this->load->model('Programs');
+	    $programs = $this->Programs->find();
+	    $data['item'] = $this->$model->getListItem($programs[0]->uuid, $id);
+
 	    $data['nama_jabatan_group'] = $record['nama'];
 	    $data['allow_edit_pagu'] = true;
 	    $this->loadview('index', $data);

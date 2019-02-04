@@ -161,7 +161,7 @@ class Spjs extends MY_Model {
       ->generate();
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
     $this->Users->filterListItem();
     $spj = $this->db
