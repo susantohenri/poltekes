@@ -2,6 +2,7 @@ window.onload = function () {
 
   formInit()
   calculateSpj()
+  if (window.location.href.includes('Breakdown')) $('[name="jabatan_group[]"]').siblings().css('width','100%')
   $('[name="last_submit"]').parent('form').submit(function () {
     $('[data-number]').each (function () {
       $(this).val(getNumber($(this)))
@@ -65,43 +66,7 @@ function formInit () {
           url: current_controller + '/select2/' + model + '/' + field,
           type: 'POST', dataType: 'json'
         }
-      }).on('select2:select', function (evt) {
-          var selectID = $(this).attr('id');
-          var uid = $(".select2-hidden-accessible[id="+selectID+"] option:selected").val();
-          // var text = $(".select2-hidden-accessible[id="+selectID+"] option:selected").text();
-          if(selectID == 'Provinces'){
-              $('#Regencies').select2({
-                 ajax: {
-                   url: current_controller + '/select2region/'+ model + '/Regencies/' + uid + '/' + field,
-                   type: 'POST', dataType: 'json'
-                 }
-              })     
-              $('#Regencies').val(null).trigger('change');
-              $('#Districts').val(null).trigger('change');
-              $('#Villages').val(null).trigger('change');                                
-           }
-          else if(selectID == 'Regencies'){    
-              $('#Districts').select2({
-                ajax: {
-                  url: current_controller + '/select2region/'+ model + '/Districts/' + uid + '/' + field,
-                  type: 'POST', dataType: 'json'
-                }
-              })    
-              $('#Districts').val(null).trigger('change');
-              $('#Villages').val(null).trigger('change');                   
-          } 
-          else if(selectID == 'Districts'){
-              $('#Villages').select2({
-                ajax: {
-                  url: current_controller + '/select2region/' + model + '/Villages/' + uid + '/' + field,
-                  type: 'POST', dataType: 'json'
-                }
-              })    
-              $('#Villages').val(null).trigger('change');                   
-          }             
-           else{ 
-         }
-       });                
+      })
     } else if ($(this).is ('[data-suggestion]')) {
       $(this).select2({
         tags: true,
