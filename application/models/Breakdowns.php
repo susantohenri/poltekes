@@ -176,11 +176,22 @@ class Breakdowns extends MY_Model {
       ->result();
   }
 
-  function setGroup ($groups, $details) {
+  function setGroup ($groups, $entity, $uuid) {
     $this->load->model('Assignments');
     $this->db
-      ->where_in('detail', $details)
+      ->where_in('detail', "
+        SELECT DISTINCT `detail`.`uuid` FROM `program`
+        LEFT JOIN `kegiatan` ON `program`.`uuid` = `kegiatan`.`program`
+        LEFT JOIN `output` ON `kegiatan`.`uuid` = `output`.`kegiatan`
+        LEFT JOIN `sub_output` ON `output`.`uuid` = `sub_output`.`output`
+        LEFT JOIN `komponen` ON `sub_output`.`uuid` = `komponen`.`sub_output`
+        LEFT JOIN `sub_komponen` ON `komponen`.`uuid` = `sub_komponen`.`komponen`
+        LEFT JOIN `akun` ON `sub_komponen`.`uuid` = `akun`.`sub_komponen`
+        LEFT JOIN `detail` ON `akun`.`uuid` = `detail`.`akun`
+        WHERE `{$entity}`.`uuid` = '{$uuid}'
+      ", false)
       ->delete('assignment');
+    $details = array_column($this->getDetails($entity, $uuid), 'uuid');
     foreach ($groups as $group) {
       foreach ($details as $detail) {
         $this->Assignments->save(array(
@@ -192,8 +203,7 @@ class Breakdowns extends MY_Model {
   }
 
   function updateAssignment ($entity, $uuid, $groups) {
-    $details = $this->getDetails($entity, $uuid);
-    $this->setGroup($groups, $details);
+    $this->setGroup($groups, $entity, $uuid);
     return true;
   }
 

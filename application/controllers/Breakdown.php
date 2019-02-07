@@ -26,6 +26,7 @@ class Breakdown extends MY_Controller {
 
 	    $this->load->model('Programs');
 	    $programs = $this->Programs->find();
+	    if (!isset ($programs[0])) redirect(site_url ('Breakdown'));
 	    $data['item'] = $this->$model->getListItem($programs[0]->uuid, $id);
 
 	    $data['nama_jabatan_group'] = $record['nama'];
