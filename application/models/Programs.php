@@ -129,7 +129,7 @@ class Programs extends MY_Model {
           'uraian' => $cell[1],
           'vol' => $cell[2],
           'sat' => $cell[3],
-          'hargasat' => $cell[4],
+          'hargasat' => $cell[2] < 1 ? 0 : $cell[5] / $cell[2],
         ));
         $this->Assignments->save(array(
           'jabatan_group' => $jabatanGroup,

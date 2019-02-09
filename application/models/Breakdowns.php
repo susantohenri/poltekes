@@ -60,7 +60,6 @@ class Breakdowns extends MY_Model {
     $entity= $entity['table'];
     $this->load->model($model);
     $record = $this->{$model}->findOne($uuid);
-    $details= $this->getDetails($entity, $uuid);
     $groups = $this->getGroup($entity, $uuid);
     $options= array();
     foreach ($groups as $group) $options[] = array(
