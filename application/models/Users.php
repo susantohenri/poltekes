@@ -71,53 +71,25 @@ class Users extends MY_Model {
     return parent::dt();
   }
 
-  function filterByRole () {
-    $filters = array();
-    $this->load->model(array('Jabatans'));
-    $topdown = $this->Jabatans->getTopDown($this->session->userdata('jabatan'));
-    $groups = $this->db
+  function filterByJabatan ($class, $jabatan = false) {
+    if (!$jabatan) $jabatan = $this->session->userdata('jabatan');
+    $this->load->model('Jabatans');
+    $topdown = $this->Jabatans->getTopDown($jabatan);
+
+    $groups = array();
+    $getGroup = $this->db
       ->distinct()
       ->select('jabatan_group')
       ->where_in('uuid', $topdown)
-      ->get('jabatan')
-      ->result();
-    $include_group = array();
-    foreach ($groups as $g) $include_group[] = $g->jabatan_group;
-    $details = $this->db
-      ->distinct()
-      ->select('detail')
-      ->where_in('jabatan_group', $include_group)
-      ->get('assignment')
-      ->result();
-    $include_detail = array();
-    foreach ($details as $d) $include_detail[] = $d->detail;
-    if (count ($include_detail) > 0) $filters[] = array('fn' => 'where_in', 'field' => 'detail.uuid', 'value' => $include_detail);
-    return $filters;
-  }
+      ->get('jabatan');
+    foreach ($getGroup->result() as $g) $groups[] = $g->jabatan_group;
 
-  function filterDt () {
-    foreach ($this->filterByRole() as $filter) {
-      $fn = $filter['fn'];
-      $field = $filter['field'];
-      $value = $filter['value'];
-      if ('or_where_in' === $fn) $this->datatables->or_where("{$field} IN ('{$value}')");
-      else $this->datatables->$fn($field, $value);
+    if (isset ($groups[0]) && !empty ($groups[0])) {
+      $groups = $this->arrayToWhereIn ($groups);
+      $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$groups}))");
     }
-    $this->joinRelatedTables($this->datatables);
-  }
 
-  function filterListItem () {
-    foreach ($this->filterByRole() as $filter) {
-      $fn = $filter['fn'];
-      $field = $filter['field'];
-      $value = $filter['value'];
-      $this->db->$fn($field, $value);
-    }
-    $this->joinRelatedTables($this->db);
-  }
-
-  function joinRelatedTables ($obj) {
-    $obj
+    $class
       ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
       ->join('output', "kegiatan.uuid = output.kegiatan", 'left')
       ->join('sub_output', "output.uuid = sub_output.output", 'left')
@@ -130,6 +102,14 @@ class Users extends MY_Model {
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
       ->from('program');
+  }
+
+  function arrayToWhereIn ($array) {
+    $string = json_encode($array);
+    $string = str_replace('"', "'", $string);
+    $string = str_replace('[', '', $string);
+    $string = str_replace(']', '', $string);
+    return $string;
   }
 
 }

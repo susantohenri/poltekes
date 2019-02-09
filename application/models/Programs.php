@@ -142,7 +142,7 @@ class Programs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterListItem();
+    $this->Users->filterByJabatan($this->db);
     return 
     $this->db
       ->where("{$this->table}.uuid", $uuid)
@@ -160,8 +160,9 @@ class Programs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterDt();
-    return $this->datatables
+    $this->Users->filterByJabatan($this->datatables);
+    return 
+    $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
@@ -170,6 +171,7 @@ class Programs extends MY_Model {
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
+      // die($this->db->last_query());
   }
 
   function getForm ($uuid = false, $isSubform = false) {

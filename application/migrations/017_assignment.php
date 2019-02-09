@@ -11,7 +11,8 @@ class Migration_assignment extends CI_Migration {
         `jabatan_group` varchar(255) NOT NULL,
         `detail` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `jabatan_group` (`jabatan_group`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

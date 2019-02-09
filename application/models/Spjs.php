@@ -146,7 +146,7 @@ class Spjs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterDt();
+    $this->Users->filterByJabatan($this->datatables);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
@@ -163,7 +163,7 @@ class Spjs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterListItem();
+    $this->Users->filterByJabatan($this->db);
     $spj = $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")

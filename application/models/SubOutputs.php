@@ -44,7 +44,7 @@ class SubOutputs extends MY_Model {
       $this->db
       ->join('assignment', 'assignment.detail = detail.uuid', 'right')
       ->where('assignment.jabatan_group', $jabatanGroup);
-    } else $this->Users->filterListItem();
+    } else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
@@ -63,7 +63,7 @@ class SubOutputs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterDt();
+    $this->Users->filterByJabatan($this->datatables);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
