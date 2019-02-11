@@ -17,7 +17,8 @@ class Breakdowns extends MY_Model {
     $this->datatables
       ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama")
       ->select("IFNULL(SUM(detail.hargasat * detail.vol), 0) as pagu", false)
-      ->join('assignment', "{$this->table}.uuid = assignment.jabatan_group", 'left')
+      ->join('topdown', 'jabatan_group.uuid = topdown.jabatan_group', 'left')
+      ->join('assignment', 'find_in_set(concat("\'",assignment.jabatan_group,"\'"), topdown.bawahan)', 'left')
       ->join('detail', 'detail.uuid = assignment.detail', 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();

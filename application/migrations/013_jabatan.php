@@ -26,6 +26,17 @@ class Migration_jabatan extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
+    $this->db->query("
+      CREATE TABLE `topdown` (
+        `uuid` varchar(255) NOT NULL,
+        `jabatan_group` varchar(255) NOT NULL,
+        `bawahan` text NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
+        PRIMARY KEY (`uuid`),
+        KEY `jabatan_group` (`jabatan_group`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+
     $this->load->model(array('Jabatans', 'Permissions', 'JabatanGroups'));
     $entities = $this->Permissions->getEntities();
 
@@ -217,6 +228,7 @@ class Migration_jabatan extends CI_Migration {
   function down () {
     $this->db->query("DROP TABLE `jabatan`");
     $this->db->query("DROP TABLE `jabatan_group`");
+    $this->db->query("DROP TABLE `topdown`");
   }
 
 }

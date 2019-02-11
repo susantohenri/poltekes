@@ -73,21 +73,10 @@ class Users extends MY_Model {
 
   function filterByJabatan ($class, $jabatan = false) {
     if (!$jabatan) $jabatan = $this->session->userdata('jabatan');
-    $this->load->model('Jabatans');
-    $topdown = $this->Jabatans->getTopDown($jabatan);
 
-    $groups = array();
-    $getGroup = $this->db
-      ->distinct()
-      ->select('jabatan_group')
-      ->where_in('uuid', $topdown)
-      ->get('jabatan');
-    foreach ($getGroup->result() as $g) $groups[] = $g->jabatan_group;
-
-    if (isset ($groups[0]) && !empty ($groups[0])) {
-      $groups = $this->arrayToWhereIn ($groups);
-      $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$groups}))");
-    }
+    $this->load->model('TopDowns');
+    $groups = $this->TopDowns->getFilterByJabatan($jabatan);
+    if ($groups) $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$groups}))");
 
     $class
       ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
@@ -102,14 +91,6 @@ class Users extends MY_Model {
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
       ->from('program');
-  }
-
-  function arrayToWhereIn ($array) {
-    $string = json_encode($array);
-    $string = str_replace('"', "'", $string);
-    $string = str_replace('[', '', $string);
-    $string = str_replace(']', '', $string);
-    return $string;
   }
 
 }
