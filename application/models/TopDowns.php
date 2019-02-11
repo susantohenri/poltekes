@@ -45,20 +45,6 @@ class TopDowns extends MY_Model {
     }
   }
 
-  function getFilterByJabatanGroup ($jabatanGroup) {
-    $record = $this->findOne(array('jabatan_group' => $jabatanGroup));
-    if (!$record) return false;
-    else if (strlen ($record['bawahan']) < 1) return false;
-    else return $record['bawahan'];
-  }
-
-  function getFilterByJabatan ($jabatan) {
-    $this->load->model('Jabatans');
-    $record = $this->Jabatans->findOne($jabatan);
-    if (!$record) return false;
-    else return $this->getFilterByJabatanGroup($record['jabatan_group']);
-  }
-
   function arrayToWhereIn ($array) {
     $string = json_encode($array);
     $string = str_replace('"', "'", $string);

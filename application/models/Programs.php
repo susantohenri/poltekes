@@ -142,7 +142,8 @@ class Programs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->db);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    else $this->Users->filterByJabatan($this->db);
     return 
     $this->db
       ->where("{$this->table}.uuid", $uuid)

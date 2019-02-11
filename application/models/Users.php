@@ -71,12 +71,12 @@ class Users extends MY_Model {
     return parent::dt();
   }
 
-  function filterByJabatan ($class, $jabatan = false) {
-    if (!$jabatan) $jabatan = $this->session->userdata('jabatan');
-
+  function filterByJabatanGroup ($class, $jabatanGroup) {
     $this->load->model('TopDowns');
-    $groups = $this->TopDowns->getFilterByJabatan($jabatan);
-    if ($groups) $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$groups}))");
+    $topdown = $this->TopDowns->findOne(array('jabatan_group' => $jabatanGroup));
+    if ($topdown && strlen ($topdown['bawahan']) > 0) {
+      $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$topdown['bawahan']}))");
+    }
 
     $class
       ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
@@ -91,6 +91,13 @@ class Users extends MY_Model {
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
       ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
       ->from('program');
+  }
+
+  function filterByJabatan ($class, $jabatan = false) {
+    if (!$jabatan) $jabatan = $this->session->userdata('jabatan');
+    $this->load->model('Jabatans');
+    $jab = $this->Jabatans->findOne($jabatan);
+    $this->filterByJabatanGroup($class, $jab['jabatan_group']);
   }
 
 }

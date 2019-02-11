@@ -40,12 +40,8 @@ class Komponens extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) {
-      $this->Users->joinRelatedTables($this->db);
-      $this->db
-      ->join('assignment', 'assignment.detail = detail.uuid', 'right')
-      ->where('assignment.jabatan_group', $jabatanGroup);
-    } else $this->Users->filterByJabatan($this->db);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
