@@ -36,10 +36,14 @@ class Breakdowns extends MY_Model {
     $record = $this->{$model}->findOne($uuid);
     $groups = $this->getGroup($entity, $uuid);
     $options= array();
-    foreach ($groups as $group) $options[] = array(
-      'text' => $group->nama,
-      'value'=> $group->jabatan_group,
-    );
+    $values = array();
+    foreach ($groups as $group) {
+      $values[] = $group->jabatan_group;
+      $options[] = array(
+        'text' => $group->nama,
+        'value'=> $group->jabatan_group,
+      );
+    }
 
     $this->form[]= array(
       'name' => 'uraian',
@@ -56,7 +60,7 @@ class Breakdowns extends MY_Model {
         array('data-model' => 'JabatanGroups'), 
         array('data-field' => 'nama')
       ),
-      'value' => array_column($groups, 'jabatan_group')
+      'value' => $values
     );
     $this->form[] = array(
       'name' => 'entity',
@@ -164,7 +168,8 @@ class Breakdowns extends MY_Model {
         WHERE `{$entity}`.`uuid` = '{$uuid}'
       ", false)
       ->delete('assignment');
-    $details = array_column($this->getDetails($entity, $uuid), 'uuid');
+    $details = array();
+    foreach ($this->getDetails($entity, $uuid) as $detail) $details[] = $detail->uuid;
     foreach ($groups as $group) {
       foreach ($details as $detail) {
         $this->Assignments->save(array(
