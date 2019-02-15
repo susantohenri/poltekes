@@ -53,4 +53,16 @@ class TopDowns extends MY_Model {
     return $string;
   }
 
+  function getHierarchi ($groups) {
+    foreach ($groups as $group) {
+      $topdown = $this->TopDowns->findOne(array('jabatan_group' => $group));
+      if (isset ($topdown['bawahan']) && strlen($topdown['bawahan']) > 0) {
+        foreach (explode(',', $topdown['bawahan']) as $bwh) {
+          if (!in_array($bwh, $groups)) $groups[] = str_replace("'", '', $bwh);
+        }
+      }
+    }
+    return $groups;
+  }
+
 }

@@ -153,35 +153,22 @@ class Breakdowns extends MY_Model {
       ->result();
   }
 
-  function setGroup ($groups, $entity, $uuid) {
-    $this->load->model('Assignments');
-    $this->db
-      ->where_in('detail', "
-        SELECT DISTINCT `detail`.`uuid` FROM `program`
-        LEFT JOIN `kegiatan` ON `program`.`uuid` = `kegiatan`.`program`
-        LEFT JOIN `output` ON `kegiatan`.`uuid` = `output`.`kegiatan`
-        LEFT JOIN `sub_output` ON `output`.`uuid` = `sub_output`.`output`
-        LEFT JOIN `komponen` ON `sub_output`.`uuid` = `komponen`.`sub_output`
-        LEFT JOIN `sub_komponen` ON `komponen`.`uuid` = `sub_komponen`.`komponen`
-        LEFT JOIN `akun` ON `sub_komponen`.`uuid` = `akun`.`sub_komponen`
-        LEFT JOIN `detail` ON `akun`.`uuid` = `detail`.`akun`
-        WHERE `{$entity}`.`uuid` = '{$uuid}'
-      ", false)
-      ->delete('assignment');
-    $details = array();
-    foreach ($this->getDetails($entity, $uuid) as $detail) $details[] = $detail->uuid;
-    foreach ($groups as $group) {
-      foreach ($details as $detail) {
-        $this->Assignments->save(array(
-          'jabatan_group' => $group,
-          'detail' => $detail
-        ));
-      }
-    }
-  }
-
   function updateAssignment ($entity, $uuid, $groups) {
-    $this->setGroup($groups, $entity, $uuid);
+    $details = array();
+    $existing = array();
+    foreach ($this->getDetails($entity, $uuid) as $detail) $details[] = $detail->uuid;
+    foreach ($this->getGroup($entity, $uuid) as $group) $existing[] = $group->jabatan_group;
+    $this->load->model('Assignments');
+
+    // untuk pengurangan, berlaku hierarichal. utk penambahan, tidak
+    $this->load->model('TopDowns');
+    $dikurangkan = array_diff($existing, $groups);
+    $dikurangkan = $this->TopDowns->getHierarchi ($dikurangkan);    
+    $this->Assignments->bulkDelete($dikurangkan, $details);
+
+    $ditambahkan = array_diff($groups, $existing);
+    $this->Assignments->bulkInsert($ditambahkan, $details);
+
     return true;
   }
 
