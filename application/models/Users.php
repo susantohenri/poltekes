@@ -89,7 +89,7 @@ class Users extends MY_Model {
       ->join('detail', "akun.uuid = detail.akun", 'left')
       ->join('spj', "detail.uuid = spj.detail", 'left')
       ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
-      ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
+      ->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM lampiran GROUP BY lampiran.spj) as spj_lampiran', "spj_lampiran.spj = spj.uuid", 'left')
       ->from('program');
   }
 

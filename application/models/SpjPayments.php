@@ -54,8 +54,8 @@ class SpjPayments extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.detail parent", false)
       ->select("FORMAT(SUM(amount), 0) paid", false)
-      ->select("FORMAT(SUM(spj_item.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
-      ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
+      ->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM item GROUP BY lampiran.spj) as spj_item', "spj_lampiran.spj = spj.uuid", 'left')
       ->join('payment', 'payment.spj = spj.uuid', 'left');
     return parent::findOne($param);
   }
@@ -67,7 +67,7 @@ class SpjPayments extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)

@@ -47,7 +47,7 @@ class SubKomponens extends MY_Model {
       ->select("{$this->table}.*")
       ->select("{$this->table}.komponen parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT akun.uuid) childUuid", false)
       ->select("'Akun' childController", false)
@@ -67,7 +67,7 @@ class SubKomponens extends MY_Model {
       ->select('sub_komponen.kode as kode_sub_komponen', false)
       ->select('sub_komponen.uraian as uraian_sub_komponen', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();

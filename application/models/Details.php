@@ -79,9 +79,9 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat", false)
       ->select("FORMAT({$this->table}.hargasat * {$this->table}.vol, 0) pagu", false)
-      ->select("FORMAT(SUM(spj_item.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
       ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
-      ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
+      ->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM lampiran GROUP BY lampiran.spj) as spj_lampiran', "spj_lampiran.spj = spj.uuid", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::findOne($param);
   }
@@ -97,7 +97,7 @@ class Details extends MY_Model {
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.hargasat * {$this->table}.vol as pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
@@ -114,7 +114,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)
