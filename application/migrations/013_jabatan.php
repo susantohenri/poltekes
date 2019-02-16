@@ -148,9 +148,13 @@ class Migration_jabatan extends CI_Migration {
       }
     }
 
+    $group_direktorat = $this->JabatanGroups->create(array(
+      'nama' => 'Direktorat'
+    ));
     foreach (array ('Bendahara Gaji', 'Bendahara Pembantu Pengeluaran Direktorat') as $custom) $this->Jabatans->save(array(
       'nama' => $custom,
       'parent' => $verifDir,
+      'jabatan_group' => $group_direktorat
     ));
 
     foreach (array(
