@@ -318,7 +318,7 @@
             <script type="text/javascript" src="<?= base_url('js/select2.full.min.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/bootstrap-datepicker.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/form.js') ?>"></script>
-        <?php elseif ('list' === $page_name): ?>
+        <?php elseif (in_array($page_name, array('list','breakdown-list'))): ?>
             <script type="text/javascript" src="<?= base_url('js/list.js') ?>"></script>
             <script type="text/javascript" src="<?= base_url('js/bootbox.min.js') ?>"></script>
         <?php elseif ('dashboard' === $page_name): ?>

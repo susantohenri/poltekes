@@ -88,7 +88,7 @@ class Details extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterDt();
+    $this->Users->filterByJabatan($this->datatables);
     return 
     $this->datatables
       ->select("{$this->table}.uuid")
@@ -103,9 +103,10 @@ class Details extends MY_Model {
       ->generate();
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterListItem();
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
@@ -129,6 +130,13 @@ class Details extends MY_Model {
       foreach ($child as &$c) if (is_array ($c)) $c = implode(',', str_replace(',', '[comma-replacement]', $c));
       $this->update($child);
     }
+  }
+
+  function delete ($uuid) {
+    parent::delete($uuid);
+    $this->db
+      ->where('detail', $uuid)
+      ->delete('assignment');
   }
 
 }

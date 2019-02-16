@@ -9,12 +9,24 @@ class Jabatans extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'urutan', 'visible' => false),
       (object) array('mData' => 'nama', 'sTitle' => 'Jabatan'),
+      (object) array('mData' => 'nama_group', 'sTitle' => 'Group'),
       (object) array('mData' => 'parent_name', 'sTitle' => 'Atasan', 'width' => '30%', 'searchable' => false),
     );
 
     $this->form[]= array(
     	'name' => 'nama',
     	'label'=> 'Jabatan'
+    );
+
+    $this->form[]= array(
+      'name'    => 'jabatan_group',
+      'label'   => 'Group',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'JabatanGroups'), 
+        array('data-field' => 'nama')
+      ),
     );
 
     $this->form[]= array(
@@ -35,10 +47,26 @@ class Jabatans extends MY_Model {
   function dt () {
     $this->datatables
       ->select("{$this->table}.uuid, {$this->table}.urutan, {$this->table}.nama")
+      ->select("jabatan_group.nama as nama_group", false)
       ->select("GROUP_CONCAT(parent.nama SEPARATOR ', ') as parent_name", false)
       ->join('`jabatan` `parent`', "parent.uuid = {$this->table}.parent", 'left')
+      ->join('`jabatan_group`', "jabatan_group.uuid = {$this->table}.jabatan_group", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::dt();
+  }
+
+  function save ($record) {
+    $result = parent::save($record);
+    $this->load->model('TopDowns');
+    $this->TopDowns->recalculate();
+    return $result;
+  }
+
+  function delete ($uuid) {
+    $result = parent::delete($uuid);
+    $this->load->model('TopDowns');
+    $this->TopDowns->recalculate();
+    return $result;
   }
 
   function getUserAttr (&$user) {

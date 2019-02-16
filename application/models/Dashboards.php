@@ -10,7 +10,7 @@ class Dashboards extends MY_Model {
   }
 
   function penyerapanAnggaran () {
-  	$this->Users->filterListItem();
+  	$this->Users->filterByJabatan($this->db);
   	return $this->db
   		->select("DATE_FORMAT(transfer_time, '%Y-%m') x", false)
   		->select("SUM(amount) y", false)
@@ -25,7 +25,7 @@ class Dashboards extends MY_Model {
   }
 
   function gauge () {
-    $this->Users->filterListItem();
+    $this->Users->filterByJabatan($this->db);
     return $this->db
       ->select("IFNULL(SUM(detail.vol * detail.hargasat), 0) pagu", false)
       ->select("IFNULL(SUM(payment.amount), 0) realisasi", false)
@@ -40,7 +40,7 @@ class Dashboards extends MY_Model {
   }
 
   function komposisiRealisasi () {
-    $this->Users->filterListItem();
+    $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
       ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'B. Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'B. Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'B. Modal' END) as absis", false)
@@ -54,7 +54,7 @@ class Dashboards extends MY_Model {
   }
 
   function komposisiAlokasi () {
-    $this->Users->filterListItem();
+    $this->Users->filterByJabatan($this->db);
     $result = $this->db
       ->where_in("SUBSTR(akun.kode, 1, 2)", array(51, 52, 53))
       ->select("CONCAT(SUBSTR(akun.kode, 1, 2), ' ', CASE WHEN SUBSTR(akun.kode, 1, 2) = 51 THEN 'Belanja Pegawai' WHEN SUBSTR(akun.kode, 1, 2) = 52 THEN 'Belanja Barang' WHEN SUBSTR(akun.kode, 1, 2) = 53 THEN 'Belanja Modal' END) as label", false)

@@ -2,6 +2,7 @@ window.onload = function () {
 
   formInit()
   calculateSpj()
+  if (window.location.href.includes('Breakdown')) $('[name="jabatan_group[]"]').siblings().css('width','100%')
   $('[name="last_submit"]').parent('form').submit(function () {
     $('[data-number]').each (function () {
       $(this).val(getNumber($(this)))
@@ -31,7 +32,6 @@ window.onload = function () {
         elements.remove()
         for( var i = 0; i < sorted.length; ++i ) html += sorted[i].outerHTML
         fchild.prepend(html)
-        if (window.location.href.indexOf('Breakdown') > -1) jabatanFilternDropDown()
         formInit()
       }
     }})
@@ -39,7 +39,6 @@ window.onload = function () {
       var beforeButton = $(this).parents('.form-group');
       $.get(controller + '/subformcreate/', function (form) {
         $(form).insertBefore(beforeButton)
-        if (window.location.href.indexOf('Breakdown') > -1) jabatanFilternDropDown()
         formInit()
       })
     })
@@ -67,43 +66,7 @@ function formInit () {
           url: current_controller + '/select2/' + model + '/' + field,
           type: 'POST', dataType: 'json'
         }
-      }).on('select2:select', function (evt) {
-          var selectID = $(this).attr('id');
-          var uid = $(".select2-hidden-accessible[id="+selectID+"] option:selected").val();
-          // var text = $(".select2-hidden-accessible[id="+selectID+"] option:selected").text();
-          if(selectID == 'Provinces'){
-              $('#Regencies').select2({
-                 ajax: {
-                   url: current_controller + '/select2region/'+ model + '/Regencies/' + uid + '/' + field,
-                   type: 'POST', dataType: 'json'
-                 }
-              })     
-              $('#Regencies').val(null).trigger('change');
-              $('#Districts').val(null).trigger('change');
-              $('#Villages').val(null).trigger('change');                                
-           }
-          else if(selectID == 'Regencies'){    
-              $('#Districts').select2({
-                ajax: {
-                  url: current_controller + '/select2region/'+ model + '/Districts/' + uid + '/' + field,
-                  type: 'POST', dataType: 'json'
-                }
-              })    
-              $('#Districts').val(null).trigger('change');
-              $('#Villages').val(null).trigger('change');                   
-          } 
-          else if(selectID == 'Districts'){
-              $('#Villages').select2({
-                ajax: {
-                  url: current_controller + '/select2region/' + model + '/Villages/' + uid + '/' + field,
-                  type: 'POST', dataType: 'json'
-                }
-              })    
-              $('#Villages').val(null).trigger('change');                   
-          }             
-           else{ 
-         }
-       });                
+      })
     } else if ($(this).is ('[data-suggestion]')) {
       $(this).select2({
         tags: true,
@@ -203,14 +166,4 @@ function markMinus (spj_total) {
   var inlineStyle = $('[name="total_spj"]').attr('style') || ''
   if (spj_total > getNumber ($('[name="pagu"]'))) $('[name="total_spj"]').css('background-color', '#ffcccc')
   else $('[name="total_spj"]').attr('style', inlineStyle.replace('background-color: rgb(255, 204, 204);', ''))
-}
-
-function jabatanFilternDropDown () {
-  $('[name*="level"]').change(function () {
-    var model = $(this).val().replace(' ', '') + 's'
-    var row = $(this).parent().parent()
-    row.find('[name*="kode"]').val('')
-    row.find('select[name*="item"]').attr('data-model', model).val('').select2('destroy')
-    formInit()
-  })
 }

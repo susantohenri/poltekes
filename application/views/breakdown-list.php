@@ -10,7 +10,7 @@
         <div class="row">
             <div class="col-sm-6">
                 <h1 class="title"> <?= $page_title ?> </h1>
-                <p class="title-description"> Detail <?= $page_title ?> </p>
+                <p class="title-description"> <?= "$page_title $nama_jabatan_group" ?> </p>
             </div>
             <div class="col-sm-6 text-right">
                 <?php if (in_array('update', $permitted_actions)) : ?>
@@ -69,10 +69,6 @@
                         <div class="item-col item-col-header fixed col-sm-8">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
-                                <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>
-                                    &nbsp; <a href="<?= site_url("{$current['controller']}/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                                    &nbsp; <a target="_blank" href="<?= site_url("Breakdown/Assign/{$current['controller']}/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square"></i> Breakdown</a>
-                                <?php endif ?>
                             </div>
                         </div>
                         <div class="item-col item-col-header text-right">

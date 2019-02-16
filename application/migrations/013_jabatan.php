@@ -6,29 +6,38 @@ class Migration_jabatan extends CI_Migration {
   function up () {
 
     $this->db->query("
-      CREATE TABLE `jabatan` (
+      CREATE TABLE `jabatan_group` (
         `uuid` varchar(255) NOT NULL,
         `nama` varchar(255) NOT NULL,
-        `parent` varchar(255) NOT NULL,
+        `kode` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
     $this->db->query("
-      CREATE TABLE `jabatan_filter` (
+      CREATE TABLE `jabatan` (
         `uuid` varchar(255) NOT NULL,
-        `jabatan` varchar(255) NOT NULL,
-        `type` varchar(255) NOT NULL,
-        `level` varchar(255) NOT NULL,
-        `kode` varchar(255) NOT NULL,
-        `item` text NOT NULL,
+        `nama` varchar(255) NOT NULL,
+        `parent` varchar(255) NOT NULL,
+        `jabatan_group` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
         PRIMARY KEY (`uuid`)
-      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
-    $this->load->model(array('Jabatans', 'JabatanFilters', 'Permissions'));
+    $this->db->query("
+      CREATE TABLE `topdown` (
+        `uuid` varchar(255) NOT NULL,
+        `jabatan_group` varchar(255) NOT NULL,
+        `bawahan` text NOT NULL,
+        `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
+        PRIMARY KEY (`uuid`),
+        KEY `jabatan_group` (`jabatan_group`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+
+    $this->load->model(array('Jabatans', 'Permissions', 'JabatanGroups'));
     $entities = $this->Permissions->getEntities();
 
     $planner = $this->Jabatans->save(array('nama' => 'Perencanaan'));
@@ -56,7 +65,7 @@ class Migration_jabatan extends CI_Migration {
     }
     $verifDir = $atasan;
 
-    foreach (array (
+    $jurusans = array (
       array ("A", "Jurusan Keperawatan"), 
       array ("B", "Jurusan Kebidanan"), 
       array ("C", "Jurusan Keperawatan Gigi"), 
@@ -65,23 +74,21 @@ class Migration_jabatan extends CI_Migration {
       array ("F", "Jurusan Analis Kesehatan"), 
       array ("G", "Jurusan Teknik Radiodiagnostik & Radioterapi"), 
       array ("H", "Jurusan Rekam Medis dan Informasi Kesehatan"),
-    ) as $jur) {
+    );
+    $benjurs = array();
+    foreach ($jurusans as $jur) {
+      $group = $this->JabatanGroups->create(array('nama' => $jur[1], 'kode' => $jur[0]));
       $parent = array();
       foreach (array ('Kepala / Sekretaris', 'Bendahara') as $jabatan) {
         $kode = $jur[0];
         $jurusan = $jur[1];
         $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$jurusan}",
-          'parent' => 0 < count($parent) ? implode(',', $parent) : $verifDir
+          'parent' => 0 < count($parent) ? implode(',', $parent) : $verifDir,
+          'jabatan_group' => $group
         ));
+        if ('Bendahara' === $jabatan) $benjurs[$kode] = $jab;
         $parent[] = $jab;
-        $this->JabatanFilters->create(array(
-          'jabatan' => $jab,
-          'type' => 'AND',
-          'level'=> 'Sub Komponen',
-          'kode' => "{$kode}%",
-          'item' => ''
-        ));
       }
     }
 
@@ -126,29 +133,28 @@ class Migration_jabatan extends CI_Migration {
       array ("HA", "D-III Rekam Medis dan Informasi Kesehatan"), 
       array ("HB", "D-IV Rekam Medis dan Informasi Kesehatan")
     ) as $prod) {
+      $group = $this->JabatanGroups->create(array('nama' => "Prodi {$prod[1]}", 'kode' => "{$prod[0]}"));
       $kode = $prod[0];
       $prodi= $prod[1];
       $parent = array();
-      $jurusan= $this->Jabatans->findOne(array('nama LIKE' => 'Bendahara%'));
+      $jurusan = $benjurs[substr($kode, 0, -1)];
       foreach (array ('Kaprodi / Sekretaris Prodi', 'Bendahara Prodi') as $jabatan) {
         $jab = $this->Jabatans->save(array(
           'nama' => "{$jabatan} {$prodi}",
-          'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan['uuid'],
+          'parent' => 0 < count($parent) ? implode(',', $parent) : $jurusan,
+          'jabatan_group' => $group
         ));
         $parent[] = $jab;
-        $this->JabatanFilters->create(array(
-          'jabatan' => $jab,
-          'type' => 'AND',
-          'level'=> 'Sub Komponen',
-          'kode' => "{$kode}",
-          'item' => ''
-        ));
       }
     }
 
+    $group_direktorat = $this->JabatanGroups->create(array(
+      'nama' => 'Direktorat'
+    ));
     foreach (array ('Bendahara Gaji', 'Bendahara Pembantu Pengeluaran Direktorat') as $custom) $this->Jabatans->save(array(
       'nama' => $custom,
       'parent' => $verifDir,
+      'jabatan_group' => $group_direktorat
     ));
 
     foreach (array(
@@ -161,26 +167,32 @@ class Migration_jabatan extends CI_Migration {
       'Asrama',
       'Pengembangan Bahasa'
     ) as $unit) {
+      $group = $this->JabatanGroups->create(array('nama' => "Unit {$unit}"));
       $kepalaUnit = $this->Jabatans->save(array(
         'nama' => "Kepala Unit {$unit}",
         'parent' => $verifDir,
+        'jabatan_group' => $group
       ));
       $this->Jabatans->save(array(
         'nama' => "Bendahara Unit {$unit}",
-        'parent' => $kepalaUnit
+        'parent' => $kepalaUnit,
+        'jabatan_group' => $group
       ));
     }
 
     foreach (array(
       'PPM'
     ) as $urusan) {
+      $group = $this->JabatanGroups->create(array('nama' => "Urusan {$urusan}"));
       $kepalaUrusan = $this->Jabatans->save(array(
         'nama' => "Kepala Urusan {$urusan}",
         'parent' => $verifDir,
+        'jabatan_group' => $group
       ));
       $this->Jabatans->save(array(
         'nama' => "Bendahara Urusan {$urusan}",
         'parent' => $kepalaUrusan,
+        'jabatan_group' => $group
       ));
     }
 
@@ -219,7 +231,8 @@ class Migration_jabatan extends CI_Migration {
 
   function down () {
     $this->db->query("DROP TABLE `jabatan`");
-    $this->db->query("DROP TABLE `jabatan_filter`");
+    $this->db->query("DROP TABLE `jabatan_group`");
+    $this->db->query("DROP TABLE `topdown`");
   }
 
 }

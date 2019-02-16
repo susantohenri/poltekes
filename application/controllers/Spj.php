@@ -2,7 +2,7 @@
 
 class Spj extends MY_Controller {
 
-  function subformlist ($uuid) {
+  function subformlist ($uuid, $jabatanGroup = null) {
     $this->load->model('Permissions');
     $perms = $this->Permissions->getPermittedActions($this->controller);
     if (!in_array('read', $perms)) return false;

@@ -37,9 +37,11 @@ class Kegiatans extends MY_Model {
 
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterListItem();
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    else $this->Users->filterByJabatan($this->db);
+
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
@@ -58,7 +60,7 @@ class Kegiatans extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterDt();
+    $this->Users->filterByJabatan($this->datatables);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")

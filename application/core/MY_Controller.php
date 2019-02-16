@@ -121,13 +121,13 @@ class MY_Controller extends CI_Controller {
     $this->loadview('index', $data);
   }
 
-  function subformlist ($uuid) {
+  function subformlist ($uuid, $jabatan_group = null) {
     $this->load->model('Permissions');
     $perms = $this->Permissions->getPermittedActions($this->controller);
     if (!in_array('read', $perms)) return false;
     $data = array();
     $model = $this->model;
-    $data['item'] = $this->$model->getListItem($uuid);
+    $data['item'] = $this->$model->getListItem($uuid, $jabatan_group);
     $data['allow_edit_pagu'] = in_array('create', $perms);
     $this->loadview('subformlist', $data);
   }

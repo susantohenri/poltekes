@@ -74,6 +74,9 @@ function expandItem (btn, cb) {
 	var requests = []
 	for (var uuid of parent.childUuids) {
 		var url = site_url + parent.childController + '/subformlist/' + uuid
+		if (window.location.href.includes('Breakdown')) {
+			url += '/' + window.location.href.split('/').pop()
+		}
 		if ('Spj' === parent.childController && uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
 		requests.push($.ajax({
 			url: url,
@@ -96,6 +99,7 @@ function expandItem (btn, cb) {
 			adjustPaymentButton(parent)
 			activateFormVerificationButton(parent)
 		}
+		if (window.location.href.includes('Breakdown')) activateLinkToAssignment()
 		cb()
 	})
 }
@@ -260,5 +264,18 @@ function activateFormVerificationButton (parent) {
 				}
 			}
 		})
+	})
+}
+
+function activateLinkToAssignment () {
+	$('li.item[data-uuid]').each(function () {
+		$(this).find('a[href*="read/"]').hide()
+		var uuid = $(this).attr('data-uuid')
+		var linkToChange = $(this).find('a[href*="readList"]')
+		var href = linkToChange.attr('href')
+		if (!href) return true
+		var entity = href.split('index.php/')[1].split('/')[0]
+		var site_url = href.split(entity)[0]
+		linkToChange.attr('href', `${site_url}Breakdown/Assign/${entity}/${uuid}`)
 	})
 }

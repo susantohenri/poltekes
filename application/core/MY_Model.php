@@ -51,7 +51,7 @@ class MY_Model extends CI_Model {
     return $this->db->get_where($this->table, $param)->row_array();
   }
 
-  function getListItem ($uuid) {
+  function getListItem ($uuid, $jabatanGroup = null) {
     return $this->db->get_where($this->table, array("{$this->table}.uuid" => $uuid))->row_array();
   }
 
