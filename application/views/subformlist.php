@@ -13,6 +13,7 @@
                 </a>
                 <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>
                     &nbsp; <a href="<?= site_url("{$current['controller']}/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Edit</a>
+                    &nbsp; <a target="_blank" href="<?= site_url("Breakdown/Assign/{$current['controller']}/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square"></i> Breakdown</a>
                 <?php endif ?>
             </div>
         </div>

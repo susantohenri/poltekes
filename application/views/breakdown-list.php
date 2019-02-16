@@ -69,9 +69,6 @@
                         <div class="item-col item-col-header fixed col-sm-8">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
-                                <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>
-                                    &nbsp; <a href="<?= site_url("{$current['controller']}/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Edit</a>
-                                <?php endif ?>
                             </div>
                         </div>
                         <div class="item-col item-col-header text-right">
