@@ -28,13 +28,6 @@ class Spj extends MY_Controller {
     $this->loadview($viewer, $data);
   }
 
-  function subformlistcreate ($parentUuid) {
-    $this->load->model('Permissions');
-    $perms = $this->Permissions->getPermittedActions($this->controller);
-    if (!in_array('create', $perms)) return false;
-    $this->loadview('subformlistcreate-spj', array('item' => array ('parent' => $parentUuid)));
-  }
-
   function save () {
     $post = $this->input->post();
     echo $this->{$this->model}->save($post);

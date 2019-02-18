@@ -38,14 +38,17 @@ function expandItem (btn, cb) {
 		childController: li.attr('data-child-controller'),
 		indent: parseInt(li.css('padding-left').replace('px', ''), 10)
 	}
-	if (parent.childUuids[0].length < 1) cb()
+	if (parent.childUuids[0].length < 1) {
+		cb()
+		return
+	}
 	var requests = []
+
 	for (var uuid of parent.childUuids) {
 		var url = site_url + parent.childController + '/subformlist/' + uuid
 		if (window.location.href.includes('Breakdown')) {
 			url += '/' + window.location.href.split('/').pop()
 		}
-		if ('Spj' === parent.childController && uuid.length < 1) url = site_url + parent.childController + '/subformlistcreate/' + parent.uuid
 		requests.push($.ajax({
 			url: url,
 			success: function (item) {

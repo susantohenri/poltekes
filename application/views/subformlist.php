@@ -8,7 +8,8 @@
         </div>
         <div class="item-col item-col-header fixed col-sm-8">
             <div>
-                <a target="_blank" href="<?= site_url($current['controller']) . '/readList/' . $item['uuid'] ?>">
+                <?php $routeToEdit = in_array($current['controller'], array('Detail', 'Spj')) ? 'read' : 'readList' ?>
+                <a target="_blank" href="<?= site_url("{$current['controller']}/{$routeToEdit}/{$item['uuid']}") ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
                 <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>

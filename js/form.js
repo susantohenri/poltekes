@@ -124,22 +124,29 @@ function calculateAkunProgram () {
 
 function calculateProgramDetail () {
   if (window.location.href.indexOf ('/Detail/') < 0) return true
-  markMinus(getNumber ($('[name="total_spj"]')))
   $('[name="vol"], [name="hargasat"]').keyup(function () {
     $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
   })
-  $('[name^="Spj_vol["], [name^="Spj_hargasat["]').keyup(function () {
-    var row = $(this).parent().parent()
-    var vol = getNumber(row.find('[name^="Spj_vol["]'))
-    var hargasat = getNumber(row.find('[name^="Spj_hargasat["]'))
-    var total_spj= currency(vol * hargasat)
-    row.find('[name^="Spj_total_spj["]').val(total_spj)
-    var spj_total = 0
-    $('[name^="Spj_total_spj["]').each(function () {
-      spj_total += getNumber($(this))
+  $('.form-child[data-controller="Spj"]').each (function () {
+    var spj = $(this)
+    spj.find('[data-number="true"]').keyup(function () {
+      var total_spj = 0
+      spj.find('[data-number="true"]').each(function () {
+        total_spj += getNumber($(this))
+      })
+      spj.find('[name="Spj_total_spj[]"]').val(total_spj)
     })
-    $('[name="total_spj"]').val(currency (spj_total))
-    markMinus(spj_total)
+  })
+
+  $('[name="last_submit"]').parent().submit(function () {
+    var total_spj = 0
+    $('.form-child[data-controller="Spj"] [name="Spj_total_spj[]"]').each(function () {
+      total_spj += getNumber($(this))
+    })
+    if (total_spj > getNumber($('[name="pagu"]'))) {
+      showError('Formulir gagal dikirim, perhitungan minus')
+      return false
+    } else return true
   })
 }
 

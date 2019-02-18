@@ -10,9 +10,9 @@ class Migration_lampiran extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `spj` varchar(255) NOT NULL,
         `uraian` varchar(255) NOT NULL,
-        `vol` double NOT NULL,
+        `vol` double NOT NULL DEFAULT '0',
         `sat` varchar(255) NOT NULL,
-        `hargasat` double NOT NULL,
+        `hargasat` double NOT NULL DEFAULT '0',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`spj`)

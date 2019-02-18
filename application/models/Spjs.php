@@ -23,28 +23,6 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'vol',
-      'label'=> 'Vol',
-      'attributes' => array(
-        array('data-number' => 'true')
-      ),
-      'width'=> 1
-    );
-
-    $this->form[]= array(
-      'name'    => 'sat',
-      'label'   => 'Sat',
-    );
-
-    $this->form[]= array(
-      'name' => 'hargasat',
-      'label'=> 'Harga Sat',
-      'attributes' => array(
-        array('data-number' => 'true')
-      ),
-    );
-
-    $this->form[]= array(
       'name' => 'ppn',
       'label'=> 'PPN',
       'attributes' => array(
@@ -55,6 +33,15 @@ class Spjs extends MY_Model {
     $this->form[]= array(
       'name' => 'pph',
       'label'=> 'PPH',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
+    );
+
+    $this->form[]= array(
+      'name' => 'total_lampiran',
+      'type' => 'hidden',
+      'label'=> '',
       'attributes' => array(
         array('data-number' => 'true')
       ),
@@ -140,7 +127,10 @@ class Spjs extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol")
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(hargasat * vol + ppn + pph, 0) total_spj", false);
+      ->select("FORMAT(SUM(lampiran.hargasat * lampiran.vol) + ppn + pph, 0) total_spj", false)
+      ->select('SUM(lampiran.hargasat * lampiran.vol) total_lampiran', false)
+      ->join('lampiran', "lampiran.spj = {$this->table}.uuid", 'left')
+      ->group_by();
     return parent::findOne($param);
   }
 

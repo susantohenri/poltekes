@@ -17,6 +17,17 @@ class Details extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'akun',
+      'label'=> 'Akun',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'), 
+        array('data-model' => 'Akuns'), 
+        array('data-field' => 'uraian')
+      ),
+    );
+
+    $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
       'width'=> 5
@@ -24,7 +35,7 @@ class Details extends MY_Model {
 
     $this->form[]= array(
       'name' => 'vol',
-      'label'=> 'Vol',
+      'label'=> 'Volume',
       'attributes' => array(
         array('data-number' => 'true')
       ),
@@ -33,13 +44,13 @@ class Details extends MY_Model {
 
     $this->form[]= array(
       'name'    => 'sat',
-      'label'   => 'Sat',
+      'label'   => 'Satuan',
       'width'=> 1
     );
 
     $this->form[]= array(
       'name' => 'hargasat',
-      'label'=> 'Harga Sat',
+      'label'=> 'Harga Satuan',
       'attributes' => array(
         array('data-number' => 'true')
       ),
@@ -56,17 +67,6 @@ class Details extends MY_Model {
       ),
       'width'=> 2
     );
-
-    // $this->form[]= array(
-    //   'name' => 'total_spj',
-    //   'label'=> 'SPJ',
-    //   'value'=> 0,
-    //   'attributes' => array(
-    //     array('disabled' => 'disabled'),
-    //     array('data-number' => 'true')
-    //   ),
-    //   'width'=> 2
-    // );
 
     $this->childs[] = array('label' => '', 'controller' => 'Spj', 'model' => 'Spjs');
 
