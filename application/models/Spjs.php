@@ -28,6 +28,7 @@ class Spjs extends MY_Model {
       'attributes' => array(
         array('data-number' => 'true')
       ),
+      'width' => 1
     );
 
     $this->form[]= array(
@@ -40,9 +41,10 @@ class Spjs extends MY_Model {
 
     $this->form[]= array(
       'name' => 'total_lampiran',
-      'type' => 'hidden',
+      // 'type' => 'hidden',
       'label'=> '',
       'attributes' => array(
+        array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
     );
@@ -122,15 +124,14 @@ class Spjs extends MY_Model {
   }
 
   function findOne ($param) {
+    $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
       ->select("{$this->table}.*")
-      ->select("FORMAT({$this->table}.vol, 0) vol")
-      ->select("FORMAT({$this->table}.hargasat, 0) hargasat")
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(SUM(lampiran.hargasat * lampiran.vol) + ppn + pph, 0) total_spj", false)
-      ->select('SUM(lampiran.hargasat * lampiran.vol) total_lampiran', false)
+      ->select("FORMAT(SUM(IFNULL(lampiran.hargasat, 0) * IFNULL(lampiran.vol, 0)) + ppn + pph, 0) total_spj", false)
+      ->select('SUM(IFNULL(lampiran.hargasat, 0) * IFNULL(lampiran.vol, 0)) total_lampiran', false)
       ->join('lampiran', "lampiran.spj = {$this->table}.uuid", 'left')
-      ->group_by();
+      ->group_by("{$this->table}.uuid");
     return parent::findOne($param);
   }
 

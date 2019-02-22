@@ -2,7 +2,7 @@ window.onload = function () {
 
   formInit()
   calculateSpj()
-  if (window.location.href.includes('Breakdown')) $('[name="jabatan_group[]"]').siblings().css('width','100%')
+  if (window.location.href.includes('Breakdown')) $('[name^="jabatan_group"]').siblings().css('width','100%')
   $('[name="last_submit"]').parent('form').submit(function () {
     $('[data-number]').each (function () {
       $(this).val(getNumber($(this)))
@@ -47,8 +47,8 @@ window.onload = function () {
   $('.select2-selection__rendered .select2-selection__choice').each(function(){
       atr = this.getAttribute('title');
       if (atr === ''){ $(this).remove(); }
-      else if (atr === null){ $(this).remove(); } 
-  });    
+      else if (atr === null){ $(this).remove(); }
+  });
 
   if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
 }
@@ -127,20 +127,31 @@ function calculateProgramDetail () {
   $('[name="vol"], [name="hargasat"]').keyup(function () {
     $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
   })
-  $('.form-child[data-controller="Spj"]').each (function () {
+
+  $('.form-child[data-controller="Spj"] .row').each(function () {
     var spj = $(this)
     spj.find('[data-number="true"]').keyup(function () {
       var total_spj = 0
-      spj.find('[data-number="true"]').each(function () {
+      spj.find('[data-number="true"]').not('[name^="Spj_total_spj"]').each(function () {
         total_spj += getNumber($(this))
       })
-      spj.find('[name="Spj_total_spj[]"]').val(total_spj)
+      spj.find('[name^="Spj_total_spj"]').val(currency(total_spj))
+      calculateAllSpj()
     })
+    spj.find('.btn-delete').bind('click', calculateAllSpj)
   })
+
+  function calculateAllSpj () {
+    var total_all_spj = 0
+    $('.form-child[data-controller="Spj"] [data-number="true"]').not('[name^="Spj_total_spj"]').each(function () {
+      total_all_spj += getNumber($(this))
+    })
+    $('[name="total_spj"]').val(currency(total_all_spj))
+  }
 
   $('[name="last_submit"]').parent().submit(function () {
     var total_spj = 0
-    $('.form-child[data-controller="Spj"] [name="Spj_total_spj[]"]').each(function () {
+    $('.form-child[data-controller="Spj"] [name^="Spj_total_spj"]').each(function () {
       total_spj += getNumber($(this))
     })
     if (total_spj > getNumber($('[name="pagu"]'))) {

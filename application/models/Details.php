@@ -21,8 +21,8 @@ class Details extends MY_Model {
       'label'=> 'Akun',
       'options' => array(),
       'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Akuns'), 
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Akuns'),
         array('data-field' => 'uraian')
       ),
     );
@@ -68,6 +68,17 @@ class Details extends MY_Model {
       'width'=> 2
     );
 
+    $this->form[]= array(
+      'name' => 'total_spj',
+      'label'=> 'Total SPJ',
+      'value'=> 0,
+      'attributes' => array(
+        array('disabled' => 'disabled'),
+        array('data-number' => 'true')
+      ),
+      'width'=> 2
+    );
+
     $this->childs[] = array('label' => '', 'controller' => 'Spj', 'model' => 'Spjs');
 
   }
@@ -79,7 +90,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat", false)
       ->select("FORMAT({$this->table}.hargasat * {$this->table}.vol, 0) pagu", false)
-      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
+      ->select("FORMAT(SUM(IFNULL(spj_lampiran.submitted_amount, 0) + spj.ppn + spj.pph), 0) total_spj", false)
       ->join('spj', "{$this->table}.uuid = spj.detail", 'left')
       ->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM lampiran GROUP BY lampiran.spj) as spj_lampiran', "spj_lampiran.spj = spj.uuid", 'left')
       ->group_by("{$this->table}.uuid");
@@ -89,7 +100,7 @@ class Details extends MY_Model {
   function dt () {
     $this->load->model('Users');
     $this->Users->filterByJabatan($this->datatables);
-    return 
+    return
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.uraian")
