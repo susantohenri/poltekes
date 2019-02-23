@@ -22,6 +22,7 @@
             .btn-oval{padding: 2px 4px; font-size: 12px}
             .hidden{display: none;}
             .form-spj .form-group {margin-bottom: 2px}
+            .form-child [class^="col-sm-"] {margin-bottom: 5px}
         </style>
     </head>
     <body>
@@ -283,7 +284,7 @@
                 $mobileHandle.swipe({
                     swipeLeft: function() {
                         if($appContainer.hasClass("sidebar-open")) {
-                            $appContainer.removeClass("sidebar-open")  
+                            $appContainer.removeClass("sidebar-open")
                         }
                     },
                     swipeRight: function() {

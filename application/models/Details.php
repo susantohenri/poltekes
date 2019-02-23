@@ -25,12 +25,13 @@ class Details extends MY_Model {
         array('data-model' => 'Akuns'),
         array('data-field' => 'uraian')
       ),
+      'width' => 6
     );
 
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 5
+      'width'=> 6
     );
 
     $this->form[]= array(

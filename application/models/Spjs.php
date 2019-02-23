@@ -19,7 +19,7 @@ class Spjs extends MY_Model {
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 4
+      'width'=> 6
     );
 
     $this->form[]= array(
@@ -28,7 +28,7 @@ class Spjs extends MY_Model {
       'attributes' => array(
         array('data-number' => 'true')
       ),
-      'width' => 1
+      'width' => 3
     );
 
     $this->form[]= array(
@@ -37,6 +37,7 @@ class Spjs extends MY_Model {
       'attributes' => array(
         array('data-number' => 'true')
       ),
+      'width' => 3
     );
 
     $this->form[]= array(
