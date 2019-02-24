@@ -62,7 +62,7 @@ class SpjPayments extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")

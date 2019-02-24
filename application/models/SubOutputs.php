@@ -39,7 +39,7 @@ class SubOutputs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
     else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
@@ -59,7 +59,7 @@ class SubOutputs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")

@@ -20,8 +20,8 @@ class Akuns extends MY_Model {
       'label'=> 'Sub Komponen',
       'options' => array(),
       'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'SubKomponens'), 
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'SubKomponens'),
         array('data-field' => 'uraian')
       ),
     );
@@ -60,7 +60,7 @@ class Akuns extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
     else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
@@ -80,7 +80,7 @@ class Akuns extends MY_Model {
 
   function dt () {
   	$this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
   		->select("{$this->table}.uuid")
   		->select("{$this->table}.urutan")

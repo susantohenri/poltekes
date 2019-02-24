@@ -19,8 +19,8 @@ class Outputs extends MY_Model {
       'label'=> 'Kegiatan',
       'options' => array(),
       'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Kegiatans'), 
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Kegiatans'),
         array('data-field' => 'uraian')
       ),
     );
@@ -39,7 +39,7 @@ class Outputs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
     else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
@@ -59,7 +59,7 @@ class Outputs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
@@ -70,7 +70,7 @@ class Outputs extends MY_Model {
       ->select('detail.sat as detail_sat', false)
       ->select('SUM(lampiran.vol) as spj_vol', false)
       ->select('lampiran.sat as spj_sat', false)
-      ->join('item', 'spj.uuid = lampiran.spj', 'left')
+      ->join('lampiran', 'spj.uuid = lampiran.spj', 'left')
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

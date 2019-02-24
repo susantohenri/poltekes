@@ -9,9 +9,6 @@ class Spjs extends MY_Model {
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'vol', 'sTitle' => 'Vol', 'className' => 'text-right'),
-      (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
-      (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'Jumlah', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
     );
@@ -138,18 +135,15 @@ class Spjs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
-      ->select("{$this->table}.vol")
-      ->select("{$this->table}.sat")
-      ->select("{$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph as total_spj", false)
+      ->select('SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) + IFNULL(ppn, 0) + IFNULL (pph, 0) total_spj', false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
-      ->select("{$this->table}.hargasat")
+      ->join('lampiran', 'spj.uuid = lampiran.spj', 'left')
       ->group_by("{$this->table}.uuid")
-      ->where("{$this->table}.uuid IS", 'NOT NULL', false)
       ->generate();
   }
 
