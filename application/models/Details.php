@@ -40,13 +40,13 @@ class Details extends MY_Model {
       'attributes' => array(
         array('data-number' => 'true')
       ),
-      'width'=> 1
+      'width'=> 3
     );
 
     $this->form[]= array(
       'name'    => 'sat',
       'label'   => 'Satuan',
-      'width'=> 1
+      'width'=> 2
     );
 
     $this->form[]= array(
@@ -55,7 +55,7 @@ class Details extends MY_Model {
       'attributes' => array(
         array('data-number' => 'true')
       ),
-      'width'=> 2
+      'width'=> 3
     );
 
     $this->form[]= array(
@@ -66,7 +66,7 @@ class Details extends MY_Model {
         array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
-      'width'=> 2
+      'width'=> 4
     );
 
     $this->form[]= array(
@@ -149,6 +149,14 @@ class Details extends MY_Model {
     $this->db
       ->where('detail', $uuid)
       ->delete('assignment');
+  }
+
+  function getForm ($uuid = false, $isSubform = false) {
+    if ($isSubform) {
+      unset($this->form[0]);
+      unset($this->form[count ($this->form)]);
+    }
+    return parent::getForm ($uuid, $isSubform);
   }
 
 }

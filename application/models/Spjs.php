@@ -40,11 +40,12 @@ class Spjs extends MY_Model {
     $this->form[]= array(
       'name' => 'total_lampiran',
       // 'type' => 'hidden',
-      'label'=> '',
+      'label'=> 'Total Lampiran',
       'attributes' => array(
         array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
+      'width' => 5
     );
 
     $this->form[]= array(
@@ -55,6 +56,7 @@ class Spjs extends MY_Model {
         array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
+      'width' => 5
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'Spjlog', 'model' => 'Spjlogs');
