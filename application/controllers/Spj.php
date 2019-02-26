@@ -2,6 +2,25 @@
 
 class Spj extends MY_Controller {
 
+  function create ($detail = null) {
+    $model= $this->model;
+    $vars = array();
+    $vars['page_name'] = 'form';
+    $vars['form']     = $this->$model->getForm();
+    if (!is_null($detail)) {
+      $this->load->model('Details');
+      $record = $this->Details->findOne($detail);
+      $vars['form'][0]['options'][] = array(
+        'value' => $detail,
+        'text' => $record['uraian']
+      );
+      $vars['form'][0]['value'] = $detail;
+    }
+    $vars['subform'] = $this->$model->getFormChild();
+    $vars['uuid'] = '';
+    $this->loadview('index', $vars);
+  }
+
   function subformlist ($uuid, $jabatanGroup = null) {
     $this->load->model('Permissions');
     $perms = $this->Permissions->getPermittedActions($this->controller);
