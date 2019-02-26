@@ -14,6 +14,18 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'detail',
+      'label'=> 'Detail',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Details'),
+        array('data-field' => 'uraian')
+      ),
+      'width' => 6
+    );
+
+    $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
       'width'=> 6
@@ -59,7 +71,7 @@ class Spjs extends MY_Model {
       'width' => 5
     );
 
-    $this->childs[] = array('label' => '', 'controller' => 'Spjlog', 'model' => 'Spjlogs');
+    $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans');
     $this->load->model('Spjlogs');
   }
 
@@ -198,12 +210,27 @@ class Spjs extends MY_Model {
       }
     }
     $this->load->model('Payments');
-    $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $spj['hargasat'] * $spj['vol']);
+    $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $this->getTotal($spj['uuid']));
   }
 
   function getCreator ($uuid) {
     $creator = $this->Spjlogs->findOne(array('spj' => $uuid, 'action' => 'create'));
     return $creator['user'];
+  }
+
+  function getTotal ($uuid) {
+    $record = $this->db->query("
+      SELECT SUM(IFNULL(vol, 0) * IFNULL(hargasat, 0)) + ppn + pph as total
+      FROM spj
+      LEFT JOIN lampiran ON spj.uuid = lampiran.spj
+      WHERE spj.uuid = '{$uuid}'
+      GROUP BY spj.uuid")->row_array();
+    return $record['total'];
+  }
+
+  function getForm ($uuid = false, $isSubform = false) {
+    if ($isSubform) unset($this->form[0]);
+    return parent::getForm ($uuid, $isSubform);
   }
 
 }

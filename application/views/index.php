@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/dataTables.green.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/select2.min.css') ?>">
         <style type="text/css">
-            form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option {
+            form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option, .input-group-text {
                 font-size: 14px
             }
             [data-number] {text-align: right;}
