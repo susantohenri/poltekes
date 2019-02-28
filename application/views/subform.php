@@ -30,10 +30,12 @@
         <?php endswitch; ?>
     <?php endforeach ?>
 
+    <?php if (in_array("delete_{$controller}", $permission)) : ?>
     <div class="col-sm-1">
       <a class="btn btn-danger btn-delete" data-uuid="<?= $uuid ?>">
         <i class="fa fa-trash-o"></i>
       </a>
     </div>
+  <?php endif ?>
 
 </div>

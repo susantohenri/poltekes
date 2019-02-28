@@ -71,7 +71,7 @@ class Permissions extends MY_Model {
     foreach (array('Detail', 'Spj') as $entity) foreach (array('index', 'read') as $action) $this->setPermission($jabatan, $entity, $action);
   }
 
-  function getPermittedActions ($entity) {
+  function _getPermittedActions ($entity) {
     $actions = array();
     foreach ($this->find(
       array(
@@ -80,6 +80,12 @@ class Permissions extends MY_Model {
       ))
     as $perm) $actions[] = $perm->action;
     return $actions;
+  }
+
+  function getPermissions () {
+    $permission = array();
+    foreach ($this->find(array('jabatan' => $this->session->userdata('jabatan'))) as $perm) $permission[] = "{$perm->action}_{$perm->entity}";
+    return $permission;
   }
 
   function getPermittedMenus () {

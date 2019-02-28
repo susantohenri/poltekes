@@ -13,10 +13,10 @@
                 <p class="title-description"> Detail <?= $page_title ?> </p>
             </div>
             <div class="col-sm-6 text-right">
-                <?php if (in_array('update', $permitted_actions)) : ?>
+                <?php if (in_array("update_{$current['controller']}", $permission)) : ?>
                 <a class="btn btn-info btn-save"><i class="fa fa-save"></i> Simpan</a>
                 <?php endif ?>
-                <?php if (in_array('delete', $permitted_actions)) : ?>
+                <?php if (in_array("delete_{$current['controller']}", $permission)) : ?>
                 <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Batal</a>
@@ -69,7 +69,7 @@
                         <div class="item-col item-col-header fixed col-sm-8">
                             <div>
                                 <span><?= "{$item['kode']} {$item['uraian']}" ?></span>
-                                <?php if (isset ($allow_edit_pagu) && $allow_edit_pagu) : ?>
+                                <?php if (in_array("update_{$current['controller']}", $permission)) : ?>
                                     &nbsp; <a href="<?= site_url("{$current['controller']}/read/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square-o"></i> Edit</a>
                                     &nbsp; <a target="_blank" href="<?= site_url("Breakdown/Assign/{$current['controller']}/{$item['uuid']}") ?>" class="text-info"><i class="fa fa-pencil-square"></i> Breakdown</a>
                                 <?php endif ?>

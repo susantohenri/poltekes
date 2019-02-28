@@ -21,7 +21,7 @@ class Spj extends MY_Controller {
     $this->loadview('index', $vars);
   }
 
-  function subformlist ($uuid, $jabatanGroup = null) {
+  function _subformlist ($uuid, $jabatanGroup = null) {
     $this->load->model('Permissions');
     $perms = $this->Permissions->getPermittedActions($this->controller);
     if (!in_array('read', $perms)) return false;
@@ -52,7 +52,7 @@ class Spj extends MY_Controller {
     echo $this->{$this->model}->save($post);
   }
 
-  function read ($id) {
+  function _read ($id) {
     $data = array();
     $data['page_name'] = 'form';
     $model = $this->model;

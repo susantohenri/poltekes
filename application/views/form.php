@@ -57,7 +57,7 @@
               <div class="form-child" data-controller="<?= $subfield['controller'] ?>" data-uuids="<?= str_replace('"', "'", json_encode($subfield['uuids'])) ?>">
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-12">
-                    <?php if((empty($uuid) && in_array('create', $permitted_actions)) || (!empty($uuid) && in_array('update', $permitted_actions))) : ?>
+                    <?php if((empty($uuid) && in_array("create_{$subfield['controller']}", $permission)) || (!empty($uuid) && in_array("update_{$subfield['controller']}", $permission))) : ?>
                     <a class="btn btn-warning btn-sm btn-add">
                       <i class="fa fa-plus"></i> &nbsp;Add <?= $subfield['label'] ?>
                     </a>
@@ -71,10 +71,10 @@
             <div class="form-group row">
               <div class="col-sm-2"></div>
               <div class="col-sm-9">
-                <?php if((empty($uuid) && in_array('create', $permitted_actions)) || (!empty($uuid) && in_array('update', $permitted_actions))) : ?>
+                <?php if((empty($uuid) && in_array("create_{$current['controller']}", $permission)) || (!empty($uuid) && in_array("update_{$current['controller']}", $permission))) : ?>
                 <button class="btn btn-primary"><i class="fa fa-save"></i> &nbsp; Save</button>
                 <?php endif ?>
-                <?php if (!empty ($uuid) && in_array('delete', $permitted_actions)): ?>
+                <?php if (!empty ($uuid) && in_array("delete_{$current['controller']}", $permission)): ?>
                 <a href="<?= site_url($current['controller'] . "/delete/$uuid") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Delete</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> &nbsp; Cancel</a>
