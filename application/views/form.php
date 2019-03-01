@@ -57,7 +57,7 @@
               <div class="form-child" data-controller="<?= $subfield['controller'] ?>" data-uuids="<?= str_replace('"', "'", json_encode($subfield['uuids'])) ?>">
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-12">
-                    <?php if((empty($uuid) && in_array("create_{$subfield['controller']}", $permission)) || (!empty($uuid) && in_array("update_{$subfield['controller']}", $permission))) : ?>
+                    <?php if((empty($subfield->uuids) && in_array("create_{$subfield['controller']}", $permission)) || (!empty($subfield->uuids) && in_array("update_{$subfield['controller']}", $permission))) : ?>
                     <a class="btn btn-warning btn-sm btn-add">
                       <i class="fa fa-plus"></i> &nbsp;Add <?= $subfield['label'] ?>
                     </a>

@@ -11,7 +11,8 @@ class Permissions extends MY_Model {
     $this->form[]= array(
     	'name' => 'entity',
     	'label'=> 'Entitas',
-      'options' => $this->getEntities()
+      'options' => $this->getEntities(),
+      'width' => 4
     );
 
     $this->form[]= array(
