@@ -109,7 +109,7 @@ class Details extends MY_Model {
       ->select("{$this->table}.sat")
       ->select("{$this->table}.hargasat")
       ->select("{$this->table}.hargasat * {$this->table}.vol as pagu", false)
-      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
@@ -126,7 +126,7 @@ class Details extends MY_Model {
       ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
       ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
       ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat, 0) pagu", false)
-      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT spj.uuid) childUuid", false)
       ->select("'Spj' childController", false)

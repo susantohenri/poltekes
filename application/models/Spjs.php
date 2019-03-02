@@ -72,10 +72,12 @@ class Spjs extends MY_Model {
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans');
+    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
+    $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs');
     $this->load->model('Spjlogs');
   }
 
-  function save ($data) {
+  function _save ($data) {
     if (isset ($data['payment_status'])) unset($data['payment_status']);
     if (isset ($data['status'])) {
       if ('verify' === $data['status']) {
@@ -90,7 +92,7 @@ class Spjs extends MY_Model {
     return parent::save($data);
   }
 
-  function create ($data) {
+  function _create ($data) {
     $result = parent::create($data);
     $this->Spjlogs->create(array(
       'spj'   => $result,
@@ -100,7 +102,7 @@ class Spjs extends MY_Model {
     return $result;
   }
 
-  function update ($data) {
+  function _update ($data) {
     $changes = array();
     $prev = $this->db->get_where($this->table, array('uuid' => $data['uuid']))->row_array();
     foreach ($data as $field => $value) {
@@ -116,7 +118,7 @@ class Spjs extends MY_Model {
     return $data['uuid'];
   }
 
-  function delete ($uuid) {
+  function _delete ($uuid) {
     $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
     return parent::delete($uuid);
   }

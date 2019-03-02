@@ -67,7 +67,7 @@ class SpjPayments extends MY_Model {
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
-      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->where("{$this->table}.uuid IS", 'NOT NULL', false)

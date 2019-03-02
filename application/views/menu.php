@@ -63,15 +63,5 @@
             <a href="<?= site_url('Spj/') ?>"><i class="fa fa-dropbox"></i>SPJ</a>
         </li>
         <?php endif ?>
-        <?php if (in_array('Spj', $permitted_menus)) : ?>
-        <li>
-            <a href="<?= site_url('Spj/') ?>"><i class="fa fa-ticket"></i>SPJ History</a>
-        </li>
-        <?php endif ?>
-        <?php if (in_array('SpjPayment', $permitted_menus)) : ?>
-        <li>
-            <a href="<?= site_url('SpjPayment/') ?>"><i class="fa fa-ticket"></i>SPJ Payment</a>
-        </li>
-        <?php endif ?>
     </ul>
 </nav>
