@@ -36,6 +36,13 @@
         <i class="fa fa-trash-o"></i>
       </a>
     </div>
-  <?php endif ?>
+    <?php endif ?>
+    <?php if (in_array("read_{$controller}", $permission)) : ?>
+    <div class="col-sm-1">
+      <a class="btn btn-info" href="<?= site_url("{$controller}/read/{$uuid}") ?>" target="_blank">
+        <i class="fa fa-external-link"></i>
+      </a>
+    </div>
+    <?php endif ?>
 
 </div>

@@ -216,7 +216,14 @@ class Migration_jabatan extends CI_Migration {
       ->or_like('nama', 'Bendahara Urusan')
       ->get('jabatan')
       ->result();
-    foreach ($allow_edit_spj as $jab) $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');
+    foreach ($allow_edit_spj as $jab) {
+      $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');
+      $this->Permissions->setPermission($jab->uuid, 'Spj', 'update');
+      $this->Permissions->setPermission($jab->uuid, 'Spj', 'delete');
+      $this->Permissions->setPermission($jab->uuid, 'Lampiran', 'create');
+      $this->Permissions->setPermission($jab->uuid, 'Lampiran', 'update');
+      $this->Permissions->setPermission($jab->uuid, 'Lampiran', 'delete');
+    }
 
     $allow_create_payment = $this->db
       ->where('nama', 'Bendahara Pengeluaran Direktorat')

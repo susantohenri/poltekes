@@ -1,7 +1,6 @@
 window.onload = function () {
 
   formInit()
-  calculateSpj()
   if (window.location.href.includes('Breakdown')) $('[name^="jabatan_group"]').siblings().css('width','100%')
   $('[name="last_submit"]').parent('form').submit(function () {
     $('[data-number]').each (function () {
@@ -98,6 +97,7 @@ function formInit () {
   $('[data-number="true"]').keyup(function () {
     $(this).val(currency(getNumber($(this))))
   })
+  calculateSpj()
   calculateProgramDetail()
   calculateAkunProgram()
 }
@@ -163,9 +163,22 @@ function calculateProgramDetail () {
 
 function calculateSpj () {
   if (window.location.href.indexOf ('/Spj/') < 0) return true
-  $('[name="vol"], [name="hargasat"]').keyup(function () {
-    $('[name="total_spj"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
-  })
+  function calcFormSpj () {
+    var totalLampiran = 0
+    $('[data-controller="Lampiran"] .row').each(function () {
+      let currentTotal = getNumber($(this).find('[name^="Lampiran_vol"]')) * getNumber($(this).find('[name^="Lampiran_hargasat"]'))
+      $(this).find('[name^="Lampiran_total"]').val(currency(currentTotal))
+      totalLampiran += currentTotal
+    })
+    $('[name="total_lampiran"]').val(currency(totalLampiran))
+    $('[name="total_spj"]').val(currency(getNumber($('[name="ppn"]')) + getNumber($('[name="pph"]')) + totalLampiran))
+  }
+
+  $('[name="ppn"]').keyup(calcFormSpj)
+  $('[name="pph"]').keyup(calcFormSpj)
+  $('[name^="Lampiran_vol"]').keyup(calcFormSpj)
+  $('[name^="Lampiran_hargasat"]').keyup(calcFormSpj)
+  $('.btn-delete').click(calcFormSpj)
 }
 
 function getNumber (element) {

@@ -140,8 +140,10 @@ class Spjs extends MY_Model {
     $this->db
       ->select("{$this->table}.*")
       ->select("{$this->table}.detail parent", false)
+      ->select('FORMAT(ppn, 0) ppn', false)
+      ->select('FORMAT(pph, 0) pph', false)
       ->select("FORMAT(SUM(IFNULL(lampiran.hargasat, 0) * IFNULL(lampiran.vol, 0)) + ppn + pph, 0) total_spj", false)
-      ->select('SUM(IFNULL(lampiran.hargasat, 0) * IFNULL(lampiran.vol, 0)) total_lampiran', false)
+      ->select('FORMAT(SUM(IFNULL(lampiran.hargasat, 0) * IFNULL(lampiran.vol, 0)), 0) total_lampiran', false)
       ->join('lampiran', "lampiran.spj = {$this->table}.uuid", 'left')
       ->group_by("{$this->table}.uuid");
     return parent::findOne($param);
