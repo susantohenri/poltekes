@@ -2,7 +2,7 @@ window.onload = function () {
 
   formInit()
   if (window.location.href.includes('Breakdown')) $('[name^="jabatan_group"]').siblings().css('width','100%')
-  $('[name="last_submit"]').parent('form').submit(function () {
+  $('.main-form').submit(function () {
     $('[data-number]').each (function () {
       $(this).val(getNumber($(this)))
     })
@@ -149,7 +149,7 @@ function calculateProgramDetail () {
     $('[name="total_spj"]').val(currency(total_all_spj))
   }
 
-  $('[name="last_submit"]').parent().submit(function () {
+  $('.main-form').submit(function () {
     var total_spj = 0
     $('.form-child[data-controller="Spj"] [name^="Spj_total_spj"]').each(function () {
       total_spj += getNumber($(this))
@@ -179,6 +179,25 @@ function calculateSpj () {
   $('[name^="Lampiran_vol"]').keyup(calcFormSpj)
   $('[name^="Lampiran_hargasat"]').keyup(calcFormSpj)
   $('.btn-delete').click(calcFormSpj)
+  validateSisaPagu()
+
+  function validateSisaPagu () {
+    $('.btn-save').unbind('click').click(function (e) {
+      e.preventDefault()
+      var total_spj = getNumber($('[name="total_spj"]'))
+      let detail = $('[name="detail"]').val()
+      let spj = $('[name="uuid"]').val()
+      spj = spj ? spj : ''
+      $.get(`${site_url}Detail/getSisaPagu/${detail}/${spj}`, function (sisaPagu) {
+        if (sisaPagu < total_spj) {
+          sisaPagu = currency(sisaPagu)
+          showError(`Formulir gagal dikirim, perhitungan minus, sisa pagu Rp ${sisaPagu}`)
+          validateSisaPagu()
+        }
+        else $('.main-form').submit()
+      })
+    })
+  }
 }
 
 function getNumber (element) {

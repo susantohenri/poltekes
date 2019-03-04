@@ -30,19 +30,17 @@
         <?php endswitch; ?>
     <?php endforeach ?>
 
-    <?php if (in_array("delete_{$controller}", $permission)) : ?>
-    <div class="col-sm-1">
+    <div class="col-sm-2">
+      <?php if (in_array("delete_{$controller}", $permission)) : ?>
       <a class="btn btn-danger btn-delete" data-uuid="<?= $uuid ?>">
         <i class="fa fa-trash-o"></i>
       </a>
-    </div>
-    <?php endif ?>
-    <?php if (in_array("read_{$controller}", $permission)) : ?>
-    <div class="col-sm-1">
+      <?php endif ?>
+      <?php if (in_array("read_{$controller}", $permission)) : ?>
       <a class="btn btn-info" href="<?= site_url("{$controller}/read/{$uuid}") ?>" target="_blank">
         <i class="fa fa-external-link"></i>
       </a>
+      <?php endif ?>
     </div>
-    <?php endif ?>
 
 </div>

@@ -159,4 +159,16 @@ class Details extends MY_Model {
     return parent::getForm ($uuid, $isSubform);
   }
 
+  function getSisaPagu ($detail, $spj) {
+    $this->db->where('detail.uuid', $detail);
+    if ($spj) $this->db->where('spj.uuid <>', $spj);
+    $calc = $this->db
+      ->select('detail.vol * detail.hargasat - IFNULL(SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) + SUM(IFNULL(spj.pph, 0) + IFNULL(spj.ppn, 0)), 0) as sisaPagu', false)
+      ->join('spj', 'detail.uuid = spj.detail', 'left')
+      ->join('lampiran', 'spj.uuid = lampiran.spj', 'left')
+      ->get($this->table)
+      ->row_array();
+    return (int) $calc['sisaPagu'];
+  }
+
 }

@@ -2,4 +2,8 @@
 
 class Detail extends MY_Controller {
 
+	function getSisaPagu ($detail, $spj = false) {
+		echo $this->{$this->model}->getSisaPagu($detail, $spj);
+	}
+
 }
