@@ -37,7 +37,7 @@
       </a>
       <?php endif ?>
       <?php if (in_array("read_{$controller}", $permission)) : ?>
-      <a class="btn btn-info" href="<?= site_url("{$controller}/read/{$uuid}") ?>" target="_blank">
+      <a class="btn btn-info btn-detail" href="<?= site_url("{$controller}/read/{$uuid}") ?>" target="_blank">
         <i class="fa fa-external-link"></i>
       </a>
       <?php endif ?>

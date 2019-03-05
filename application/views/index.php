@@ -23,7 +23,7 @@
             .hidden{display: none;}
             .form-spj .form-group {margin-bottom: 2px}
             .form-child [class^="col-sm-"] {margin-bottom: 5px}
-            .btn-delete[data-uuid] {margin-top: 5px}
+            .btn-delete[data-uuid], .btn-detail {margin-top: 5px}
         </style>
     </head>
     <body>
