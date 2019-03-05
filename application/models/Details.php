@@ -8,12 +8,10 @@ class Details extends MY_Model {
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'uraian', 'sTitle' => 'Uraian'),
-      (object) array('mData' => 'vol', 'sTitle' => 'Vol', 'className' => 'text-right'),
-      (object) array('mData' => 'sat', 'sTitle' => 'Sat'),
-      (object) array('mData' => 'hargasat', 'sTitle' => 'Harga', 'className' => 'text-right'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
-      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency'),
+      (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency', 'width' => '15%'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right'),
+      (object) array('mData' => 'nama_jabatan_group', 'sTitle' => 'Breakdown'),
     );
 
     $this->form[]= array(
@@ -105,12 +103,14 @@ class Details extends MY_Model {
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.uraian")
-      ->select("{$this->table}.vol")
-      ->select("{$this->table}.sat")
-      ->select("{$this->table}.hargasat")
       ->select("{$this->table}.hargasat * {$this->table}.vol as pagu", false)
-      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
+
+      ->select('jabatan_group.nama nama_jabatan_group', false)
+      ->join('assignment', "{$this->table}.uuid = assignment.detail", 'left')
+      ->join('jabatan_group', 'assignment.jabatan_group = jabatan_group.uuid', 'left')
+
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

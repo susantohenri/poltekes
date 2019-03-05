@@ -67,7 +67,7 @@ class SubKomponens extends MY_Model {
       ->select('sub_komponen.kode as kode_sub_komponen', false)
       ->select('sub_komponen.uraian as uraian_sub_komponen', false)
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();
