@@ -8,7 +8,7 @@ class Programs extends MY_Model {
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '50%'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Program', 'width' => '50%'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
