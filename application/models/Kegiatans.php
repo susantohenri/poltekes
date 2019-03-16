@@ -31,7 +31,7 @@ class Kegiatans extends MY_Model {
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 9
+      'width'=> 8
     );
     $this->childs[] = array('label' => '', 'controller' => 'Output', 'model' => 'Outputs');
 
@@ -51,8 +51,8 @@ class Kegiatans extends MY_Model {
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT output.uuid) childUuid", false)
       ->select("'Output' childController", false)
-      ->select('kegiatan.kode kode', false)
-      ->select('kegiatan.uraian uraian', false)
+      ->select("{$this->table}.kode kode", false)
+      ->select("{$this->table}.uraian uraian", false)
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();

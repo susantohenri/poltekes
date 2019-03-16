@@ -48,10 +48,11 @@ class Migration_jabatan extends CI_Migration {
       }
     }
     foreach ($this->Permissions->getGeneralEntities() as $e) {
-      foreach (array('index', 'create', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
+      foreach (array('index', 'create', 'update', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
     }
     foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Detail', $action);
     foreach (array('index', 'read', 'update') as $action) $this->Permissions->setPermission($planner, 'Breakdown', $action);
+    foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Permission', $action);
     $atasan = '';
     foreach (array (
       'Atasan Langsung Bendahara Pengeluaran',

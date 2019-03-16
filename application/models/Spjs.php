@@ -72,9 +72,19 @@ class Spjs extends MY_Model {
       'width' => 5
     );
 
+    $this->form[]= array(
+      'name' => 'sisa_pagu',
+      'label'=> 'Sisa Pagu',
+      'value'=> 0,
+      'attributes' => array(
+        array('disabled' => 'disabled'),
+        array('data-number' => 'true')
+      ),
+    );
+
     $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans');
-    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
     $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs');
+    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
     $this->load->model('Spjlogs');
   }
 
@@ -93,7 +103,7 @@ class Spjs extends MY_Model {
     return parent::save($data);
   }
 
-  function _create ($data) {
+  function create ($data) {
     $result = parent::create($data);
     $this->Spjlogs->create(array(
       'spj'   => $result,
@@ -141,6 +151,7 @@ class Spjs extends MY_Model {
   function findOne ($param) {
     $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
+      ->select("0 sisa_pagu", false)// fullfilled by ajax
       ->select("{$this->table}.*")
       ->select("{$this->table}.detail parent", false)
       ->select('FORMAT(ppn, 0) ppn', false)
@@ -173,26 +184,22 @@ class Spjs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->db);
-    $spj = $this->db
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
+    else $this->Users->filterByJabatan($this->db);
+    return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
-      ->select("FORMAT(detail.vol * detail.hargasat, 0) as pagu", false)
       ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT({$this->table}.vol, 0) vol_format", false)
-      ->select("FORMAT({$this->table}.hargasat, 0) hargasat_format", false)
-      ->select("FORMAT({$this->table}.ppn, 0) ppn_format", false)
-      ->select("FORMAT({$this->table}.pph, 0) pph_format", false)
-      ->select("FORMAT({$this->table}.vol * {$this->table}.hargasat + {$this->table}.ppn + {$this->table}.pph, 0) total_spj", false)
+      ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
-      ->select("'' childUuid", false)
-      ->select("'' childController", false)
-      ->select("''  kode", false)
+      ->select("GROUP_CONCAT(DISTINCT detail.uuid) childUuid", false)
+      ->select("'Lampiran' childController", false)
+      ->select('"" kode', false)
+      ->select('spj.uraian', false)
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
-    $this->putStatus($spj);
-    return $spj;
   }
 
   function putStatus (&$spj) {
@@ -239,7 +246,10 @@ class Spjs extends MY_Model {
   }
 
   function getForm ($uuid = false, $isSubform = false) {
-    if ($isSubform) unset($this->form[0]);
+    if ($isSubform) {
+      unset($this->form[0]);
+      unset($this->form[count($this->form)]);
+    }
     return parent::getForm ($uuid, $isSubform);
   }
 

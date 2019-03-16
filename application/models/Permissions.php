@@ -33,6 +33,7 @@ class Permissions extends MY_Model {
       array('text' => 'Akun', 'value' => 'Akun'),
       array('text' => 'Detail', 'value' => 'Detail'),
       array('text' => 'SPJ', 'value' => 'Spj'),
+      array('text' => 'Lampiran', 'value' => 'Lampiran'),
       array('text' => 'SPJ Payment', 'value' => 'SpjPayment'),
       array('text' => 'User', 'value' => 'User'),
       array('text' => 'Jabatan', 'value' => 'Jabatan'),
@@ -60,12 +61,12 @@ class Permissions extends MY_Model {
   function getGeneralEntities () {
     return array (
     'Program', 'Kegiatan', 'Output', 'SubOutput',
-    'Komponen', 'SubKomponen', 'Akun');
+    'Komponen', 'SubKomponen', 'Akun', 'Lampiran');
   }
 
   function setGeneralPermission ($jabatan) {
     foreach ($this->getGeneralEntities() as $entity) {
-      foreach (array('index', 'read', 'update') as $action) {
+      foreach (array('index', 'read') as $action) {
         $this->setPermission($jabatan, $entity, $action);
       }
     }

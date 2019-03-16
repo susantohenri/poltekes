@@ -50,6 +50,7 @@ window.onload = function () {
   });
 
   if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
+  if (window.location.href.indexOf('Spj') > -1) getSisaPagu()
 }
 
 function formInit () {
@@ -191,13 +192,20 @@ function calculateSpj () {
       $.get(`${site_url}Detail/getSisaPagu/${detail}/${spj}`, function (sisaPagu) {
         if (sisaPagu < total_spj) {
           sisaPagu = currency(sisaPagu)
-          showError(`Formulir gagal dikirim, perhitungan minus, sisa pagu Rp ${sisaPagu}`)
+          showError(`Formulir gagal dikirim, perhitungan minus`)
           validateSisaPagu()
         }
         else $('.main-form').submit()
       })
     })
   }
+}
+
+function getSisaPagu () {
+  let detail = $('[name="detail"]').val()
+  $.get(`${site_url}Detail/getSisaPagu/${detail}`, function (sisaPagu) {
+    $('[name="sisa_pagu"]').val(currency(sisaPagu))
+  })
 }
 
 function getNumber (element) {

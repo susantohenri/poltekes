@@ -32,7 +32,7 @@ class SubKomponens extends MY_Model {
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 9
+      'width'=> 8
     );
     $this->childs[] = array('label' => '', 'controller' => 'Akun', 'model' => 'Akuns');
 
@@ -51,8 +51,8 @@ class SubKomponens extends MY_Model {
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT akun.uuid) childUuid", false)
       ->select("'Akun' childController", false)
-      ->select('sub_komponen.kode kode', false)
-      ->select('sub_komponen.uraian uraian', false)
+      ->select("{$this->table}.kode kode", false)
+      ->select("{$this->table}.uraian uraian", false)
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
