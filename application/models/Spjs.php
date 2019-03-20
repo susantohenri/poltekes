@@ -202,32 +202,23 @@ class Spjs extends MY_Model {
       ->row_array();
   }
 
-  function putStatus (&$spj) {
+  function getStatus ($spj) {
     $this->load->model(array('Jabatans', 'Spjlogs'));
     $user = $this->session->all_userdata();
     $this->Jabatans->getUserAttr($user);
     $lastLog = $this->Spjlogs->getLastVerification($spj['uuid']);
 
-    $spj['viewer'] = 'list';
-    $spj['status'] = 'unverifiable';
-
-    if ('verified' === $spj['global_status']) $spj['status'] = 'verified';
+    $status = 'unverifiable';
+    if ('verified' === $spj['global_status']) $status = 'verified';
     else if (in_array($lastLog['user'], $user['atasan'])) {
-      // if ('verify' === $lastLog['action']) $spj['status'] = 'verified';// let it wait for global status
-      if ('unverify' === $lastLog['action']) {
-        $spj['status'] = 'verifiable';
-        $spj['viewer'] = 'form';
-      }
+      // if ('verify' === $lastLog['action']) $status = 'verified';// let it wait for global status
+      if ('unverify' === $lastLog['action']) $status = 'verifiable';
     } else if (in_array($lastLog['user'], $user['letting'])) {
 
     } else if (in_array($lastLog['user'], $user['bawahan'])) {
-      if ('verify' === $lastLog['action']) {
-        $spj['status'] = 'verifiable';
-        $spj['viewer'] = 'form';
-      }
+      if ('verify' === $lastLog['action']) $status = 'verifiable';
     }
-    $this->load->model('Payments');
-    $spj['payment_status'] = $this->Payments->getStatusPayment($spj['uuid'], $this->getTotal($spj['uuid']));
+    return $status;
   }
 
   function getCreator ($uuid) {

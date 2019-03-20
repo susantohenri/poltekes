@@ -50,7 +50,7 @@ class Spjlogs extends MY_Model {
       'attributes' => array(
         array('disabled' => 'disabled')
       ),
-      'width' => 6
+      'width' => 4
     );
   }
 
@@ -58,7 +58,7 @@ class Spjlogs extends MY_Model {
     $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
       ->select("{$this->table}.*")
-      ->select("DATE_FORMAT(taken, '%d/%m/%Y %H:%i:%s') taken", false)
+      ->select("DATE_FORMAT(taken, '%d-%m-%Y %H:%i:%s') taken", false)
       ->select("jabatan.nama as nama_jabatan", false)
       ->join('user', "user.uuid = {$this->table}.user", 'left')
       ->join('jabatan', "jabatan.uuid = user.jabatan", 'left');

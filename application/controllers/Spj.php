@@ -52,7 +52,7 @@ class Spj extends MY_Controller {
     echo $this->{$this->model}->save($post);
   }
 
-  function _read ($id) {
+  function read ($id) {
     $data = array();
     $data['page_name'] = 'form';
     $model = $this->model;
@@ -60,11 +60,23 @@ class Spj extends MY_Controller {
     $data['subform'] = $this->$model->getFormChild($id);
     $data['uuid'] = $id;
 
+    $spj = $this->Spjs->findOne($id);
+    $status = $this->Spjs->getStatus($spj);
+
     $this->load->model('Permissions');
-    $data['permitted_actions'] = $this->Permissions->getPermittedActions($this->controller);
-    $spj = $this->db->get_where('spj', array('uuid' => $id))->row_array();
-    $this->{$this->model}->putStatus($spj);
-    if ('verifiable' === $spj['status'] && !in_array('delete', $data['permitted_actions'])) $data['permitted_actions'][] = 'delete';
+    $data['permission'] = $this->Permissions->getPermissions();
+
+    switch ($status) {
+      case 'unverifiable':
+      case 'verified':
+        unset($data['permission'][array_search('update_Spj', $data['permission'])]);
+        unset($data['permission'][array_search('delete_Spj', $data['permission'])]);
+        break;
+      case 'verifiable':
+        $data['permission'][] = 'verify_Spj';
+        break;
+      default: $data['permission'] = array();
+    }
 
     $this->loadview('index', $data);
   }
