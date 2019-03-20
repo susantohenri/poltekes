@@ -9,7 +9,7 @@
         <div class="item-col item-col-header fixed col-sm-8">
             <div>
                 <?php $routeToEdit = in_array($current['controller'], array('Detail', 'Spj')) ? 'read' : 'readList' ?>
-                <a target="_blank" href="<?= site_url("{$current['controller']}/{$routeToEdit}/{$item['uuid']}") ?>">
+                <a href="<?= site_url("{$current['controller']}/{$routeToEdit}/{$item['uuid']}") ?>">
                   <?= "{$item['kode']} {$item['uraian']}" ?>
                 </a>
                 <?php if (in_array("update_{$current['controller']}", $permission) && !in_array($current['controller'], array('Spj', 'Lampiran'))) : ?>

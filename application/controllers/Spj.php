@@ -2,6 +2,36 @@
 
 class Spj extends MY_Controller {
 
+  public function index () {
+    $model = $this->model;
+    if ($post = $this->$model->lastSubmit($this->input->post())) {
+      if (isset ($post['delete'])) $this->$model->delete($post['delete']);
+      else if (isset ($post['verification'])) $this->$model->verify($post['verification']);
+      else {
+          $db_debug = $this->db->db_debug;
+          $this->db->db_debug = FALSE;
+
+          if (strpos($_SERVER['HTTP_REFERER'], '/readList/') > -1) {
+            $this->load->model('Details');
+            $result = $this->Details->updateByList($post);
+          } else $result = $this->$model->save($post);
+
+          $error = $this->db->error();
+          $this->db->db_debug = $db_debug;
+          if (isset ($result['error'])) $error = $result['error'];
+          if(count($error)){
+              $this->session->set_flashdata('model_error', $error['message']);
+              redirect($this->controller);
+          }
+      }
+    }
+    $vars = array();
+    $vars['page_name'] = 'table';
+    // $vars['records'] = $this->$model->find();
+    $vars['thead'] = $this->$model->thead;
+    $this->loadview('index', $vars);
+  }
+
   function create ($detail = null) {
     $model= $this->model;
     $vars = array();
@@ -19,32 +49,6 @@ class Spj extends MY_Controller {
     $vars['subform'] = $this->$model->getFormChild();
     $vars['uuid'] = '';
     $this->loadview('index', $vars);
-  }
-
-  function _subformlist ($uuid, $jabatanGroup = null) {
-    $this->load->model('Permissions');
-    $perms = $this->Permissions->getPermittedActions($this->controller);
-    if (!in_array('read', $perms)) return false;
-    $data = array();
-    $model = $this->model;
-    $data['item'] = $this->$model->getListItem($uuid);
-
-    if ('form' === $data['item']['viewer']) {
-      $viewer = 'subformlistread-spj';
-      $this->load->model('Jabatans');
-      $user = $this->session->userdata();
-      $this->Jabatans->getUserAttr($user);
-      $data['userDetail'] = $user;
-
-      if (in_array('create', $perms)) {
-        $creator = $this->{$this->model}->getCreator($uuid);
-        if (in_array($creator, $user['letting'])) {}
-        else if (!in_array($creator, $user['bawahan'])) $perms = array_diff ($perms, ['create']);
-      }
-    } else $viewer = 'subformlist-spj';
-
-    $data['permitted_actions'] = $perms;
-    $this->loadview($viewer, $data);
   }
 
   function save () {
@@ -79,5 +83,12 @@ class Spj extends MY_Controller {
     }
 
     $this->loadview('index', $data);
+  }
+
+  function verify ($uuid) {
+    $vars = array();
+    $vars['page_name'] = 'confirm-verification';
+    $vars['uuid'] = $uuid;
+    $this->loadview('index', $vars);
   }
 }
