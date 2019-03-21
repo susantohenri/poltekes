@@ -7,6 +7,7 @@ class Spj extends MY_Controller {
     if ($post = $this->$model->lastSubmit($this->input->post())) {
       if (isset ($post['delete'])) $this->$model->delete($post['delete']);
       else if (isset ($post['verification'])) $this->$model->verify($post['verification']);
+      else if (isset ($post['unverification'])) $this->$model->unverify($post['unverification'], $post['unverify_reason']);
       else {
           $db_debug = $this->db->db_debug;
           $this->db->db_debug = FALSE;
@@ -77,6 +78,7 @@ class Spj extends MY_Controller {
         unset($data['permission'][array_search('delete_Spj', $data['permission'])]);
         break;
       case 'verifiable':
+        $data['permission'][] = 'unverify_Spj';
         $data['permission'][] = 'verify_Spj';
         break;
       default: $data['permission'] = array();
@@ -88,6 +90,13 @@ class Spj extends MY_Controller {
   function verify ($uuid) {
     $vars = array();
     $vars['page_name'] = 'confirm-verification';
+    $vars['uuid'] = $uuid;
+    $this->loadview('index', $vars);
+  }
+
+  function unverify ($uuid) {
+    $vars = array();
+    $vars['page_name'] = 'confirm-unverification';
     $vars['uuid'] = $uuid;
     $this->loadview('index', $vars);
   }

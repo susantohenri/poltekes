@@ -247,8 +247,8 @@
                                 <p>Are you sure want to do this?</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Ya</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                             </div>
                         </div>
                         <!-- /.modal-content -->

@@ -14,7 +14,10 @@
                 <a href="<?= site_url($current['controller'] . "/delete/$uuid") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
                 <?php endif ?>
                 <?php if (!empty ($uuid) && in_array("verify_{$current['controller']}", $permission)): ?>
-                <a href="<?= site_url($current['controller'] . "/verify/$uuid") ?>" class="btn btn-success"><i class="fa fa-check-square-o"></i> &nbsp; Verifikasi</a>
+                <a href="<?= site_url($current['controller'] . "/verify/$uuid") ?>" class="btn btn-success"><i class="fa fa-check"></i> &nbsp; Verify</a>
+                <?php endif ?>
+                <?php if (!empty ($uuid) && in_array("unverify_{$current['controller']}", $permission)): ?>
+                <a href="<?= site_url($current['controller'] . "/unverify/$uuid") ?>" class="btn btn-danger"><i class="fa fa-times"></i> &nbsp; Unverify</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> &nbsp; Batal</a>
             </div>

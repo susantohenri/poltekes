@@ -141,11 +141,12 @@ class Spjs extends MY_Model {
     ));
   }
 
-  function unverify ($uuid) {
+  function unverify ($uuid, $unverify_reason) {
     $this->Spjlogs->create(array(
       'spj'   => $uuid,
       'action'=> 'unverify'
     ));
+    $this->db->where('uuid', $uuid)->set('unverify_reason', $unverify_reason)->update($this->table);
   }
 
   function findOne ($param) {
