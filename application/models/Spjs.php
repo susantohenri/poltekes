@@ -147,7 +147,7 @@ class Spjs extends MY_Model {
       'spj'   => $uuid,
       'action'=> 'unverify'
     ));
-    $this->db->where('uuid', $uuid)->set('unverify_reason', $unverify_reason)->update($this->table);
+    if (strlen($unverify_reason) > 0) $this->db->where('uuid', $uuid)->set('unverify_reason', $unverify_reason)->update($this->table);
   }
 
   function findOne ($param) {
@@ -226,6 +226,13 @@ class Spjs extends MY_Model {
   function getCreator ($uuid) {
     $creator = $this->Spjlogs->findOne(array('spj' => $uuid, 'action' => 'create'));
     return $creator['user'];
+  }
+
+  function getJabatanCreator ($uuid) {
+    $creatorId = $this->getCreator($uuid);
+    $this->load->model('Users');
+    $creator = $this->Users->findOne($creatorId);
+    return $creator['jabatan'];
   }
 
   function getTotal ($uuid) {

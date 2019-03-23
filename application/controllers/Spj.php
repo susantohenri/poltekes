@@ -68,6 +68,7 @@ class Spj extends MY_Controller {
     $spj = $this->Spjs->findOne($id);
     $status = $this->Spjs->getStatus($spj);
     $isMine = $this->Spjs->isMine($id);
+    $isCreator = $this->session->userdata('jabatan') === $this->Spjs->getJabatanCreator($id);
 
     $this->load->model('Permissions');
     $data['permission'] = $this->Permissions->getPermissions();
@@ -83,7 +84,7 @@ class Spj extends MY_Controller {
           unset($data['permission'][array_search('update_Spj', $data['permission'])]);
           unset($data['permission'][array_search('delete_Spj', $data['permission'])]);
         }
-        $data['permission'][] = 'unverify_Spj';
+        if (!$isCreator) $data['permission'][] = 'unverify_Spj';// creator ndak boleh unverify
         $data['permission'][] = 'verify_Spj';
         break;
       default: $data['permission'] = array();
