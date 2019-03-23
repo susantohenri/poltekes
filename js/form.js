@@ -50,7 +50,10 @@ window.onload = function () {
   });
 
   if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
-  if (window.location.href.indexOf('Spj') > -1) getSisaPagu()
+  if (window.location.href.indexOf('Spj') > -1) {
+    getSisaPagu()
+    checkUnverifyReason()
+  }
 }
 
 function formInit () {
@@ -205,6 +208,13 @@ function getSisaPagu () {
   let detail = $('[name="detail"]').val()
   $.get(`${site_url}Detail/getSisaPagu/${detail}`, function (sisaPagu) {
     $('[name="sisa_pagu"]').val(currency(sisaPagu))
+  })
+}
+
+function checkUnverifyReason () {
+  let spj = $('[name="uuid"]').val()
+  $.get(`${site_url}Spj/getReason/${spj}`, function (reason) {
+    if (reason.length > 0) showError(`Status: Unverified, Alasan: ${reason}`)
   })
 }
 

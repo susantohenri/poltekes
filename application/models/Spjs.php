@@ -139,6 +139,7 @@ class Spjs extends MY_Model {
       'spj'   => $uuid,
       'action'=> 'verify'
     ));
+    $this->db->where('uuid', $uuid)->set('unverify_reason', '')->update($this->table);
   }
 
   function unverify ($uuid, $unverify_reason) {

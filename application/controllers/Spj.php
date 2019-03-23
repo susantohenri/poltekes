@@ -105,4 +105,9 @@ class Spj extends MY_Controller {
     $vars['uuid'] = $uuid;
     $this->loadview('index', $vars);
   }
+
+  function getReason ($uuid) {
+    $record = $this->Spjs->findOne($uuid);
+    echo $record['unverify_reason'];
+  }
 }
