@@ -245,4 +245,18 @@ class Spjs extends MY_Model {
     return parent::getForm ($uuid, $isSubform);
   }
 
+  function isMine ($uuid) {
+    $records = $this->db->query("
+      SELECT `assignment`.*
+      FROM `assignment`
+      LEFT JOIN detail ON `assignment`.detail = detail.uuid
+      LEFT JOIN jabatan_group ON `assignment`.jabatan_group = jabatan_group.uuid
+      LEFT JOIN jabatan ON jabatan.jabatan_group = jabatan_group.uuid
+      LEFT JOIN spj ON spj.detail = detail.uuid
+      WHERE spj.uuid = '{$uuid}'
+      AND jabatan.uuid = '{$this->session->userdata('jabatan')}'
+    ")->result();
+    return count($records) > 0;
+  }
+
 }

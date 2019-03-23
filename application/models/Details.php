@@ -11,7 +11,7 @@ class Details extends MY_Model {
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency', 'width' => '14%'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'type' => 'currency', 'width' => '14%'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '14%'),
-      (object) array('mData' => 'nama_jabatan_group', 'sTitle' => 'Breakdown'),
+      (object) array('mData' => 'nama_jabatan_group', 'sTitle' => 'Breakdown', 'searchable' => false),
     );
 
     $this->form[]= array(
