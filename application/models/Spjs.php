@@ -113,19 +113,22 @@ class Spjs extends MY_Model {
     return $result;
   }
 
-  function _update ($data) {
-    $changes = array();
-    $prev = $this->db->get_where($this->table, array('uuid' => $data['uuid']))->row_array();
-    foreach ($data as $field => $value) {
-      if (isset ($prev[$field]) && $prev[$field] !== $value) $changes[] = array($field, $prev[$field], $value);
-    }
-    if (!empty ($changes)) {
-      $this->db->where('uuid', $data['uuid'])->update($this->table, $data);
-      $this->Spjlogs->create(array(
-        'spj'   => $data['uuid'],
-        'action'=> 'update'
-      ));
-    }
+  function update ($data) {
+    $this->load->model('Lampirans');
+    $uuid = $data['uuid'];
+    $spj_before = $this->findOne($uuid);
+    $lampiran_before = $this->Lampirans->find(array('spj' => $uuid));
+
+    parent::update($data);
+
+    $spj_after = $this->findOne($uuid);
+    $lampiran_after = $this->Lampirans->find(array('spj' => $uuid));
+
+    if (json_encode($spj_before) != json_encode($spj_after) || json_encode($lampiran_before) != json_encode($lampiran_after)) $this->Spjlogs->create(array(
+      'spj'   => $data['uuid'],
+      'action'=> 'update'
+    ));
+
     return $data['uuid'];
   }
 
