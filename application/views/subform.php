@@ -7,7 +7,7 @@
         <?php case 'select': if(preg_match('/(multiple)/', $field['attr']) > 0) echo '<input type="hidden" name="'.$controller.'_'.$field['name'].'">'; ?>
           <div class="input-group col-sm-<?= $field['width'] ?>">
             <div class="input-group-prepend">
-              <span class="input-group-text" id="basic-addon1"><?= $field['label'] ?></span>
+              <span class="input-group-text" id="basic-+on1"><?= $field['label'] ?></span>
             </div>
             <select class="form-control" name="<?= "{$controller}_" ?><?= $field['name'] ?>[<?= $uuid ?>]" <?= $field['attr'] ?>>
             <?php foreach ($field['options'] as $opt): ?>
@@ -36,7 +36,7 @@
         <i class="fa fa-trash-o"></i>
       </a>
       <?php endif ?>
-      <?php if (in_array("read_{$controller}", $permission)) : ?>
+      <?php if (in_array("read_{$controller}", $permission) && strlen($uuid) > 0) : ?>
       <a class="btn btn-info btn-detail" href="<?= site_url("{$controller}/read/{$uuid}") ?>" target="_blank">
         <i class="fa fa-external-link"></i>
       </a>
