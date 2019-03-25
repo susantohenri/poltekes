@@ -207,7 +207,12 @@ class Migration_jabatan extends CI_Migration {
       ));
     }
 
-    $para_bendahara = $this->db->get_where('jabatan', array('nama LIKE' => 'Bendahara%'))->result();
+    $para_bendahara = $this->db
+      ->where(array('nama LIKE' => 'Bendahara%'))
+      ->where(array('nama <>' => 'Bendahara Pengeluaran Direktorat'))
+      ->get('jabatan')
+      ->result();
+      // ->get_where('jabatan', array('nama LIKE' => 'Bendahara%'))->result();
     foreach ($para_bendahara as $bendahara) {
       foreach (array('Spj', 'Lampiran') as $entity) {
         foreach(array('create', 'update', 'delete') as $action) {
@@ -234,6 +239,7 @@ class Migration_jabatan extends CI_Migration {
       ->where('nama', 'Bendahara Pengeluaran Direktorat')
       ->get('jabatan')
       ->row_array();
+    $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'create');
     $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'update');
     foreach ($this->Jabatans->find() as $jab) {
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'index');
