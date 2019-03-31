@@ -72,6 +72,7 @@ class Spj extends MY_Controller {
 
     $this->load->model('Permissions');
     $data['permission'] = $this->Permissions->getPermissions();
+    if ('verified' !== $spj['global_status']) unset($data['permission'][array_search('create_SpjPayment', $data['permission'])]);
 
     switch ($status) {
       case 'unverifiable':

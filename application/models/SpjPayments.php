@@ -4,7 +4,7 @@ class SpjPayments extends MY_Model {
 
   function __construct () {
     parent::__construct();
-    $this->table = 'spj';
+    $this->table = 'payment';
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
@@ -14,49 +14,59 @@ class SpjPayments extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'uraian',
-      'label'=> 'Uraian',
-      'width'=> 4
-    );
-
-    $this->form[]= array(
-      'name' => 'total_spj',
-      'label'=> 'Total SPJ',
-      'value'=> 0,
+      'name' => 'spj',
+      'label'=> 'Uraian SPJ',
+      'options' => array(),
       'attributes' => array(
-        array('disabled' => 'disabled'),
-        array('data-number' => 'true')
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Spjs'),
+        array('data-field' => 'uraian')
       ),
     );
 
     $this->form[]= array(
-      'name' => 'paid',
-      'label'=> 'Total Dibayar',
-      'value'=> 0,
-      'attributes' => array(
-        array('disabled' => 'disabled'),
-        array('data-number' => 'true')
-      ),
+      'name' => 'sender',
+      'label'=> 'Rekening Pengirim',
+      'width'=> 5
     );
 
     $this->form[]= array(
-      'name'    => 'unpaid_reason',
-      'label'   => 'Alasan Tidak Dibayar',
+      'name' => 'recipient',
+      'label'=> 'Rekening Penerima',
+      'width'=> 5
     );
 
-    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
-    $this->load->model('Spjlogs');
+    $this->form[]= array(
+      'name' => 'transfer_time',
+      'label'=> 'Waktu Transfer',
+      'attributes' => array (
+        array ('data-date' => 'datepicker')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
+      'name' => 'amount',
+      'label'=> 'Nominal',
+      'attributes' => array(
+        array('data-number' => 'true')
+      ),
+      'width'=> 5
+    );
+
+  }
+
+  function getForm ($uuid = false, $isSubform = false) {
+    if ($isSubform) unset($this->form[0]);
+    return parent::getForm ($uuid, $isSubform);
   }
 
   function findOne ($param) {
-    $param = !is_array($param) ? array("{$this->table}.uuid" => $param) : $param;
     $this->db
       ->select("{$this->table}.*")
-      ->select("{$this->table}.detail parent", false)
-      ->select("FORMAT(SUM(amount), 0) paid", false)
-      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) total_spj", false)
-      ->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM item GROUP BY lampiran.spj) as spj_item', "spj_lampiran.spj = spj.uuid", 'left')
-      ->join('payment', 'payment.spj = spj.uuid', 'left');
+      ->select("DATE_FORMAT(transfer_time, '%d %b %Y') transfer_time", false)
+      ->select("FORMAT(amount, 0) amount", false)
+      ;
     return parent::findOne($param);
   }
 

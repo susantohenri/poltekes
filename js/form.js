@@ -54,6 +54,10 @@ window.onload = function () {
     getSisaPagu()
     checkUnverifyReason()
   }
+
+  let paymentBtn = $('div.form-child[data-controller="SpjPayment"] .btn-warning')
+  let paymentLabel = paymentBtn.html()
+  paymentBtn.html(`${paymentLabel} New Payment`)
 }
 
 function formInit () {

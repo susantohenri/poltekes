@@ -83,8 +83,8 @@ class Spjs extends MY_Model {
     );
 
     $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans');
+    $this->childs[] = array('label' => '', 'controller' => 'SpjPayment', 'model' => 'SpjPayments');
     $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs');
-    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
     $this->load->model('Spjlogs');
   }
 
@@ -143,6 +143,11 @@ class Spjs extends MY_Model {
       'action'=> 'verify'
     ));
     $this->db->where('uuid', $uuid)->set('unverify_reason', '')->update($this->table);
+
+    $this->load->model('Jabatans');
+    $jab = $this->Jabatans->findOne($this->session->userdata('jabatan'));
+    if ($jab && empty ($jab['parent']))
+      $this->db->where('uuid', $uuid)->set('global_status', 'verified')->update($this->table);
   }
 
   function unverify ($uuid, $unverify_reason) {
