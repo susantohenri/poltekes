@@ -35,6 +35,7 @@ class SpjPayment extends MY_Controller {
               redirect(site_url('Spj'));
           }
       }
+      redirect(site_url('Spj'));
     } else redirect(site_url('Spj'));
   }
 

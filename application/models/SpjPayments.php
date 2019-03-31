@@ -61,11 +61,17 @@ class SpjPayments extends MY_Model {
     $form = parent::getForm ($uuid, $isSubform);
     if ($isSubform) {
       foreach ($form as &$field) {
-        if ('amount' === $field['name']) $field['value'] = number_format($field['value']);
         if ('transfer_time' === $field['name']) $field['value'] = date('d F Y', strtotime($field['value']));
       }
     }
     return $form;
+  }
+
+  function findOne ($param) {
+    $this->db
+      ->select('*')
+      ->select('FORMAT(amount, 0) amount', false);
+    return parent::findOne($param);
   }
 
   function dt () {

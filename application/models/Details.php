@@ -78,7 +78,7 @@ class Details extends MY_Model {
       'width'=> 2
     );
 
-    $this->childs[] = array('label' => '', 'controller' => 'Spj', 'model' => 'Spjs');
+    $this->childs[] = array('label' => '', 'controller' => 'Spj', 'model' => 'Spjs', 'label' => 'SPJ');
 
   }
 

@@ -240,6 +240,7 @@ class Migration_jabatan extends CI_Migration {
       ->row_array();
     $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'create');
     $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'update');
+    $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'delete');
     foreach ($this->Jabatans->find() as $jab) {
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'index');
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'read');
