@@ -11,7 +11,8 @@ class Permissions extends MY_Model {
     $this->form[]= array(
     	'name' => 'entity',
     	'label'=> 'Entitas',
-      'options' => $this->getEntities()
+      'options' => $this->getEntities(),
+      'width' => 4
     );
 
     $this->form[]= array(
@@ -32,6 +33,7 @@ class Permissions extends MY_Model {
       array('text' => 'Akun', 'value' => 'Akun'),
       array('text' => 'Detail', 'value' => 'Detail'),
       array('text' => 'SPJ', 'value' => 'Spj'),
+      array('text' => 'Lampiran', 'value' => 'Lampiran'),
       array('text' => 'SPJ Payment', 'value' => 'SpjPayment'),
       array('text' => 'User', 'value' => 'User'),
       array('text' => 'Jabatan', 'value' => 'Jabatan'),
@@ -59,19 +61,19 @@ class Permissions extends MY_Model {
   function getGeneralEntities () {
     return array (
     'Program', 'Kegiatan', 'Output', 'SubOutput',
-    'Komponen', 'SubKomponen', 'Akun');
+    'Komponen', 'SubKomponen', 'Akun', 'Lampiran');
   }
 
   function setGeneralPermission ($jabatan) {
     foreach ($this->getGeneralEntities() as $entity) {
-      foreach (array('index', 'read', 'update') as $action) {
+      foreach (array('index', 'read') as $action) {
         $this->setPermission($jabatan, $entity, $action);
       }
     }
-    foreach (array('Detail', 'Spj') as $entity) $this->setPermission($jabatan, $entity, 'read');
+    foreach (array('Detail', 'Spj') as $entity) foreach (array('index', 'read') as $action) $this->setPermission($jabatan, $entity, $action);
   }
 
-  function getPermittedActions ($entity) {
+  function _getPermittedActions ($entity) {
     $actions = array();
     foreach ($this->find(
       array(
@@ -80,6 +82,12 @@ class Permissions extends MY_Model {
       ))
     as $perm) $actions[] = $perm->action;
     return $actions;
+  }
+
+  function getPermissions () {
+    $permission = array();
+    foreach ($this->find(array('jabatan' => $this->session->userdata('jabatan'))) as $perm) $permission[] = "{$perm->action}_{$perm->entity}";
+    return $permission;
   }
 
   function getPermittedMenus () {

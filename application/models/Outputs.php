@@ -19,8 +19,8 @@ class Outputs extends MY_Model {
       'label'=> 'Kegiatan',
       'options' => array(),
       'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Kegiatans'), 
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Kegiatans'),
         array('data-field' => 'uraian')
       ),
     );
@@ -31,7 +31,7 @@ class Outputs extends MY_Model {
     $this->form[]= array(
       'name' => 'uraian',
       'label'=> 'Uraian',
-      'width'=> 9
+      'width'=> 8
     );
     $this->childs[] = array('label' => '', 'controller' => 'SubOutput', 'model' => 'SubOutputs');
 
@@ -39,19 +39,19 @@ class Outputs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
     else $this->Users->filterByJabatan($this->db);
     return $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("{$this->table}.kegiatan parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT sub_output.uuid) childUuid", false)
       ->select("'SubOutput' childController", false)
-      ->select('output.kode kode', false)
-      ->select('output.uraian uraian', false)
+      ->select("{$this->table}.kode kode", false)
+      ->select("{$this->table}.uraian uraian", false)
       ->group_by("{$this->table}.uuid")
       ->get()
       ->row_array();
@@ -59,7 +59,7 @@ class Outputs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
+    $this->Users->filterByJabatan($this->datatables, $this->table);
     return $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
@@ -68,9 +68,9 @@ class Outputs extends MY_Model {
 
       ->select('SUM(detail.vol) as detail_vol', false)
       ->select('detail.sat as detail_sat', false)
-      ->select('SUM(item.vol) as spj_vol', false)
-      ->select('item.sat as spj_sat', false)
-      ->join('item', 'spj.uuid = item.spj', 'left')
+      ->select('SUM(lampiran.vol) as spj_vol', false)
+      ->select('lampiran.sat as spj_sat', false)
+      ->join('lampiran', 'spj.uuid = lampiran.spj', 'left')
       ->group_by("{$this->table}.uuid")
       ->generate();
   }

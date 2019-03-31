@@ -28,14 +28,14 @@ class Users extends MY_Model {
         'name' => 'confirm_password',
         'label'=> 'Ulangi Password'
     );
-  
+
     $this->form[]= array(
       'name' => 'jabatan',
       'label'=> 'Jabatan',
       'options' => array(),
       'attributes' => array(
-        array('data-autocomplete' => 'true'), 
-        array('data-model' => 'Jabatans'), 
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Jabatans'),
         array('data-field' => 'nama')
       ),
     );
@@ -71,33 +71,38 @@ class Users extends MY_Model {
     return parent::dt();
   }
 
-  function filterByJabatanGroup ($class, $jabatanGroup) {
+  function filterByJabatanGroup ($class, $rightTable = 'Program', $jabatanGroup) {
     $this->load->model('TopDowns');
     $topdown = $this->TopDowns->findOne(array('jabatan_group' => $jabatanGroup));
     if ($topdown && strlen ($topdown['bawahan']) > 0) {
       $class->where("detail.uuid IN (SELECT assignment.detail FROM assignment WHERE jabatan_group IN ({$topdown['bawahan']}))");
     }
 
-    $class
-      ->join('kegiatan', "program.uuid = kegiatan.program", 'left')
-      ->join('output', "kegiatan.uuid = output.kegiatan", 'left')
-      ->join('sub_output', "output.uuid = sub_output.output", 'left')
-      ->join('komponen', "sub_output.uuid = komponen.sub_output", 'left')
-      ->join('sub_komponen', "komponen.uuid = sub_komponen.komponen", 'left')
-      ->join('akun', "sub_komponen.uuid = akun.sub_komponen", 'left')
+    $tables = array(
+      'program',
+      'kegiatan',
+      'output',
+      'sub_output',
+      'komponen',
+      'sub_komponen',
+      'akun',
+      'detail',
+      'spj',
+    );
+    foreach ($tables as $index => $table) if ($index > 0) {
+      $class->join($table, "{$tables[$index - 1]}.uuid = {$table}.{$tables[$index - 1]}", $table === $rightTable ? 'right' : 'left');
+    }
 
-      ->join('detail', "akun.uuid = detail.akun", 'left')
-      ->join('spj', "detail.uuid = spj.detail", 'left')
-      ->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left')
-      ->join('(SELECT item.spj, SUM(IFNULL(item.vol, 0) * IFNULL(item.hargasat, 0)) as submitted_amount FROM item GROUP BY item.spj) as spj_item', "spj_item.spj = spj.uuid", 'left')
-      ->from('program');
+    $class->join('(SELECT payment.spj, SUM(payment.amount) as paid_amount FROM payment GROUP BY payment.spj) as payment_sent', "payment_sent.spj = spj.uuid", 'left');
+    $class->join('(SELECT lampiran.spj, SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) as submitted_amount FROM lampiran GROUP BY lampiran.spj) as spj_lampiran', "spj_lampiran.spj = spj.uuid", 'left');
+    $class->from('program');
   }
 
-  function filterByJabatan ($class, $jabatan = false) {
+  function filterByJabatan ($class, $rightTable = 'Program', $jabatan = false) {
     if (!$jabatan) $jabatan = $this->session->userdata('jabatan');
     $this->load->model('Jabatans');
     $jab = $this->Jabatans->findOne($jabatan);
-    $this->filterByJabatanGroup($class, $jab['jabatan_group']);
+    $this->filterByJabatanGroup($class, $rightTable, $jab['jabatan_group']);
   }
 
 }

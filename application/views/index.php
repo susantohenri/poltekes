@@ -14,7 +14,7 @@
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/dataTables.green.css') ?>">
         <link rel="stylesheet" type="text/css" href="<?= base_url('css/select2.min.css') ?>">
         <style type="text/css">
-            form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option {
+            form label, form .form-control, .btn, .dataTables_wrapper, .select2, .select2-results__option, .input-group-text {
                 font-size: 14px
             }
             [data-number] {text-align: right;}
@@ -22,6 +22,8 @@
             .btn-oval{padding: 2px 4px; font-size: 12px}
             .hidden{display: none;}
             .form-spj .form-group {margin-bottom: 2px}
+            .form-child [class^="col-sm-"] {margin-bottom: 5px}
+            .btn-delete[data-uuid], .btn-detail {margin-top: 5px}
         </style>
     </head>
     <body>
@@ -245,8 +247,8 @@
                                 <p>Are you sure want to do this?</p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-primary" data-dismiss="modal">Yes</button>
-                                <button type="button" class="btn btn-secondary" data-dismiss="modal">No</button>
+                                <button type="button" class="btn btn-primary" data-dismiss="modal">Ya</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Tidak</button>
                             </div>
                         </div>
                         <!-- /.modal-content -->
@@ -283,7 +285,7 @@
                 $mobileHandle.swipe({
                     swipeLeft: function() {
                         if($appContainer.hasClass("sidebar-open")) {
-                            $appContainer.removeClass("sidebar-open")  
+                            $appContainer.removeClass("sidebar-open")
                         }
                     },
                     swipeRight: function() {

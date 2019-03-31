@@ -11,7 +11,7 @@
         <div class="card card-block">
           <form action="<?= site_url($current['controller']) ?>" class="form-horizontal form-groups" enctype="multipart/form-data" method="POST">
 		        <input type="hidden" name="last_submit" value="<?= time() ?>">
-		        <input type="hidden" name="delete" value="<?= $uuid ?>">
+		        <input type="hidden" name="verification" value="<?= $uuid ?>">
 
 		        <div class="text-center">
 		          <h1>Apakah Anda Yakin ?</h1>

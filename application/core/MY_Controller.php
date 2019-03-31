@@ -35,9 +35,7 @@ class MY_Controller extends CI_Controller {
 
     $this->load->model('Permissions');
     $vars['permitted_menus']  = $this->Permissions->getPermittedMenus();
-    if (!isset ($vars['permitted_actions'])) $vars['permitted_actions']= $this->Permissions->getPermittedActions($this->controller);
-    // $vars['permitted_spj_actions']= $this->Permissions->getPermittedActions('Spj');
-    // $vars['permitted_jabatan_actions']= $this->Permissions->getPermittedActions('Jabatan');
+    if (!isset ($vars['permission'])) $vars['permission'] = $this->Permissions->getPermissions();
     $this->load->view($view, $vars);
   }
 
@@ -117,18 +115,15 @@ class MY_Controller extends CI_Controller {
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($id);
     $this->load->model('Permissions');
-    $data['allow_edit_pagu'] = in_array('create', $this->Permissions->getPermittedActions($this->controller));
     $this->loadview('index', $data);
   }
 
   function subformlist ($uuid, $jabatan_group = null) {
     $this->load->model('Permissions');
-    $perms = $this->Permissions->getPermittedActions($this->controller);
-    if (!in_array('read', $perms)) return false;
+    if (!in_array("read_{$this->controller}", $this->Permissions->getPermissions())) return false;
     $data = array();
     $model = $this->model;
     $data['item'] = $this->$model->getListItem($uuid, $jabatan_group);
-    $data['allow_edit_pagu'] = in_array('create', $perms);
     $this->loadview('subformlist', $data);
   }
 

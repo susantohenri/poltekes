@@ -8,7 +8,7 @@ class Programs extends MY_Model {
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Uraian', 'width' => '50%'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Program', 'width' => '50%'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
@@ -142,15 +142,15 @@ class Programs extends MY_Model {
 
   function getListItem ($uuid, $jabatanGroup = null) {
     $this->load->model('Users');
-    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $jabatanGroup);
+    if (!is_null($jabatanGroup)) $this->Users->filterByJabatanGroup($this->db, $this->table, $jabatanGroup);
     else $this->Users->filterByJabatan($this->db);
-    return 
+    return
     $this->db
       ->where("{$this->table}.uuid", $uuid)
       ->select("{$this->table}.*")
       ->select("'' parent", false)
       ->select("FORMAT(SUM(detail.vol * detail.hargasat), 0) pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("FORMAT(SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph), 0) as total_spj", false)
       ->select("FORMAT(SUM(payment_sent.paid_amount), 0) as paid", false)
       ->select("GROUP_CONCAT(DISTINCT kegiatan.uuid) childUuid", false)
       ->select("'Kegiatan' childController", false)
@@ -161,14 +161,14 @@ class Programs extends MY_Model {
 
   function dt () {
     $this->load->model('Users');
-    $this->Users->filterByJabatan($this->datatables);
-    return 
+    $this->Users->filterByJabatan($this->datatables, $this->table);
+    return
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
       ->select("{$this->table}.uraian")
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
-      ->select("SUM(spj_item.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
+      ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
       ->select("SUM(payment_sent.paid_amount) as paid", false)
       ->group_by("{$this->table}.uuid")
       ->generate();

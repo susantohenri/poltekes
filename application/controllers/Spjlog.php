@@ -1,7 +1,7 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Spjlog extends MY_Controller {
-  function subformcreate () {
+  function _subformcreate () {
     $model= $this->model;
     $vars = array();
     $vars['form'] = $this->$model->getForm();
@@ -11,7 +11,7 @@ class Spjlog extends MY_Controller {
     $this->loadview('subform-spjlog', $vars);
   }
 
-  function subformread ($uuid) {
+  function _subformread ($uuid) {
     $data = array();
     $model = $this->model;
     $data['form'] = $this->$model->getForm($uuid);

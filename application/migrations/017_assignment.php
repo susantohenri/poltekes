@@ -16,6 +16,9 @@ class Migration_assignment extends CI_Migration {
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
+    $this->db->query("ALTER TABLE `assignment` ADD INDEX(`jabatan_group`)");
+    $this->db->query("ALTER TABLE `assignment` ADD INDEX(`detail`)");
+
   }
 
   function down () {

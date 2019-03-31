@@ -48,10 +48,11 @@ class Migration_jabatan extends CI_Migration {
       }
     }
     foreach ($this->Permissions->getGeneralEntities() as $e) {
-      foreach (array('index', 'create', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
+      foreach (array('index', 'create', 'update', 'delete') as $a) $this->Permissions->setPermission($planner, $e, $a);
     }
     foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Detail', $action);
     foreach (array('index', 'read', 'update') as $action) $this->Permissions->setPermission($planner, 'Breakdown', $action);
+    foreach (array('index', 'create', 'update', 'delete') as $action) $this->Permissions->setPermission($planner, 'Permission', $action);
     $atasan = '';
     foreach (array (
       'Atasan Langsung Bendahara Pengeluaran',
@@ -206,23 +207,40 @@ class Migration_jabatan extends CI_Migration {
       ));
     }
 
-    $allow_edit_spj = $this->db
-      ->where('nama', 'Bendahara Pembantu Pengeluaran Direktorat')
-      ->or_like('nama', 'Bendahara Prodi')
-      ->or_like('nama', 'Kaprodi')
-      ->or_like('nama', 'Bendahara Jurusan')
-      ->or_like('nama', 'Bendahara Gaji')
-      ->or_like('nama', 'Bendahara Unit')
-      ->or_like('nama', 'Bendahara Urusan')
+    $para_bendahara = $this->db
+      ->where(array('nama LIKE' => 'Bendahara%'))
+      ->where(array('nama <>' => 'Bendahara Pengeluaran Direktorat'))
       ->get('jabatan')
       ->result();
-    foreach ($allow_edit_spj as $jab) $this->Permissions->setPermission($jab->uuid, 'Spj', 'create');
+    foreach ($para_bendahara as $bendahara) {
+      foreach (array('Spj', 'Lampiran') as $entity) {
+        foreach(array('create', 'update', 'delete') as $action) {
+          $this->Permissions->setPermission($bendahara->uuid, $entity, $action);
+        }
+      }
+    }
+
+    $para_kepala = $this->db
+      ->where(array('nama LIKE' => 'kepala%'))
+      ->or_where(array('nama LIKE' => 'kaprodi%'))
+      ->get('jabatan')
+      ->result();
+    foreach ($para_kepala as $kepala) {
+      foreach (array('Spj', 'Lampiran') as $entity) {
+        foreach(array('create', 'update', 'delete') as $action) {
+          if ('Spj' === $entity && 'delete' === $action) continue;
+          $this->Permissions->setPermission($kepala->uuid, $entity, $action);
+        }
+      }
+    }
 
     $allow_create_payment = $this->db
       ->where('nama', 'Bendahara Pengeluaran Direktorat')
       ->get('jabatan')
       ->row_array();
+    $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'create');
     $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'update');
+    $this->Permissions->setPermission($allow_create_payment['uuid'], 'SpjPayment', 'delete');
     foreach ($this->Jabatans->find() as $jab) {
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'index');
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'read');

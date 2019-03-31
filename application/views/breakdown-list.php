@@ -13,10 +13,10 @@
                 <p class="title-description"> <?= "$page_title $nama_jabatan_group" ?> </p>
             </div>
             <div class="col-sm-6 text-right">
-                <?php if (in_array('update', $permitted_actions)) : ?>
+                <?php if (in_array("update_{$current['controller']}", $permission)) : ?>
                 <a class="btn btn-info btn-save"><i class="fa fa-save"></i> Simpan</a>
                 <?php endif ?>
-                <?php if (in_array('delete', $permitted_actions)) : ?>
+                <?php if (in_array("delete_{$current['controller']}", $permission)) : ?>
                 <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> Batal</a>

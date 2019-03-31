@@ -1,9 +1,8 @@
 window.onload = function () {
 
   formInit()
-  calculateSpj()
-  if (window.location.href.includes('Breakdown')) $('[name="jabatan_group[]"]').siblings().css('width','100%')
-  $('[name="last_submit"]').parent('form').submit(function () {
+  if (window.location.href.includes('Breakdown')) $('[name^="jabatan_group"]').siblings().css('width','100%')
+  $('.main-form').submit(function () {
     $('[data-number]').each (function () {
       $(this).val(getNumber($(this)))
     })
@@ -47,10 +46,14 @@ window.onload = function () {
   $('.select2-selection__rendered .select2-selection__choice').each(function(){
       atr = this.getAttribute('title');
       if (atr === ''){ $(this).remove(); }
-      else if (atr === null){ $(this).remove(); } 
-  });    
+      else if (atr === null){ $(this).remove(); }
+  });
 
   if (window.location.href.indexOf('ChangePassword') > -1) $('form a[href*="ChangePassword/delete"]').hide()
+  if (window.location.href.indexOf('Spj') > -1) {
+    getSisaPagu()
+    checkUnverifyReason()
+  }
 }
 
 function formInit () {
@@ -98,6 +101,7 @@ function formInit () {
   $('[data-number="true"]').keyup(function () {
     $(this).val(currency(getNumber($(this))))
   })
+  calculateSpj()
   calculateProgramDetail()
   calculateAkunProgram()
 }
@@ -124,29 +128,93 @@ function calculateAkunProgram () {
 
 function calculateProgramDetail () {
   if (window.location.href.indexOf ('/Detail/') < 0) return true
-  markMinus(getNumber ($('[name="total_spj"]')))
   $('[name="vol"], [name="hargasat"]').keyup(function () {
     $('[name="pagu"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
   })
-  $('[name^="Spj_vol["], [name^="Spj_hargasat["]').keyup(function () {
-    var row = $(this).parent().parent()
-    var vol = getNumber(row.find('[name^="Spj_vol["]'))
-    var hargasat = getNumber(row.find('[name^="Spj_hargasat["]'))
-    var total_spj= currency(vol * hargasat)
-    row.find('[name^="Spj_total_spj["]').val(total_spj)
-    var spj_total = 0
-    $('[name^="Spj_total_spj["]').each(function () {
-      spj_total += getNumber($(this))
+
+  $('.form-child[data-controller="Spj"] .row').each(function () {
+    var spj = $(this)
+    spj.find('[data-number="true"]').keyup(function () {
+      var total_spj = 0
+      spj.find('[data-number="true"]').not('[name^="Spj_total_spj"]').each(function () {
+        total_spj += getNumber($(this))
+      })
+      spj.find('[name^="Spj_total_spj"]').val(currency(total_spj))
+      calculateAllSpj()
     })
-    $('[name="total_spj"]').val(currency (spj_total))
-    markMinus(spj_total)
+    spj.find('.btn-delete').bind('click', calculateAllSpj)
+  })
+
+  function calculateAllSpj () {
+    var total_all_spj = 0
+    $('.form-child[data-controller="Spj"] [data-number="true"]').not('[name^="Spj_total_spj"]').each(function () {
+      total_all_spj += getNumber($(this))
+    })
+    $('[name="total_spj"]').val(currency(total_all_spj))
+  }
+
+  $('.main-form').submit(function () {
+    var total_spj = 0
+    $('.form-child[data-controller="Spj"] [name^="Spj_total_spj"]').each(function () {
+      total_spj += getNumber($(this))
+    })
+    if (total_spj > getNumber($('[name="pagu"]'))) {
+      showError('Formulir gagal dikirim, perhitungan minus')
+      return false
+    } else return true
   })
 }
 
 function calculateSpj () {
   if (window.location.href.indexOf ('/Spj/') < 0) return true
-  $('[name="vol"], [name="hargasat"]').keyup(function () {
-    $('[name="total_spj"]').val(currency (getNumber ($('[name="vol"]')) * getNumber ($('[name="hargasat"]'))))
+  function calcFormSpj () {
+    var totalLampiran = 0
+    $('[data-controller="Lampiran"] .row').each(function () {
+      let currentTotal = getNumber($(this).find('[name^="Lampiran_vol"]')) * getNumber($(this).find('[name^="Lampiran_hargasat"]'))
+      $(this).find('[name^="Lampiran_total"]').val(currency(currentTotal))
+      totalLampiran += currentTotal
+    })
+    $('[name="total_lampiran"]').val(currency(totalLampiran))
+    $('[name="total_spj"]').val(currency(getNumber($('[name="ppn"]')) + getNumber($('[name="pph"]')) + totalLampiran))
+  }
+
+  $('[name="ppn"]').keyup(calcFormSpj)
+  $('[name="pph"]').keyup(calcFormSpj)
+  $('[name^="Lampiran_vol"]').keyup(calcFormSpj)
+  $('[name^="Lampiran_hargasat"]').keyup(calcFormSpj)
+  $('.btn-delete').click(calcFormSpj)
+  validateSisaPagu()
+
+  function validateSisaPagu () {
+    $('.btn-save').unbind('click').click(function (e) {
+      e.preventDefault()
+      var total_spj = getNumber($('[name="total_spj"]'))
+      let detail = $('[name="detail"]').val()
+      let spj = $('[name="uuid"]').val()
+      spj = spj ? spj : ''
+      $.get(`${site_url}Detail/getSisaPagu/${detail}/${spj}`, function (sisaPagu) {
+        if (sisaPagu < total_spj) {
+          sisaPagu = currency(sisaPagu)
+          showError(`Formulir gagal dikirim, perhitungan minus`)
+          validateSisaPagu()
+        }
+        else $('.main-form').submit()
+      })
+    })
+  }
+}
+
+function getSisaPagu () {
+  let detail = $('[name="detail"]').val()
+  $.get(`${site_url}Detail/getSisaPagu/${detail}`, function (sisaPagu) {
+    $('[name="sisa_pagu"]').val(currency(sisaPagu))
+  })
+}
+
+function checkUnverifyReason () {
+  let spj = $('[name="uuid"]').val()
+  $.get(`${site_url}Spj/getReason/${spj}`, function (reason) {
+    if (reason.length > 0) showError(`Status: Unverified, Alasan: ${reason}`)
   })
 }
 

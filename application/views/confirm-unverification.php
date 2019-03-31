@@ -11,7 +11,14 @@
         <div class="card card-block">
           <form action="<?= site_url($current['controller']) ?>" class="form-horizontal form-groups" enctype="multipart/form-data" method="POST">
 		        <input type="hidden" name="last_submit" value="<?= time() ?>">
-		        <input type="hidden" name="delete" value="<?= $uuid ?>">
+		        <input type="hidden" name="unverification" value="<?= $uuid ?>">
+
+                <div class="form-group row">
+                  <label class="col-sm-8 offset-2 control-label">Sertakan Alasan</label>
+                  <div class="col-sm-8 offset-2">
+                    <textarea class="form-control" name="unverify_reason" ></textarea>
+                  </div>
+                </div>
 
 		        <div class="text-center">
 		          <h1>Apakah Anda Yakin ?</h1>
