@@ -82,9 +82,9 @@ class Spjs extends MY_Model {
       ),
     );
 
-    $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans');
-    $this->childs[] = array('label' => '', 'controller' => 'SpjPayment', 'model' => 'SpjPayments');
-    $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs');
+    $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans', 'label' => 'Lampiran');
+    $this->childs[] = array('label' => '', 'controller' => 'SpjPayment', 'model' => 'SpjPayments', 'label' => 'Payment');
+    $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs', 'label' => 'Log History');
     $this->load->model('Spjlogs');
   }
 

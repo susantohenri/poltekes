@@ -28,7 +28,7 @@ class Spjlogs extends MY_Model {
       'attributes' => array(
         array('disabled' => 'disabled')
       ),
-      'width' => 3
+      'width' => 4
     );
 
     $this->form[]= array(

@@ -11,14 +11,6 @@ class SpjPayment extends MY_Controller {
     $data['uuid'] = $id;
 
     $record = $this->{$this->model}->findOne($id);
-    if ('unverified' === $record['global_status']) {
-	    $this->load->model('Permissions');
-	    $data['permitted_actions'] = array();
-	    foreach ($this->Permissions->getPermittedActions($this->controller) as $perm) {
-	    	if ('update' !== $perm) $data['permitted_actions'][] = $perm;
-	    }
-    }
-
     $this->loadview('index', $data);
   }
 

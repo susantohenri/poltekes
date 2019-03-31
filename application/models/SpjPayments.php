@@ -58,16 +58,14 @@ class SpjPayments extends MY_Model {
 
   function getForm ($uuid = false, $isSubform = false) {
     if ($isSubform) unset($this->form[0]);
-    return parent::getForm ($uuid, $isSubform);
-  }
-
-  function findOne ($param) {
-    $this->db
-      ->select("{$this->table}.*")
-      ->select("DATE_FORMAT(transfer_time, '%d %b %Y') transfer_time", false)
-      ->select("FORMAT(amount, 0) amount", false)
-      ;
-    return parent::findOne($param);
+    $form = parent::getForm ($uuid, $isSubform);
+    if ($isSubform) {
+      foreach ($form as &$field) {
+        if ('amount' === $field['name']) $field['value'] = number_format($field['value']);
+        if ('transfer_time' === $field['name']) $field['value'] = date('d F Y', strtotime($field['value']));
+      }
+    }
+    return $form;
   }
 
   function dt () {

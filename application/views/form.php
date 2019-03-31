@@ -70,25 +70,26 @@
 
             <?php foreach ($subform as $subfield) : ?>
               <hr>
-              <div class="form-child" data-controller="<?= $subfield['controller'] ?>" data-uuids="<?= str_replace('"', "'", json_encode($subfield['uuids'])) ?>">
+              <fieldset class="form-child" data-controller="<?= $subfield['controller'] ?>" data-uuids="<?= str_replace('"', "'", json_encode($subfield['uuids'])) ?>">
+                <legend><?= $subfield['label'] ?></legend>
                 <div class="form-group">
                   <div class="col-sm-offset-3 col-sm-12">
                     <?php if((empty($subfield->uuids) && in_array("create_{$subfield['controller']}", $permission)) || (!empty($subfield->uuids) && in_array("update_{$subfield['controller']}", $permission))) : ?>
 
                       <?php if (in_array($subfield['controller'], array('Spj', 'SpjPayment'))) : ?>
                       <a class="btn btn-warning btn-sm" href="<?= site_url("{$subfield['controller']}/create/{$uuid}") ?>" target="_blank">
-                        <i class="fa fa-plus"></i> &nbsp;Add <?= $subfield['label'] ?>
+                        <i class="fa fa-plus"></i> &nbsp;Input <?= $subfield['label'] ?>
                       </a>
                       <?php else : ?>
                       <a class="btn btn-warning btn-sm btn-add">
-                        <i class="fa fa-plus"></i> &nbsp;Add <?= $subfield['label'] ?>
+                        <i class="fa fa-plus"></i> &nbsp;Input <?= $subfield['label'] ?>
                       </a>
                       <?php endif ?>
 
                     <?php endif ?>
                   </div>
                 </div>
-              </div>
+              </fieldset>
             <?php endforeach ?>
             <?= !empty($subform) ? '<hr>':'' ?>
             </div>
