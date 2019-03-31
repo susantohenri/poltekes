@@ -181,7 +181,7 @@ class Spjs extends MY_Model {
       ->select("{$this->table}.urutan")
       ->select("{$this->table}.uraian")
       ->select('SUM(IFNULL(lampiran.vol, 0) * IFNULL(lampiran.hargasat, 0)) + IFNULL(ppn, 0) + IFNULL (pph, 0) total_spj', false)
-      ->select("SUM(payment_sent.paid_amount) as paid", false)
+      ->select("SUM(DISTINCT payment_sent.paid_amount) as paid", false)
 
       ->select('jabatan_group.nama nama_jabatan_group', false)
       ->join('assignment', "detail.uuid = assignment.detail", 'left')
