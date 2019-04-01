@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Spjlogs extends MY_Model {
+class SpjLogs extends MY_Model {
 
   function __construct () {
     parent::__construct();

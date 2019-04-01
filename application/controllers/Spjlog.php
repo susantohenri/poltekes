@@ -1,6 +1,6 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Spjlog extends MY_Controller {
+class SpjLog extends MY_Controller {
   function _subformcreate () {
     $model= $this->model;
     $vars = array();
