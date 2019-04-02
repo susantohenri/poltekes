@@ -88,21 +88,6 @@ class Spjs extends MY_Model {
     $this->load->model('Spjlogs');
   }
 
-  function _save ($data) {
-    if (isset ($data['payment_status'])) unset($data['payment_status']);
-    if (isset ($data['status'])) {
-      if ('verify' === $data['status']) {
-        $data['unverify_reason'] = '';
-        $this->verify($data['uuid']);
-        $this->load->model('Jabatans');
-        $jab = $this->Jabatans->findOne($this->session->userdata('jabatan'));
-        if ($jab && empty ($jab['parent'])) $data['global_status'] = 'verified';
-      } else if ('unverify' === $data['status']) $this->unverify($data['uuid']);
-      unset($data['status']);
-    }
-    return parent::save($data);
-  }
-
   function create ($data) {
     $result = parent::create($data);
     $this->Spjlogs->create(array(
@@ -130,11 +115,6 @@ class Spjs extends MY_Model {
     ));
 
     return $data['uuid'];
-  }
-
-  function _delete ($uuid) {
-    $this->childs[] = array('label' => '', 'controller' => 'Payment', 'model' => 'Payments');
-    return parent::delete($uuid);
   }
 
   function verify ($uuid) {

@@ -52,11 +52,6 @@ class Spj extends MY_Controller {
     $this->loadview('index', $vars);
   }
 
-  function save () {
-    $post = $this->input->post();
-    echo $this->{$this->model}->save($post);
-  }
-
   function read ($id) {
     $data = array();
     $data['page_name'] = 'form';
