@@ -171,4 +171,16 @@ class Details extends MY_Model {
     return (int) $calc['sisaPagu'];
   }
 
+  function select2 ($field, $term) {
+    return $this->db
+      ->select("{$this->table}.uuid as id", false)
+      ->select("{$this->table}.{$field} as text", false)
+      ->join('assignment', "{$this->table}.uuid = assignment.detail", 'left')
+      ->join('jabatan_group', 'assignment.jabatan_group = jabatan_group.uuid', 'left')
+      ->join('jabatan', 'jabatan.jabatan_group = jabatan_group.uuid', 'left')
+      ->limit(10)
+      ->where('jabatan.uuid', $this->session->userdata('jabatan'))
+      ->like($field, $term)->get($this->table)->result();
+  }
+
 }
