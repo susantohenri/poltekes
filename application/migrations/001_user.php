@@ -8,6 +8,7 @@ class Migration_user extends CI_Migration {
     $this->db->query("
       CREATE TABLE `user` (
         `uuid` varchar(255) NOT NULL,
+        `nip` varchar(255) NOT NULL,
         `email` varchar(255) NOT NULL,
         `password` varchar(255) NOT NULL,
         `jabatan` varchar(255) NOT NULL,
