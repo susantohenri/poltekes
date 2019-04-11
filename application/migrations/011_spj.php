@@ -15,6 +15,7 @@ class Migration_spj extends CI_Migration {
         `uuid` varchar(255) NOT NULL,
         `detail` varchar(255) NOT NULL,
         `uraian` varchar(255) NOT NULL,
+        `creator` varchar(255) NOT NULL,
         `global_status` varchar(255) NOT NULL DEFAULT 'unverified',
         `unverify_reason` varchar(255) NOT NULL,
         `unpaid_reason` varchar(255) NOT NULL,

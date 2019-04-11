@@ -89,6 +89,7 @@ class Spjs extends MY_Model {
   }
 
   function create ($data) {
+    $data['creator'] = $this->session->userdata('uuid');
     $result = parent::create($data);
     $this->Spjlogs->create(array(
       'spj'   => $result,
@@ -211,15 +212,10 @@ class Spjs extends MY_Model {
     return $status;
   }
 
-  function getCreator ($uuid) {
-    $creator = $this->Spjlogs->findOne(array('spj' => $uuid, 'action' => 'create'));
-    return $creator['user'];
-  }
-
   function getJabatanCreator ($uuid) {
-    $creatorId = $this->getCreator($uuid);
+    $spj = $this->findOne($uuid);
     $this->load->model('Users');
-    $creator = $this->Users->findOne($creatorId);
+    $creator = $this->Users->findOne($spj['creator']);
     return $creator['jabatan'];
   }
 
