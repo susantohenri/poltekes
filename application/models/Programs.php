@@ -8,10 +8,16 @@ class Programs extends MY_Model {
     $this->form = array();
     $this->thead = array(
       (object) array('mData' => 'kode', 'sTitle' => 'Kode', 'className' => 'text-right', 'width' => '5%'),
-      (object) array('mData' => 'uraian', 'sTitle' => 'Program', 'width' => '50%'),
+      (object) array('mData' => 'tahun_anggaran', 'sTitle' => 'T.A', 'width' => '5%'),
+      (object) array('mData' => 'uraian', 'sTitle' => 'Program', 'width' => '45%'),
       (object) array('mData' => 'pagu', 'sTitle' => 'Pagu', 'className' => 'text-right', 'searchable' => false, 'width' => '15%'),
       (object) array('mData' => 'total_spj', 'sTitle' => 'SPJ', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
       (object) array('mData' => 'paid', 'sTitle' => 'Dibayar', 'searchable' => 'false', 'className' => 'text-right', 'width' => '15%'),
+    );
+
+    $this->form[]= array(
+      'name' => 'tahun_anggaran',
+      'label'=> 'Tahun Anggaran'
     );
 
     $this->form[]= array(
@@ -25,7 +31,7 @@ class Programs extends MY_Model {
   }
 
   function create ($data) {
-    $xlsString = $data[$this->form[0]['name']];
+    $xlsString = $data[$this->form[1]['name']];
     $this->load->model(array(
       'Kegiatans',
       'Outputs',
@@ -58,6 +64,7 @@ class Programs extends MY_Model {
       if (2 === $codeDotCount && $codeLength <= 9) {
         $program = parent::create(array(
           'kode' => $cell[0],
+          'tahun_anggaran' => $data['tahun_anggaran'],
           'uraian' => $cell[1]
         ));
       } else if ($codeLength === 4) {
@@ -166,6 +173,7 @@ class Programs extends MY_Model {
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.kode")
+      ->select("{$this->table}.tahun_anggaran")
       ->select("{$this->table}.uraian")
       ->select("SUM(detail.hargasat * detail.vol) as pagu", false)
       ->select("SUM(spj_lampiran.submitted_amount + spj.ppn + spj.pph) as total_spj", false)
@@ -183,6 +191,10 @@ class Programs extends MY_Model {
       $this->form[]= array(
         'name' => 'kode',
         'label'=> 'Kode',
+      );
+      $this->form[]= array(
+        'name' => 'tahun_anggaran',
+        'label'=> 'Tahun Anggaran',
       );
       $this->form[]= array(
         'name' => 'uraian',
