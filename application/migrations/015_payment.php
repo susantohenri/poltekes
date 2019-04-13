@@ -11,6 +11,7 @@ class Migration_payment extends CI_Migration {
         `spj` varchar(255) NOT NULL,
         `sender` varchar(255) NOT NULL,
         `recipient` varchar(255) NOT NULL,
+        `user_recipient` varchar(255) NOT NULL,
         `transfer_time` date NOT NULL,
         `amount` double NOT NULL DEFAULT '0',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,

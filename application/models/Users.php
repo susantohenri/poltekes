@@ -7,10 +7,16 @@ class Users extends MY_Model {
     $this->table = 'user';
     $this->thead = array(
       (object) array('mData' => 'urutan', 'sTitle' => 'No', 'visible' => false),
-      (object) array('mData' => 'email', 'sTitle' => 'Email'),
+      (object) array('mData' => 'nip', 'sTitle' => 'N.I.P'),
+      (object) array('mData' => 'email', 'sTitle' => 'Nama'),
       (object) array('mData' => 'nama_jabatan', 'sTitle' => 'Jabatan'),
     );
     $this->form  = array ();
+
+    $this->form[]= array(
+      'name' => 'nip',
+      'label'=> 'N.I.P'
+    );
 
     $this->form[]= array(
     	'name' => 'email',
@@ -65,6 +71,7 @@ class Users extends MY_Model {
     $this->datatables
       ->select("{$this->table}.uuid")
       ->select("{$this->table}.urutan")
+      ->select("{$this->table}.nip")
       ->select("{$this->table}.email")
       ->select("jabatan.nama as nama_jabatan", false)
       ->join('jabatan', 'user.jabatan = jabatan.uuid', 'left');
