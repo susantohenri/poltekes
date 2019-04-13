@@ -37,6 +37,18 @@ class SpjPayments extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'user_recipient',
+      'label'=> 'Nama Penerima',
+      'options' => array(),
+      'attributes' => array(
+        array('data-autocomplete' => 'true'),
+        array('data-model' => 'Users'),
+        array('data-field' => 'email')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
       'name' => 'transfer_time',
       'label'=> 'Waktu Transfer',
       'attributes' => array (
