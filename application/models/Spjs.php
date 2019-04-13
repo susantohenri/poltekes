@@ -33,6 +33,18 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'mak',
+      'label'=> 'M.A.K',
+      'width'=> 6
+    );
+
+    $this->form[]= array(
+      'name' => 'no_bukti',
+      'label'=> 'Nomor Bukti',
+      'width'=> 6
+    );
+
+    $this->form[]= array(
       'name' => 'ppn',
       'label'=> 'PPN',
       'attributes' => array(
@@ -58,7 +70,7 @@ class Spjs extends MY_Model {
         array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
-      'width' => 5
+      'width' => 6
     );
 
     $this->form[]= array(
@@ -69,7 +81,7 @@ class Spjs extends MY_Model {
         array('disabled' => 'disabled'),
         array('data-number' => 'true')
       ),
-      'width' => 5
+      'width' => 6
     );
 
     $this->form[]= array(

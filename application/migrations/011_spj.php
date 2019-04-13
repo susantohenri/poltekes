@@ -19,6 +19,8 @@ class Migration_spj extends CI_Migration {
         `global_status` varchar(255) NOT NULL DEFAULT 'unverified',
         `unverify_reason` varchar(255) NOT NULL,
         `unpaid_reason` varchar(255) NOT NULL,
+        `mak` varchar(255) NOT NULL,
+        `no_bukti` varchar(255) NOT NULL,
         `ppn` double NOT NULL DEFAULT '0',
         `pph` double NOT NULL DEFAULT '0',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
