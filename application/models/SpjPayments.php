@@ -100,4 +100,20 @@ class SpjPayments extends MY_Model {
       ->generate();
   }
 
+  function getKwitansi ($uuid) {
+    $this->load->model(array('Spjs', 'Lampirans'));
+    $result = array();
+    $spj = $this->Spjs->findOne($uuid);
+    $lampirans = $this->Lampirans->find(array('spj' => $uuid));
+
+    $result[] = array(
+      'label' => 'T.A',
+      'col' => 9,
+      'row' => 2,
+      'value' => ': ' . date('Y')
+    );
+
+    return $result;
+  }
+
 }

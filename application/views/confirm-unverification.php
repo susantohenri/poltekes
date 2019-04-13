@@ -22,8 +22,8 @@
 
 		        <div class="text-center">
 		          <h1>Apakah Anda Yakin ?</h1>
-		          <button class="btn btn-danger"><i class="fa fa-check"></i> &nbsp; Ya</button>
-		          <a href="<?= site_url($current['controller']) ?>" class="btn btn-info"><i class="fa fa-arrow-left"></i> &nbsp; Tidak</a>
+		          <button class="btn btn-success"><i class="fa fa-check"></i> &nbsp; Ya</button>
+		          <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> &nbsp; Tidak</a>
 		        </div>
 		      </form>
 			  </div>
