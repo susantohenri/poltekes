@@ -68,6 +68,25 @@ class SpjPayment extends MY_Controller {
     }
 
     $data = $this->SpjPayments->getKwitansi($uuid);
+    $lampirans = array_filter($data, function ($label) {
+      return strpos($label, 'Lampiran ') > -1;
+    }, ARRAY_FILTER_USE_KEY);
+
+    reset($lampirans);
+    $key = key($lampirans);
+    $starting_lamp = $lampirans[$key]['row'];
+
+    $objPHPExcel->getActiveSheet()->insertNewRowBefore($starting_lamp + 1, count($lampirans));
+
+    $cell_total_lampiran = $data['Total Lampiran'];
+    $objPHPExcel->getActiveSheet()->getStyle("I{$cell_total_lampiran['row']}")->applyFromArray(array(
+      'borders' => array(
+        'top' => array(
+          'style' => PHPExcel_Style_Border::BORDER_THIN
+        )
+      )
+    ));
+
     foreach ($data as $rplcmt) $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($rplcmt['col'], $rplcmt['row'], $rplcmt['value']);
 
     $objPHPExcel->setActiveSheetIndex(0);
