@@ -58,4 +58,48 @@ class SpjPayment extends MY_Controller {
     $this->loadview('index', $vars);
   }
 
+  function cetak ($uuid) {
+    $xlsx = 'report/KWITANSI.xlsx';
+    $this->load->library('PHPExcel');
+    try {
+        $objPHPExcel = PHPExcel_IOFactory::load($xlsx);
+    } catch(Exception $e) {
+        die('Error loading file :' . $e->getMessage());
+    }
+
+    $data = $this->SpjPayments->getKwitansi($uuid);
+    $lampirans = array_filter($data, function ($label) {
+      return strpos($label, 'Lampiran ') > -1;
+    }, ARRAY_FILTER_USE_KEY);
+
+    reset($lampirans);
+    $key = key($lampirans);
+    $starting_lamp = $lampirans[$key]['row'];
+
+    $objPHPExcel->getActiveSheet()->insertNewRowBefore($starting_lamp + 1, count($lampirans));
+
+    $cell_total_lampiran = $data['Total Lampiran'];
+    $objPHPExcel->getActiveSheet()->getStyle("I{$cell_total_lampiran['row']}")->applyFromArray(array(
+      'borders' => array(
+        'top' => array(
+          'style' => PHPExcel_Style_Border::BORDER_THIN
+        )
+      )
+    ));
+
+    foreach ($data as $rplcmt) $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($rplcmt['col'], $rplcmt['row'], $rplcmt['value']);
+
+    $objPHPExcel->setActiveSheetIndex(0);
+    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+
+    header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
+    header("Cache-Control: no-store, no-cache, must-revalidate");
+    header("Cache-Control: post-check=0, pre-check=0", false);
+    header("Pragma: no-cache");
+    header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+
+    header('Content-Disposition: attachment;filename="Kwitansi.xlsx"');
+    $objWriter->save("php://output");
+  }
+
 }

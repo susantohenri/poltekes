@@ -107,4 +107,5 @@ class Spj extends MY_Controller {
     $record = $this->Spjs->findOne($uuid);
     echo $record['unverify_reason'];
   }
+
 }

@@ -97,13 +97,13 @@ class Spjs extends MY_Model {
     $this->childs[] = array('label' => '', 'controller' => 'Lampiran', 'model' => 'Lampirans', 'label' => 'Lampiran');
     $this->childs[] = array('label' => '', 'controller' => 'SpjPayment', 'model' => 'SpjPayments', 'label' => 'Payment');
     $this->childs[] = array('label' => '', 'controller' => 'SpjLog', 'model' => 'SpjLogs', 'label' => 'Log History');
-    $this->load->model('Spjlogs');
+    $this->load->model('SpjLogs');
   }
 
   function create ($data) {
     $data['creator'] = $this->session->userdata('uuid');
     $result = parent::create($data);
-    $this->Spjlogs->create(array(
+    $this->SpjLogs->create(array(
       'spj'   => $result,
       'action'=> 'create'
     ));
@@ -122,7 +122,7 @@ class Spjs extends MY_Model {
     $spj_after = $this->findOne($uuid);
     $lampiran_after = $this->Lampirans->find(array('spj' => $uuid));
 
-    if (json_encode($spj_before) != json_encode($spj_after) || json_encode($lampiran_before) != json_encode($lampiran_after)) $this->Spjlogs->create(array(
+    if (json_encode($spj_before) != json_encode($spj_after) || json_encode($lampiran_before) != json_encode($lampiran_after)) $this->SpjLogs->create(array(
       'spj'   => $data['uuid'],
       'action'=> 'update'
     ));
@@ -131,7 +131,7 @@ class Spjs extends MY_Model {
   }
 
   function verify ($uuid) {
-    $this->Spjlogs->create(array(
+    $this->SpjLogs->create(array(
       'spj'   => $uuid,
       'action'=> 'verify'
     ));
@@ -144,7 +144,7 @@ class Spjs extends MY_Model {
   }
 
   function unverify ($uuid, $unverify_reason) {
-    $this->Spjlogs->create(array(
+    $this->SpjLogs->create(array(
       'spj'   => $uuid,
       'action'=> 'unverify'
     ));
@@ -206,10 +206,10 @@ class Spjs extends MY_Model {
   }
 
   function getStatus ($spj) {
-    $this->load->model(array('Jabatans', 'Spjlogs'));
+    $this->load->model(array('Jabatans', 'SpjLogs'));
     $user = $this->session->all_userdata();
     $this->Jabatans->getUserAttr($user);
-    $lastLog = $this->Spjlogs->getLastVerification($spj['uuid']);
+    $lastLog = $this->SpjLogs->getLastVerification($spj['uuid']);
 
     $status = 'unverifiable';
     if ('verified' === $spj['global_status']) $status = 'verified';

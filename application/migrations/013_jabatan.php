@@ -245,6 +245,15 @@ class Migration_jabatan extends CI_Migration {
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'index');
       $this->Permissions->setPermission($jab->uuid, 'SpjPayment', 'read');
     }
+
+    $para_bendahara = $this->db
+      ->where(array('nama LIKE' => 'Bendahara%'))
+      ->get('jabatan')
+      ->result();
+    foreach ($para_bendahara as $bendahara) {
+      $this->Permissions->setPermission($bendahara->uuid, 'SpjPayment', 'print');
+    }
+
   }
 
   function down () {
