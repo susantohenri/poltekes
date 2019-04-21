@@ -58,7 +58,7 @@ class SpjPayment extends MY_Controller {
     $this->loadview('index', $vars);
   }
 
-  function print ($uuid) {
+  function cetak ($uuid) {
     $xlsx = 'report/KWITANSI.xlsx';
     $this->load->library('PHPExcel');
     try {

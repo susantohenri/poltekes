@@ -211,23 +211,23 @@ class SpjPayments extends MY_Model {
 
     $result['Nama Atasan Langsung'] = array(
       'col' => 0,
-      'row' => $row + 24,
+      'row' => $row + 21,
       'value' => $atasan_langsung['email']
     );
     $result['Nip Atasan Langsung'] = array(
       'col' => 0,
-      'row' => $row + 25,
+      'row' => $row + 22,
       'value' => $atasan_langsung['nip']
     );
 
     $result['Nama Bendahara Pengeluaran'] = array(
       'col' => 0,
-      'row' => $row + 35,
+      'row' => $row + 32,
       'value' => $bendahara_pengeluaran['email']
     );
     $result['Nip  Bendahara Pengeluaran'] = array(
       'col' => 0,
-      'row' => $row + 36,
+      'row' => $row + 33,
       'value' => $bendahara_pengeluaran['nip']
     );
     return $result;
@@ -244,11 +244,11 @@ class SpjPayments extends MY_Model {
     } else if ($nilai < 100) {
       $temp = $this->penyebut($nilai/10)." Puluh". $this->penyebut($nilai % 10);
     } else if ($nilai < 200) {
-      $temp = " seratus" . $this->penyebut($nilai - 100);
+      $temp = " Seratus" . $this->penyebut($nilai - 100);
     } else if ($nilai < 1000) {
       $temp = $this->penyebut($nilai/100) . " Ratus" . $this->penyebut($nilai % 100);
     } else if ($nilai < 2000) {
-      $temp = " seribu" . $this->penyebut($nilai - 1000);
+      $temp = " Seribu" . $this->penyebut($nilai - 1000);
     } else if ($nilai < 1000000) {
       $temp = $this->penyebut($nilai/1000) . " Ribu" . $this->penyebut($nilai % 1000);
     } else if ($nilai < 1000000000) {

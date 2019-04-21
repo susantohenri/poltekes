@@ -20,7 +20,7 @@
                 <a href="<?= site_url($current['controller'] . "/unverify/$uuid") ?>" class="btn btn-danger"><i class="fa fa-times"></i> &nbsp; Unverify</a>
                 <?php endif ?>
                 <?php if (!empty ($uuid) && in_array("print_{$current['controller']}", $permission)): ?>
-                <a href="<?= site_url($current['controller'] . "/print/$uuid") ?>" class="btn btn-success"><i class="fa fa-check"></i> &nbsp; Print</a>
+                <a href="<?= site_url($current['controller'] . "/cetak/$uuid") ?>" class="btn btn-success"><i class="fa fa-check"></i> &nbsp; Print</a>
                 <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> &nbsp; Batal</a>
             </div>
