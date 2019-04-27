@@ -102,6 +102,7 @@ class Spjs extends MY_Model {
 
   function create ($data) {
     $data['creator'] = $this->session->userdata('uuid');
+    $data['createdAt'] = date('Y-m-d');
     $result = parent::create($data);
     $this->SpjLogs->create(array(
       'spj'   => $result,
@@ -261,6 +262,119 @@ class Spjs extends MY_Model {
       AND jabatan.uuid = '{$this->session->userdata('jabatan')}'
     ")->result();
     return count($records) > 0;
+  }
+
+  function getSPBY ($uuid) {
+    $data = $this->db->query("
+      SELECT
+        DATE_FORMAT(spj.createdAt, '%d/%m/%Y') tanggal
+        , LPAD( spj.urutan, 7, '0') nomor
+        , SUM(lampiran.vol * lampiran.hargasat) + spj.ppn + spj.pph bruto
+        , jabatan.nama jabatan_creator
+        , spj.uraian
+        , spj.no_bukti
+        , CONCAT(REPLACE(`output`.kode, '.', ' / '), ' / ', komponen.kode, '.', sub_komponen.kode, ' / ', akun.kode) xkode
+        , user.email nama_penerima
+        , user.nip nip_penerima
+      FROM spj
+      LEFT JOIN lampiran ON lampiran.spj = spj.uuid
+      LEFT JOIN detail ON spj.detail = detail.uuid
+      LEFT JOIN akun ON detail.akun = akun.uuid
+      LEFT JOIN sub_komponen ON akun.sub_komponen = sub_komponen.uuid
+      LEFT JOIN komponen ON sub_komponen.komponen = komponen.uuid
+      LEFT JOIN sub_output ON komponen.sub_output = sub_output.uuid
+      LEFT JOIN output ON sub_output.output = output.uuid
+      LEFT JOIN kegiatan ON output.kegiatan = kegiatan.uuid
+      LEFT JOIN program ON kegiatan.program = program.uuid
+      LEFT JOIN spj_log ON spj.uuid = spj_log.spj AND spj_log.action = 'create'
+      LEFT JOIN user ON spj_log.user = user.uuid
+      LEFT JOIN jabatan ON user.jabatan = jabatan.uuid
+      WHERE spj.uuid = '{$uuid}'
+    ")->row_array();
+
+    $atasan_langsung = $this->db->query("
+      SELECT `user`.email, `user`.nip
+      FROM `user`
+      LEFT JOIN jabatan ON jabatan.uuid = `user`.jabatan
+      WHERE jabatan.nama = 'Atasan Langsung Bendahara Pengeluaran'
+    ")->row_array();
+
+    $bendahara_pengeluaran = $this->db->query("
+      SELECT `user`.email, `user`.nip
+      FROM `user`
+      LEFT JOIN jabatan ON jabatan.uuid = `user`.jabatan
+      WHERE jabatan.nama = 'Bendahara Pengeluaran Direktorat'
+    ")->row_array();
+
+    $result['Tanggal Nomor'] = array(
+      'col' => 0,
+      'row' => 15,
+      'value' => "Tgl.: {$data['tanggal']}                               Nomor : {$data['nomor']}"
+    );
+
+    $result['Sejumlah'] = array(
+      'col' => 0,
+      'row' => 20,
+      'value' => 'Rp ' . number_format($data['bruto'])
+    );
+
+    $result['Kepada'] = array(
+      'col' => 2,
+      'row' => 22,
+      'value' => $data['jabatan_creator']
+    );
+
+    $result['Untuk Pembayaran'] = array(
+      'col' => 2,
+      'row' => 23,
+      'value' => $data['uraian']
+    );
+
+    $result['Kuitansi/bukti pembelian'] = array(
+      'col' => 3,
+      'row' => 31,
+      'value' => ": {$data['no_bukti']}"
+    );
+
+    $result['Kegiatan, output, MAK'] = array(
+      'col' => 3,
+      'row' => 36,
+      'value' => $data['xkode']
+    );
+
+    $result['Nama Bendahara Pengeluaran'] = array(
+      'col' => 0,
+      'row' => 45,
+      'value' => $bendahara_pengeluaran['email']
+    );
+    $result['Nip  Bendahara Pengeluaran'] = array(
+      'col' => 0,
+      'row' => 46,
+      'value' => "NIP. {$bendahara_pengeluaran['nip']}"
+    );
+
+    $result['Nama Penerima'] = array(
+      'col' => 4,
+      'row' => 45,
+      'value' => $data['nama_penerima']
+    );
+    $result['Nip  Penerima'] = array(
+      'col' => 4,
+      'row' => 46,
+      'value' => "NIP. {$data['nip_penerima']}"
+    );
+
+    $result['Nama Atasan Langsung'] = array(
+      'col' => 7,
+      'row' => 45,
+      'value' => $atasan_langsung['email']
+    );
+    $result['Nip Atasan Langsung'] = array(
+      'col' => 7,
+      'row' => 46,
+      'value' => "NIP. {$atasan_langsung['nip']}"
+    );
+    return $result;
   }
 
 }

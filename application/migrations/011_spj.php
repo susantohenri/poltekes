@@ -23,6 +23,7 @@ class Migration_spj extends CI_Migration {
         `no_bukti` varchar(255) NOT NULL,
         `ppn` double NOT NULL DEFAULT '0',
         `pph` double NOT NULL DEFAULT '0',
+        `createdAt` DATE,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
         KEY `program` (`detail`)

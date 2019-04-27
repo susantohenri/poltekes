@@ -252,6 +252,7 @@ class Migration_jabatan extends CI_Migration {
       ->result();
     foreach ($para_bendahara as $bendahara) {
       $this->Permissions->setPermission($bendahara->uuid, 'SpjPayment', 'print');
+      $this->Permissions->setPermission($bendahara->uuid, 'Spj', 'print');
     }
 
   }
