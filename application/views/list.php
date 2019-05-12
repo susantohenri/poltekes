@@ -19,6 +19,9 @@
                 <?php if (in_array("delete_{$current['controller']}", $permission)) : ?>
                 <a href="<?= site_url($current['controller'] . "/delete/{$item['uuid']}") ?>" class="btn btn-danger"><i class="fa fa-trash-o"></i> &nbsp; Hapus</a>
                 <?php endif ?>
+                <?php if (in_array("print_{$current['controller']}", $permission)) : ?>
+                <a href="<?= site_url($current['controller'] . "/cetak/{$item['uuid']}") ?>" class="btn btn-success"><i class="fa fa-print"></i> &nbsp; Print</a>
+                <?php endif ?>
                 <a href="<?= site_url($current['controller']) ?>" class="btn btn-warning"><i class="fa fa-arrow-left"></i> &nbsp; Batal</a>
             </div>
         </div>
