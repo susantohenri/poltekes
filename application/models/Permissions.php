@@ -46,7 +46,8 @@ class Permissions extends MY_Model {
       array('text' => 'Create', 'value' => 'create'),
       array('text' => 'Read', 'value' => 'read'),
       array('text' => 'Update', 'value' => 'update'),
-      array('text' => 'Delete', 'value' => 'delete')
+      array('text' => 'Delete', 'value' => 'delete'),
+      array('text' => 'Print', 'value' => 'print')
     );
   }
 
