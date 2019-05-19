@@ -150,6 +150,10 @@ class Spjs extends MY_Model {
       'action'=> 'unverify'
     ));
     if (strlen($unverify_reason) > 0) $this->db->where('uuid', $uuid)->set('unverify_reason', $unverify_reason)->update($this->table);
+
+    $this->load->model('Jabatans');
+    $jabatan = $this->Jabatans->findOne(array('uuid' => $this->session->userdata('jabatan'), 'nama' => 'Verifikator Direktorat'));
+    if (isset ($jabatan['uuid'])) $this->db->where('uuid', $uuid)->set('sptj_printed', 0)->update($this->table);
   }
 
   function findOne ($param) {

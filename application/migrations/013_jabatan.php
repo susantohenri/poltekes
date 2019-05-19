@@ -65,6 +65,7 @@ class Migration_jabatan extends CI_Migration {
       ));
     }
     $verifDir = $atasan;
+    $this->Permissions->setPermission($verifDir, 'Akun', 'print');
 
     $jurusans = array (
       array ("A", "Jurusan Keperawatan"), 
