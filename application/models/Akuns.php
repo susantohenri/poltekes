@@ -118,19 +118,25 @@ class Akuns extends MY_Model {
   }
 
   function getSPTJ ($uuid) {
+    $result = array();
+    $akun = $this->db->get_where($this->table, array('uuid' => $uuid))->row_array();
     $data = $this->db->query("
       SELECT
-        LPAD(akun.urutan, 7, '0') nomor
-
-        DATE_FORMAT(spj.createdAt, '%d/%m/%Y') tanggal
-        , LPAD( spj.urutan, 7, '0') nomor
-        , SUM(lampiran.vol * lampiran.hargasat) + spj.ppn + spj.pph bruto
-        , jabatan.nama jabatan_creator
+        DATE_FORMAT(CURRENT_DATE, '%d %b %Y') tgl_cetak
+        , program.kode kode_program
+        , program.tahun_anggaran
+        , kegiatan.kode kode_kegiatan
+        , output.kode kode_output
+        , komponen.kode kode_komponen
+        , sub_komponen.kode kode_subkomponen
+        , akun.kode kode_akun
+        , user.email penerima
         , spj.uraian
-        , spj.no_bukti
-        , CONCAT(REPLACE(`output`.kode, '.', ' / '), ' / ', komponen.kode, '.', sub_komponen.kode, ' / ', akun.kode) xkode
-        , user.email nama_penerima
-        , user.nip nip_penerima
+        , DATE_FORMAT(spj.createdAt, '%d-%m-%Y') tanggal_e
+        , SUM(lampiran.vol * lampiran.hargasat) jumlah
+        , spj.ppn
+        , spj.pph
+        , spj.uuid spj_uuid
       FROM spj
       LEFT JOIN lampiran ON lampiran.spj = spj.uuid
       LEFT JOIN detail ON spj.detail = detail.uuid
@@ -144,8 +150,14 @@ class Akuns extends MY_Model {
       LEFT JOIN spj_log ON spj.uuid = spj_log.spj AND spj_log.action = 'create'
       LEFT JOIN user ON spj_log.user = user.uuid
       LEFT JOIN jabatan ON user.jabatan = jabatan.uuid
-      WHERE spj.uuid = '{$uuid}'
-    ")->row_array();
+      WHERE TRUE
+      AND akun.kode = {$akun['kode']}
+      AND spj.sptj_printed = 0
+      GROUP BY spj.uuid
+    ")->result();
+
+    if (count($data) < 1) return $result;
+    $header = $data[0];
 
     $atasan_langsung = $this->db->query("
       SELECT `user`.email, `user`.nip
@@ -161,73 +173,127 @@ class Akuns extends MY_Model {
       WHERE jabatan.nama = 'Bendahara Pengeluaran Direktorat'
     ")->row_array();
 
-    $result['Tanggal Nomor'] = array(
-      'col' => 0,
-      'row' => 15,
-      'value' => "Tgl.: {$data['tanggal']}                               Nomor : {$data['nomor']}"
-    );
-
-    $result['Sejumlah'] = array(
-      'col' => 0,
-      'row' => 20,
-      'value' => 'Rp ' . number_format($data['bruto'])
-    );
-
-    $result['Kepada'] = array(
-      'col' => 2,
-      'row' => 22,
-      'value' => $data['jabatan_creator']
-    );
-
-    $result['Untuk Pembayaran'] = array(
-      'col' => 2,
-      'row' => 23,
-      'value' => $data['uraian']
-    );
-
-    $result['Kuitansi/bukti pembelian'] = array(
+    $result['Tanggal/No. DIPA'] = array(
       'col' => 3,
-      'row' => 31,
-      'value' => ": {$data['no_bukti']}"
+      'row' => 5,
+      'value' => ": {$header->tgl_cetak} / No. SP DIPA-{$header->kode_program}.632242/{$header->tahun_anggaran}"
     );
 
-    $result['Kegiatan, output, MAK'] = array(
+    $kode_output = explode('.', $header->kode_output);
+    $result['Klasifikasi Anggaran'] = array(
       'col' => 3,
-      'row' => 36,
-      'value' => $data['xkode']
+      'row' => 6,
+      'value' => ": 01 / 01 / {$header->kode_program} / {$kode_output[0]} / {$kode_output[1]} / {$header->kode_komponen}.{$header->kode_subkomponen}/ {$header->kode_akun}"
     );
 
-    $result['Nama Bendahara Pengeluaran'] = array(
-      'col' => 0,
-      'row' => 45,
-      'value' => $bendahara_pengeluaran['email']
+    $walkingRow = 15;
+    $noUrut = 1;
+    $totalJumlah = 0;
+    $totalPPN = 0;
+    $totalPPH = 0;
+    $spjUuids = array();
+    foreach ($data as $spj) {
+
+      $totalJumlah += $spj->jumlah;
+      $totalPPH += $spj->pph;
+      $totalPPN += $spj->ppn;
+      $spjUuids[] = $spj->spj_uuid;
+
+      $result["SPJ-No-{$noUrut}"] = array(
+        'col' => 0,
+        'row' => $walkingRow,
+        'value' => $noUrut
+      );
+      $result["SPJ-AKUN-{$noUrut}"] = array(
+        'col' => 1,
+        'row' => $walkingRow,
+        'value' => $spj->kode_akun
+      );
+      $result["SPJ-Penerima-{$noUrut}"] = array(
+        'col' => 2,
+        'row' => $walkingRow,
+        'value' => $spj->penerima
+      );
+      $result["SPJ-Uraian-{$noUrut}"] = array(
+        'col' => 3,
+        'row' => $walkingRow,
+        'value' => $spj->uraian
+      );
+      $result["SPJ-Tanggal-{$noUrut}"] = array(
+        'col' => 4,
+        'row' => $walkingRow,
+        'value' => $spj->tanggal_e
+      );
+      $result["SPJ-f-{$noUrut}"] = array(
+        'col' => 5,
+        'row' => $walkingRow,
+        'value' => ''
+      );
+      $result["SPJ-Nomor-{$noUrut}"] = array(
+        'col' => 6,
+        'row' => $walkingRow,
+        'value' => $noUrut < 10 ? "0{$noUrut}" : $noUrut
+      );
+      $result["SPJ-Jumlah-{$noUrut}"] = array(
+        'col' => 7,
+        'row' => $walkingRow,
+        'value' => $spj->jumlah
+      );
+      $result["SPJ-PPN-{$noUrut}"] = array(
+        'col' => 8,
+        'row' => $walkingRow,
+        'value' => $spj->ppn
+      );
+      $result["SPJ-PPH-{$noUrut}"] = array(
+        'col' => 9,
+        'row' => $walkingRow,
+        'value' => $spj->pph
+      );
+      $walkingRow++;
+      $noUrut++;
+    }
+    $this->db->where_in('uuid', $spjUuids)->set('sptj_printed', 1)->update('spj');
+
+    $walkingRow ++;
+    $result["Total Jumlah"] = array(
+      'col' => 7,
+      'row' => $walkingRow,
+      'value' => $totalJumlah
     );
-    $result['Nip  Bendahara Pengeluaran'] = array(
-      'col' => 0,
-      'row' => 46,
-      'value' => "NIP. {$bendahara_pengeluaran['nip']}"
+    $result["Total PPN"] = array(
+      'col' => 8,
+      'row' => $walkingRow,
+      'value' => $totalPPN
+    );
+    $result["Total PPH"] = array(
+      'col' => 9,
+      'row' => $walkingRow,
+      'value' => $totalPPH
     );
 
-    $result['Nama Penerima'] = array(
-      'col' => 4,
-      'row' => 45,
-      'value' => $data['nama_penerima']
-    );
-    $result['Nip  Penerima'] = array(
-      'col' => 4,
-      'row' => 46,
-      'value' => "NIP. {$data['nip_penerima']}"
-    );
+    $walkingRow += 10;
 
     $result['Nama Atasan Langsung'] = array(
-      'col' => 7,
-      'row' => 45,
+      'col' => 0,
+      'row' => $walkingRow,
       'value' => $atasan_langsung['email']
     );
+    $result['Nama Bendahara Pengeluaran'] = array(
+      'col' => 6,
+      'row' => $walkingRow,
+      'value' => $bendahara_pengeluaran['email']
+    );
+
+    $walkingRow++;
     $result['Nip Atasan Langsung'] = array(
-      'col' => 7,
-      'row' => 46,
+      'col' => 0,
+      'row' => $walkingRow,
       'value' => "NIP. {$atasan_langsung['nip']}"
+    );
+    $result['Nip  Bendahara Pengeluaran'] = array(
+      'col' => 6,
+      'row' => $walkingRow,
+      'value' => "NIP. {$bendahara_pengeluaran['nip']}"
     );
     return $result;
   }

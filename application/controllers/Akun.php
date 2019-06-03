@@ -12,7 +12,17 @@ class Akun extends MY_Controller {
     }
 
     $data = $this->Akuns->getSPTJ($uuid);
-    foreach ($data as $rplcmt) $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($rplcmt['col'], $rplcmt['row'], $rplcmt['value']);
+    if (count($data) > 0) {
+        $spj = array_filter($data, function ($label) {
+          return strpos($label, 'SPJ-No-') > -1;
+        }, ARRAY_FILTER_USE_KEY);
+        reset($spj);
+        $key = key($spj);
+        $starting_lamp = $spj[$key]['row'];
+        $objPHPExcel->getActiveSheet()->insertNewRowBefore($starting_lamp + 1, count($spj));
+
+        foreach ($data as $rplcmt) $objPHPExcel->getActiveSheet()->setCellValueByColumnAndRow($rplcmt['col'], $rplcmt['row'], $rplcmt['value']);
+    }
 
     $objPHPExcel->setActiveSheetIndex(0);
     $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
