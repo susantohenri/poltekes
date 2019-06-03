@@ -65,6 +65,7 @@ class Migration_jabatan extends CI_Migration {
       ));
     }
     $verifDir = $atasan;
+    $this->Permissions->setPermission($verifDir, 'Akun', 'print');
 
     $jurusans = array (
       array ("A", "Jurusan Keperawatan"), 
@@ -253,6 +254,7 @@ class Migration_jabatan extends CI_Migration {
     foreach ($para_bendahara as $bendahara) {
       $this->Permissions->setPermission($bendahara->uuid, 'SpjPayment', 'print');
       $this->Permissions->setPermission($bendahara->uuid, 'Spj', 'print');
+      $this->Permissions->setPermission($bendahara->uuid, 'Akun', 'print');
     }
 
   }

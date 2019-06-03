@@ -116,4 +116,186 @@ class Akuns extends MY_Model {
     }
     return parent::getForm ($uuid, $isSubform);
   }
+
+  function getSPTJ ($uuid) {
+    $result = array();
+    $akun = $this->db->get_where($this->table, array('uuid' => $uuid))->row_array();
+    $data = $this->db->query("
+      SELECT
+        DATE_FORMAT(CURRENT_DATE, '%d %b %Y') tgl_cetak
+        , program.kode kode_program
+        , program.tahun_anggaran
+        , kegiatan.kode kode_kegiatan
+        , output.kode kode_output
+        , komponen.kode kode_komponen
+        , sub_komponen.kode kode_subkomponen
+        , akun.kode kode_akun
+        , user.email penerima
+        , spj.uraian
+        , DATE_FORMAT(spj.createdAt, '%d-%m-%Y') tanggal_e
+        , SUM(lampiran.vol * lampiran.hargasat) jumlah
+        , spj.ppn
+        , spj.pph
+        , spj.uuid spj_uuid
+      FROM spj
+      LEFT JOIN lampiran ON lampiran.spj = spj.uuid
+      LEFT JOIN detail ON spj.detail = detail.uuid
+      LEFT JOIN akun ON detail.akun = akun.uuid
+      LEFT JOIN sub_komponen ON akun.sub_komponen = sub_komponen.uuid
+      LEFT JOIN komponen ON sub_komponen.komponen = komponen.uuid
+      LEFT JOIN sub_output ON komponen.sub_output = sub_output.uuid
+      LEFT JOIN output ON sub_output.output = output.uuid
+      LEFT JOIN kegiatan ON output.kegiatan = kegiatan.uuid
+      LEFT JOIN program ON kegiatan.program = program.uuid
+      LEFT JOIN spj_log ON spj.uuid = spj_log.spj AND spj_log.action = 'create'
+      LEFT JOIN user ON spj_log.user = user.uuid
+      LEFT JOIN jabatan ON user.jabatan = jabatan.uuid
+      WHERE TRUE
+      AND akun.kode = {$akun['kode']}
+      AND spj.sptj_printed = 0
+      GROUP BY spj.uuid
+    ")->result();
+
+    if (count($data) < 1) return $result;
+    $header = $data[0];
+
+    $atasan_langsung = $this->db->query("
+      SELECT `user`.email, `user`.nip
+      FROM `user`
+      LEFT JOIN jabatan ON jabatan.uuid = `user`.jabatan
+      WHERE jabatan.nama = 'Atasan Langsung Bendahara Pengeluaran'
+    ")->row_array();
+
+    $bendahara_pengeluaran = $this->db->query("
+      SELECT `user`.email, `user`.nip
+      FROM `user`
+      LEFT JOIN jabatan ON jabatan.uuid = `user`.jabatan
+      WHERE jabatan.nama = 'Bendahara Pengeluaran Direktorat'
+    ")->row_array();
+
+    $result['Tanggal/No. DIPA'] = array(
+      'col' => 3,
+      'row' => 5,
+      'value' => ": {$header->tgl_cetak} / No. SP DIPA-{$header->kode_program}.632242/{$header->tahun_anggaran}"
+    );
+
+    $kode_output = explode('.', $header->kode_output);
+    $result['Klasifikasi Anggaran'] = array(
+      'col' => 3,
+      'row' => 6,
+      'value' => ": 01 / 01 / {$header->kode_program} / {$kode_output[0]} / {$kode_output[1]} / {$header->kode_komponen}.{$header->kode_subkomponen}/ {$header->kode_akun}"
+    );
+
+    $walkingRow = 15;
+    $noUrut = 1;
+    $totalJumlah = 0;
+    $totalPPN = 0;
+    $totalPPH = 0;
+    $spjUuids = array();
+    foreach ($data as $spj) {
+
+      $totalJumlah += $spj->jumlah;
+      $totalPPH += $spj->pph;
+      $totalPPN += $spj->ppn;
+      $spjUuids[] = $spj->spj_uuid;
+
+      $result["SPJ-No-{$noUrut}"] = array(
+        'col' => 0,
+        'row' => $walkingRow,
+        'value' => $noUrut
+      );
+      $result["SPJ-AKUN-{$noUrut}"] = array(
+        'col' => 1,
+        'row' => $walkingRow,
+        'value' => $spj->kode_akun
+      );
+      $result["SPJ-Penerima-{$noUrut}"] = array(
+        'col' => 2,
+        'row' => $walkingRow,
+        'value' => $spj->penerima
+      );
+      $result["SPJ-Uraian-{$noUrut}"] = array(
+        'col' => 3,
+        'row' => $walkingRow,
+        'value' => $spj->uraian
+      );
+      $result["SPJ-Tanggal-{$noUrut}"] = array(
+        'col' => 4,
+        'row' => $walkingRow,
+        'value' => $spj->tanggal_e
+      );
+      $result["SPJ-f-{$noUrut}"] = array(
+        'col' => 5,
+        'row' => $walkingRow,
+        'value' => ''
+      );
+      $result["SPJ-Nomor-{$noUrut}"] = array(
+        'col' => 6,
+        'row' => $walkingRow,
+        'value' => $noUrut < 10 ? "0{$noUrut}" : $noUrut
+      );
+      $result["SPJ-Jumlah-{$noUrut}"] = array(
+        'col' => 7,
+        'row' => $walkingRow,
+        'value' => $spj->jumlah
+      );
+      $result["SPJ-PPN-{$noUrut}"] = array(
+        'col' => 8,
+        'row' => $walkingRow,
+        'value' => $spj->ppn
+      );
+      $result["SPJ-PPH-{$noUrut}"] = array(
+        'col' => 9,
+        'row' => $walkingRow,
+        'value' => $spj->pph
+      );
+      $walkingRow++;
+      $noUrut++;
+    }
+    $this->db->where_in('uuid', $spjUuids)->set('sptj_printed', 1)->update('spj');
+
+    $walkingRow ++;
+    $result["Total Jumlah"] = array(
+      'col' => 7,
+      'row' => $walkingRow,
+      'value' => $totalJumlah
+    );
+    $result["Total PPN"] = array(
+      'col' => 8,
+      'row' => $walkingRow,
+      'value' => $totalPPN
+    );
+    $result["Total PPH"] = array(
+      'col' => 9,
+      'row' => $walkingRow,
+      'value' => $totalPPH
+    );
+
+    $walkingRow += 10;
+
+    $result['Nama Atasan Langsung'] = array(
+      'col' => 0,
+      'row' => $walkingRow,
+      'value' => $atasan_langsung['email']
+    );
+    $result['Nama Bendahara Pengeluaran'] = array(
+      'col' => 6,
+      'row' => $walkingRow,
+      'value' => $bendahara_pengeluaran['email']
+    );
+
+    $walkingRow++;
+    $result['Nip Atasan Langsung'] = array(
+      'col' => 0,
+      'row' => $walkingRow,
+      'value' => "NIP. {$atasan_langsung['nip']}"
+    );
+    $result['Nip  Bendahara Pengeluaran'] = array(
+      'col' => 6,
+      'row' => $walkingRow,
+      'value' => "NIP. {$bendahara_pengeluaran['nip']}"
+    );
+    return $result;
+  }
+
 }
