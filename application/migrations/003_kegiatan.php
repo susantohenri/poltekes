@@ -12,7 +12,8 @@ class Migration_kegiatan extends CI_Migration {
         `uraian` varchar(255) NOT NULL,
         `program` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `program` (`program`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

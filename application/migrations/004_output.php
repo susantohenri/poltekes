@@ -12,7 +12,8 @@ class Migration_output extends CI_Migration {
         `uraian` varchar(255) NOT NULL,
         `kegiatan` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `kegiatan` (`kegiatan`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

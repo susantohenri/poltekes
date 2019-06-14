@@ -212,4 +212,46 @@ class Programs extends MY_Model {
     return parent::findIn("{$this->table}.{$field}", $value);
   }
 
+  function getDataCsv ($uuid)
+  {
+    $data = array();
+    $baseQuery = "
+      SELECT
+        ent.*, SUM(detail.vol * detail.hargasat) jumlah
+      FROM program
+      LEFT JOIN kegiatan ON program.uuid = kegiatan.program
+      LEFT JOIN output ON kegiatan.uuid = output.kegiatan
+      LEFT JOIN sub_output ON output.uuid = sub_output.output
+      LEFT JOIN komponen ON sub_output.uuid = komponen.sub_output
+      LEFT JOIN sub_komponen ON komponen.uuid = sub_komponen.komponen
+      LEFT JOIN akun ON sub_komponen.uuid = akun.sub_komponen
+      LEFT JOIN detail ON akun.uuid = detail.akun
+      WHERE program.uuid = '{$uuid}'
+      GROUP BY ent.uuid
+      ORDER BY ent.urutan
+    ";
+
+    $program = $this->db->query(str_replace('ent', 'program', $baseQuery))->row_array();
+    $data[] = $program;
+
+    $vocab = array();
+    $vocab['kegiatan'] = array();
+    $records = $this->db->query(str_replace('ent', 'kegiatan', $baseQuery))->result_array();
+    foreach ($records as $rec) $vocab['kegiatan'][$rec['uuid']] = $rec;
+    $data = array_merge($data, $records);
+
+    $parent = 'kegiatan';
+    foreach (array('output', 'sub_output', 'komponen', 'sub_komponen', 'akun', 'detail') as $child)
+    {
+        $vocab[$child] = array();
+        foreach ($this->db->query(str_replace('ent', $child, $baseQuery) . ' DESC')->result_array() as $rec)
+        {
+            $vocab[$child][$rec['uuid']] = $rec;
+            array_splice($data, array_search($vocab[$parent][$rec[$parent]], $data) + 1, 0, array($rec));
+        }
+        $parent = $child;
+    }
+    return $data;
+  }
+
 }

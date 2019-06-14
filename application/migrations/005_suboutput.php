@@ -12,7 +12,8 @@ class Migration_suboutput extends CI_Migration {
         `uraian` varchar(255) NOT NULL,
         `output` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `output` (`output`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

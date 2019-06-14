@@ -27,7 +27,7 @@ class Migration_spj extends CI_Migration {
         `createdAt` DATE,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
-        KEY `program` (`detail`)
+        KEY `detail` (`detail`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

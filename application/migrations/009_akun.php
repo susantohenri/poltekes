@@ -13,7 +13,8 @@ class Migration_akun extends CI_Migration {
         `uraian` varchar(255) NOT NULL,
         `sub_komponen` varchar(255) NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `sub_komponen` (`sub_komponen`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

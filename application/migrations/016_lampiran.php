@@ -15,7 +15,7 @@ class Migration_lampiran extends CI_Migration {
         `hargasat` double NOT NULL DEFAULT '0',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT ,
         PRIMARY KEY (`uuid`),
-        KEY `program` (`spj`)
+        KEY `spj` (`spj`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

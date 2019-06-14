@@ -13,7 +13,8 @@ class Migration_spjlog extends CI_Migration {
         `action` varchar(255) NOT NULL,
         `taken` datetime NOT NULL,
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `spj` (`spj`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 

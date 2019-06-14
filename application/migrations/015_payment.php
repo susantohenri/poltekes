@@ -15,7 +15,8 @@ class Migration_payment extends CI_Migration {
         `transfer_time` date NOT NULL,
         `amount` double NOT NULL DEFAULT '0',
         `urutan` INT(11) UNIQUE NOT NULL AUTO_INCREMENT,
-        PRIMARY KEY (`uuid`)
+        PRIMARY KEY (`uuid`),
+        KEY `spj` (`spj`)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8
     ");
 
