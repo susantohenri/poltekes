@@ -9,6 +9,8 @@ class Migration_payment extends CI_Migration {
       CREATE TABLE `payment` (
         `uuid` varchar(255) NOT NULL,
         `spj` varchar(255) NOT NULL,
+        `payment_method` varchar(255) NOT NULL,
+        `check_no` varchar(255) NOT NULL,
         `sender` varchar(255) NOT NULL,
         `recipient` varchar(255) NOT NULL,
         `user_recipient` varchar(255) NOT NULL,

@@ -104,6 +104,7 @@ function formInit () {
   calculateSpj()
   calculateProgramDetail()
   calculateAkunProgram()
+  adjustPaymentMethod()
 }
 
 function calculateAkunProgram () {
@@ -216,6 +217,17 @@ function checkUnverifyReason () {
   $.get(`${site_url}Spj/getReason/${spj}`, function (reason) {
     if (reason.length > 0) showError(`Status: Unverified, Alasan: ${reason}`)
   })
+}
+
+function adjustPaymentMethod ()
+{
+  adjustPymtMthd()
+  $('[name="payment_method"]').change(adjustPymtMthd)
+  function adjustPymtMthd () {
+    $('[data-pymt-mthd]').parent().parent().hide()
+    if ('check' === $('[name="payment_method"]').val()) $('[data-pymt-mthd="check"]').parent().parent().show()
+    else $('[data-pymt-mthd="transfer"]').parent().parent().show()
+  }
 }
 
 function getNumber (element) {

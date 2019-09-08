@@ -25,18 +25,6 @@ class SpjPayments extends MY_Model {
     );
 
     $this->form[]= array(
-      'name' => 'sender',
-      'label'=> 'Rekening Pengirim',
-      'width'=> 5
-    );
-
-    $this->form[]= array(
-      'name' => 'recipient',
-      'label'=> 'Rekening Penerima',
-      'width'=> 5
-    );
-
-    $this->form[]= array(
       'name' => 'user_recipient',
       'label'=> 'Nama Penerima',
       'options' => array(),
@@ -62,6 +50,43 @@ class SpjPayments extends MY_Model {
       'label'=> 'Nominal',
       'attributes' => array(
         array('data-number' => 'true')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
+      'name' => 'payment_method',
+      'label'=> 'Jenis Pembayaran',
+      'options' => array(
+        array('text' => 'Transfer Bank', 'value' => 'transfer'),
+        array('text' => 'Check', 'value' => 'check')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
+      'name' => 'check_no',
+      'label'=> 'Nomor Check',
+      'attributes' => array(
+        array('data-pymt-mthd' => 'check')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
+      'name' => 'sender',
+      'label'=> 'Rekening Pengirim',
+      'attributes' => array(
+        array('data-pymt-mthd' => 'transfer')
+      ),
+      'width'=> 5
+    );
+
+    $this->form[]= array(
+      'name' => 'recipient',
+      'label'=> 'Rekening Penerima',
+      'attributes' => array(
+        array('data-pymt-mthd' => 'transfer')
       ),
       'width'=> 5
     );
