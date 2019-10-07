@@ -45,6 +45,13 @@ class Spjs extends MY_Model {
     );
 
     $this->form[]= array(
+      'name' => 'bukti_fisik',
+      'label'=> 'Bukti Fisik',
+      'type' => 'file',
+      'width'=> 6
+    );
+
+    $this->form[]= array(
       'name' => 'ppn',
       'label'=> 'PPN',
       'attributes' => array(
@@ -104,6 +111,7 @@ class Spjs extends MY_Model {
     $data['creator'] = $this->session->userdata('uuid');
     $data['createdAt'] = date('Y-m-d');
     $result = parent::create($data);
+    move_uploaded_file($_FILES['bukti_fisik']['tmp_name'], "upload/{$result}.jpg");
     $this->SpjLogs->create(array(
       'spj'   => $result,
       'action'=> 'create'
@@ -118,6 +126,8 @@ class Spjs extends MY_Model {
     $spj_before = $this->findOne($uuid);
     $lampiran_before = $this->Lampirans->find(array('spj' => $uuid));
 
+    if (file_exists("upload/{$uuid}.jpg")) unlink("upload/{$uuid}");
+    move_uploaded_file($_FILES['bukti_fisik']['tmp_name'], "upload/{$uuid}.jpg");
     parent::update($data);
 
     $spj_after = $this->findOne($uuid);
